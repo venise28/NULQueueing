@@ -320,10 +320,11 @@ function togglePasswordVisibility() {
 }
 
 
+// FETCHING OF OFFICES DATA STARTS
 // FOR SUPER ADMIN ADMISSION
 function getAdmissionCustomerCount() {
     $.ajax({
-        url: 'registrar-db-process.php',
+        url: 'admission-db-process.php',
         type: 'GET',
         success: (data) => {
             // Update count
@@ -341,7 +342,7 @@ $(document).ready(function () {
 });
 
 // FOR SUPER ADMIN ACCOUNTING
-function getAdmissionCustomerCount() {
+function getAccountingCustomerCount() {
     $.ajax({
         url: 'accounting-db-process.php',
         type: 'GET',
@@ -356,8 +357,8 @@ function getAdmissionCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAdmissionCustomerCount(); 
-    setInterval(getAdmissionCustomerCount, 1000); 
+    getAccountingCustomerCount(); 
+    setInterval(getAccountingCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN REGISTRAR
@@ -379,6 +380,108 @@ $(document).ready(function () {
     getRegistrarCustomerCount(); 
     setInterval(getRegistrarCustomerCount, 1000); 
 });
+
+// FOR SUPER ADMIN ACADEMICS
+function getAcademicsCustomerCount() {
+    $.ajax({
+        url: 'academics-db-process.php',
+        type: 'GET',
+        success: (data) => {
+            // Update count
+            $('#academics-count').text(data);
+        },
+        error: () => {
+            console.log('Error fetching customer count.');
+        }
+    });
+}
+
+$(document).ready(function () {
+    getAcademicsCustomerCount(); 
+    setInterval(getAcademicsCustomerCount, 1000); 
+});
+
+// FOR SUPER ADMIN ASSETS
+function getAssetsCustomerCount() {
+    $.ajax({
+        url: 'assets-db-process.php',
+        type: 'GET',
+        success: (data) => {
+            // Update count
+            $('#assets-count').text(data);
+        },
+        error: () => {
+            console.log('Error fetching customer count.');
+        }
+    });
+}
+
+$(document).ready(function () {
+    getAssetsCustomerCount(); 
+    setInterval(getAssetsCustomerCount, 1000); 
+});
+
+// FOR SUPER ADMIN GUIDANCE
+function getGuidanceCustomerCount() {
+    $.ajax({
+        url: 'guidance-db-process.php',
+        type: 'GET',
+        success: (data) => {
+            // Update count
+            $('#guidance-count').text(data);
+        },
+        error: () => {
+            console.log('Error fetching customer count.');
+        }
+    });
+}
+
+$(document).ready(function () {
+    getGuidanceCustomerCount(); 
+    setInterval(getGuidanceCustomerCount, 1000); 
+});
+
+// FOR SUPER ADMIN CLINIC
+function getClinicCustomerCount() {
+    $.ajax({
+        url: 'clinic-db-process.php',
+        type: 'GET',
+        success: (data) => {
+            // Update count
+            $('#clinic-count').text(data);
+        },
+        error: () => {
+            console.log('Error fetching customer count.');
+        }
+    });
+}
+
+$(document).ready(function () {
+    getClinicCustomerCount(); 
+    setInterval(getClinicCustomerCount, 1000); 
+});
+
+// FOR SUPER ADMIN ITSO
+function getItsoCustomerCount() {
+    $.ajax({
+        url: 'itso-db-process.php',
+        type: 'GET',
+        success: (data) => {
+            // Update count
+            $('#itso-count').text(data);
+        },
+        error: () => {
+            console.log('Error fetching customer count.');
+        }
+    });
+}
+
+$(document).ready(function () {
+    getItsoCustomerCount(); 
+    setInterval(getItsoCustomerCount, 1000); 
+});
+
+// FETCHING OF OFFICES DATA ENDS
 
 
 

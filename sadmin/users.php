@@ -91,7 +91,7 @@ if (!isset($_SESSION['email'])) {
                                 <th scope="col">Full Name</th>
                                 <th scope="col">Office</th>
                                 <th scope="col">Username</th>
-                                <th scope="col">Password</th>
+                                <!-- <th scope="col">Password</th> -->
                                 <!-- <th scope="col">Role</th> -->
                                 <th scope="col" class="col-3">Action</th>
                             </tr>
@@ -143,7 +143,7 @@ if (!isset($_SESSION['email'])) {
                                         echo "<td>" . $row['full_name'] . "</td>";
                                         echo "<td>" . $row['office'] . "</td>";
                                         echo "<td>" . $row['username'] . "</td>";
-                                        echo "<td>" . $row['password'] . "</td>";
+                                        //echo "<td>" . $row['password'] . "</td>";
                                         // echo "<td>" . $row['role'] . "</td>";
                                         echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2 edit-button' onclick='openEditUserModal(" . $row['ID'] . ", \"" . $row['full_name'] . "\", \"" . $row['office'] . "\",  \"" . $row['username'] . "\" , \"" . $row['password'] . "\")'>Edit</button>";
                                         echo "<button class='btn btn-red my-2 my-sm-0 mx-2' type='button' onclick='deleteUser(" . $row['ID'] . ")'>Delete</button>";

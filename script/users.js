@@ -77,12 +77,11 @@ function editUser(userId) {
     // You can use AJAX or any other logic to edit the user
 }
 
-function openEditUserModal(ID, full_name, office, role, username, password) {
+function openEditUserModal(ID, full_name, office, username, password) {
 
     $('#editUserModal #ID').val(ID);
     $('#editUserModal #full_name').val(full_name);
     $('#editUserModal #office').val(office);
-    $('#editUserModal #role').val(role);
     $('#editUserModal #username').val(username);
     $('#editUserModal #password').val(password);
 
