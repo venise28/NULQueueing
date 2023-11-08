@@ -11,17 +11,17 @@ if (!isset($_SESSION['email'])) {
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$sql = "SELECT * FROM registrar";
+$sql = "SELECT * FROM academics_logs";
 $result = $conn->query($sql);
 
 // FOR FETCHING THE COMPLETED QUEUE
-$sqlCompleted = "SELECT COUNT(*) AS completed_count FROM registrar WHERE status = 1";
+$sqlCompleted = "SELECT COUNT(*) AS completed_count FROM academics_logs WHERE status = 1";
 $resultCompleted = $conn->query($sqlCompleted);
 $rowCompleted = $resultCompleted->fetch_assoc();
 $completedCount = $rowCompleted['completed_count'];
 
 // FOR FETCHING THE PENDING QUEUE
-$sqlPending = "SELECT COUNT(*) AS pending_count FROM registrar WHERE status = 0";
+$sqlPending = "SELECT COUNT(*) AS pending_count FROM academics_logs WHERE status = 0";
 $resultPending = $conn->query($sqlPending);
 $rowPending = $resultPending->fetch_assoc();
 $pendingCount = $rowPending['pending_count'];
@@ -34,7 +34,7 @@ $pendingCount = $rowPending['pending_count'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRAR</title>
+    <title>ACADEMICS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -51,7 +51,7 @@ $pendingCount = $rowPending['pending_count'];
     <div class="row">
         <?php include 'aside.php'; ?>
         <div class="col-9 offset-3">
-            <h4 class="fs-2 pt-5 ps-5 pb-2 nu_color text-start">REGISTRAR</h4>
+            <h4 class="fs-2 pt-5 ps-5 pb-2 nu_color text-start">ACADEMICS</h4>
             <hr>
 
                 <!-- DETAILED NUMBERS IN BOX STARTS -->
@@ -83,7 +83,7 @@ $pendingCount = $rowPending['pending_count'];
                                     <path
                                         d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                 </svg>
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="completed-registrar-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="completed-academics-count">
                                     <?php echo $completedCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">COMPLETED</p>
@@ -102,7 +102,7 @@ $pendingCount = $rowPending['pending_count'];
                                         d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13Z" />
                                 </svg>
 
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="pending-registrar-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="pending-academics-count">
                                     <?php echo $pendingCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">PENDING</p>

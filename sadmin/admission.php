@@ -11,17 +11,17 @@ if (!isset($_SESSION['email'])) {
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$sql = "SELECT * FROM admission";
+$sql = "SELECT * FROM admission_logs";
 $result = $conn->query($sql);
 
 // FOR FETCHING THE COMPLETED QUEUE
-$sqlCompleted = "SELECT COUNT(*) AS completed_count FROM admission WHERE status = 1";
+$sqlCompleted = "SELECT COUNT(*) AS completed_count FROM admission_logs WHERE status = 1";
 $resultCompleted = $conn->query($sqlCompleted);
 $rowCompleted = $resultCompleted->fetch_assoc();
 $completedCount = $rowCompleted['completed_count'];
 
 // FOR FETCHING THE PENDING QUEUE
-$sqlPending = "SELECT COUNT(*) AS pending_count FROM admission WHERE status = 0";
+$sqlPending = "SELECT COUNT(*) AS pending_count FROM admission_logs WHERE status = 0";
 $resultPending = $conn->query($sqlPending);
 $rowPending = $resultPending->fetch_assoc();
 $pendingCount = $rowPending['pending_count'];
@@ -65,7 +65,7 @@ $pendingCount = $rowPending['pending_count'];
                                     <path
                                         d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                 </svg>
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="registrar-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="admission-count">
                                     ...
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">CUSTOMERS</p>
@@ -83,7 +83,7 @@ $pendingCount = $rowPending['pending_count'];
                                     <path
                                         d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                 </svg>
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="admission-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="completed-admission-count">
                                     <?php echo $completedCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">COMPLETED</p>
@@ -102,7 +102,7 @@ $pendingCount = $rowPending['pending_count'];
                                         d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13Z" />
                                 </svg>
 
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="pending-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="pending-admission-count">
                                     <?php echo $pendingCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">PENDING</p>
@@ -126,6 +126,7 @@ $pendingCount = $rowPending['pending_count'];
                                 <th>queue_number</th>
                                 <th>student_id</th>
                                 <th>timestamps</th>
+                                <th>timeout</th>
                                 <th>remarks</th>
                                 <th>status</th>
                             </tr>
@@ -137,6 +138,7 @@ $pendingCount = $rowPending['pending_count'];
                                     echo "<td>" . $row['queue_number'] . "</td>";
                                     echo "<td>" . $row['student_id'] . "</td>";
                                     echo "<td>" . $row['timestamp'] . "</td>";
+                                    echo "<td>" . $row['timeout'] . "</td>";
                                     echo "<td>" . $row['remarks'] . "</td>";
                                     echo "<td>" . $row['status'] . "</td>";
                                     echo "</tr>";
