@@ -45,6 +45,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
         $office = $_POST["office"];
         $program_queue = $_POST["program_queue"];
         $studentId = $_POST["studentId"];
+        $endorsed = "kiosk";
 
         // Check $office and set it to "ACADEMICS" if true
         $allowedOffices = ["SCS", "SEA", "SAS", "SABM", "SHS"];
@@ -52,7 +53,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
             $office = "ACADEMICS";
         }
 
-        $queueSql = "INSERT INTO queue (student_id, program, queue_number, office) VALUES ('$studentId', '$program_queue', '$queueNumber', '$office')";
+        $queueSql = "INSERT INTO queue (student_id, program, queue_number, office, endorsed) VALUES ('$studentId', '$program_queue', '$queueNumber', '$office', '$endorsed')";
         if ($conn->query($queueSql) === TRUE) {
             echo json_encode(["success" => true, "queue_number" => $queueNumber]);
         } else {
