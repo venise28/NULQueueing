@@ -1,6 +1,26 @@
 <?php
 @include 'database.php';
 
+// clone data to admission table.
+function insertQueueToAdmission($data)
+{
+    global $conn;
+    $studentId = $data['studentId'];
+    $program = $data['program'] ?? null;
+    $queueNumber = $data['queue_number'];
+    $timeStamp = date('Y-m-d H:i:s');
+    $transaction = $data['transaction'] ?? null;
+    $remarks = $data['remarks'] ?? null;
+
+    $sql = "INSERT INTO admission (queue_number, student_id, timestamp, transaction, remarks, program) VALUES ('$queueNumber', '$studentId', '$timeStamp', '$transaction', '$remarks', '$program')";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Handle the request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $office = $_POST["office"];
@@ -20,13 +40,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo json_encode(["success" => false, "message" => "Error: " . $sql . "<br>" . $conn->error]);
     }
+
+    if ($office === "ADMISSION") {
+        $admissionData = [
+            "studentId" => $studentId,
+            "program" => $program,
+            "queue_number" => $queueNumber,
+            "transaction" => null,
+            "remarks" => null
+        ];
+
+        insertQueueToAdmission($admissionData);
+    }
 } else {
     echo "Invalid request";
 }
 
 
 // Function to get the next queue number for a given office
-function getNextQueueNumber($office) {
+function getNextQueueNumber($office)
+{
     global $conn;
     // Define office-specific prefixes
     $prefixes = [
@@ -62,4 +95,3 @@ function getNextQueueNumber($office) {
 }
 
 $conn->close();
-?>
