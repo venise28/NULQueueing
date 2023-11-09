@@ -68,8 +68,11 @@ if ($window1Data !== null && $window2Data !== null) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Queue</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/displayqueue.css">
     <link href='http://fonts.googleapis.com/css?family=' rel='stylesheet' type='text/css'>
 </head>
@@ -81,16 +84,32 @@ if ($window1Data !== null && $window2Data !== null) {
             <h1 class="office-title">REGISTRAR</h1>
             <ul>
                 <li class="queue-list">
-                    <p class="window">Window 1:</p>
-                    <p class="window-q"><?php echo isset($window1Data) ? $window1Data['queue_number'] : 'Not Available'; ?></p>
+                    <p class="window">Window 1:
+                    <p class="window-q">
+                        <?php echo isset($window1Data) ? $window1Data['queue_number'] : 'Loading...'; ?>
+                    </p>
+                    </p>
                 </li>
                 <li class="queue-list">
-                    <p class="window">Window 2:</p>
-                    <p class="window-q"><?php echo isset($window2Data) ? $window2Data['queue_number'] : 'Not Available'; ?></p>
+                    <p class="window">Window 2:
+                    <p class="window-q">
+                        <?php echo isset($window2Data) ? $window2Data['queue_number'] : 'Loading...'; ?>
+                    </p>
+                    </p>
                 </li>
                 <li class="queue-list">
-                    <p class="window">Window 3:</p>
-                    <p class="window-q"><?php echo isset($window3Data) ? $window3Data['queue_number'] : 'Not Available'; ?></p>
+                    <p class="window">Window 3:
+                    <p class="window-q">
+                        <?php echo isset($window3Data) ? $window3Data['queue_number'] : 'Loading...'; ?>
+                    </p>
+                    </p>
+                <li class="queue-list">
+                    <p class="window">Window 4:
+                    <p class="window-q">
+                        <?php echo isset($window4Data) ? $window4Data['queue_number'] : 'Loading...'; ?>
+                    </p>
+                    </p>
+                </li>
                 </li>
             </ul>
         </div>
@@ -120,8 +139,10 @@ if ($window1Data !== null && $window2Data !== null) {
         <div class="admissions-assets-container">
             <div class="admissions-container araa-office">
                 <h1 class="office-title">ADMISSIONS</h1>
-                <?php if (isset($currentQueueForAdmission)) : ?>
-                    <p><?= $currentQueueForAdmission['queue_number'] ?></p>
+                <?php if (isset($currentQueueForAdmission)): ?>
+                    <p>
+                        <?= $currentQueueForAdmission['queue_number'] ?>
+                    </p>
                 <?php endif; ?>
             </div>
         </div>
@@ -190,16 +211,30 @@ if ($window1Data !== null && $window2Data !== null) {
 
 
 
-
-
-
-
-
-
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script/displayscript.js"></script>
+
+
+
+    <script>
+        function updateQueueNumbers() {
+            // Make an AJAX request to fetch new queue numbers
+            $.ajax({
+                url: 'fetch_numbers_registrar.php', // This PHP file will retrieve updated queue numbers
+                method: 'GET',
+                success: function (data) {
+                    // Update the displayed queue numbers in the HTML
+                    document.getElementById('window1Queue').innerText = data.window1; // Update window 1
+                    document.getElementById('window2Queue').innerText = data.window2; // Update window 2
+                    document.getElementById('window3Queue').innerText = data.window3; // Update window 3
+                    document.getElementById('window4Queue').innerText = data.window4; // Update window 4
+                }
+            });
+        }
+
+        // Call the updateQueueNumbers function every 3 seconds
+        setInterval(updateQueueNumbers, 3000);
+    </script>
 
 </body>
 
