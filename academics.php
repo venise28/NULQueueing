@@ -25,10 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         echo json_encode($data);
     } else {
-        echo json_encode(array()); 
+        echo json_encode(array());
     }
-}
-elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+} elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get data from the POST request
     $concern = $_POST["concern"];
     $program = $_POST["program"];
@@ -65,7 +64,8 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "Invalid request";
 }
 
-function getNextQueueNumber($program) {
+function getNextQueueNumber($program)
+{
     global $conn;
     $prefixes = [
         "SCS" => "SCS",
@@ -77,21 +77,21 @@ function getNextQueueNumber($program) {
 
     $prefix = $prefixes[$program];
 
-    $sql = "SELECT MAX(queue_number) as max_queue FROM queue WHERE program = '$program'";
+    $sql = "SELECT MAX(queue_number) as max_queue FROM academics WHERE program = '$program'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $maxQueue = $row['max_queue'];
-
-        $numericPart = (int)substr($maxQueue, strlen($prefix));
-
+        // Extract the numeric part of the queue number
+        $numericPart = (int) substr($maxQueue, strlen($prefix));
+        // Increment the numeric part
         $nextNumericPart = $numericPart + 1;
-
+        // Format the next queue number
         $nextQueue = $prefix . str_pad($nextNumericPart, 3, '0', STR_PAD_LEFT);
         return $nextQueue;
     } else {
-
+        // If no records exist for the office, start from 001
         return $prefix . "001";
     }
 }

@@ -84,32 +84,28 @@ if ($window1Data !== null && $window2Data !== null) {
             <h1 class="office-title">REGISTRAR</h1>
             <ul>
                 <li class="queue-list">
-                    <p class="window">Window 1:
-                    <p class="window-q">
-                        <?php echo isset($window1Data) ? $window1Data['queue_number'] : 'Loading...'; ?>
-                    </p>
-                    </p>
+                    <div class="window-info">
+                        <p class="window">Window 1: </p>
+                        <span class="window-q" id="window1Queue">Loading...</span>
+                    </div>
                 </li>
                 <li class="queue-list">
-                    <p class="window">Window 2:
-                    <p class="window-q">
-                        <?php echo isset($window2Data) ? $window2Data['queue_number'] : 'Loading...'; ?>
-                    </p>
-                    </p>
+                    <div class="window-info">
+                        <p class="window">Window 2:</p>
+                        <span class="window-q" id="window2Queue">Loading...</span>
+                    </div>
                 </li>
                 <li class="queue-list">
-                    <p class="window">Window 3:
-                    <p class="window-q">
-                        <?php echo isset($window3Data) ? $window3Data['queue_number'] : 'Loading...'; ?>
-                    </p>
-                    </p>
-                <li class="queue-list">
-                    <p class="window">Window 4:
-                    <p class="window-q">
-                        <?php echo isset($window4Data) ? $window4Data['queue_number'] : 'Loading...'; ?>
-                    </p>
-                    </p>
+                    <div class="window-info">
+                        <p class="window">Window 3:</p>
+                        <span class="window-q" id="window3Queue">Loading...</span>
+                    </div>
                 </li>
+                <li class="queue-list">
+                    <div class="window-info">
+                        <p class="window">Window 4:</p>
+                        <span class="window-q" id="window4Queue">Loading...</span>
+                    </div>
                 </li>
             </ul>
         </div>
