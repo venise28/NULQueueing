@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2023 at 02:03 PM
+-- Generation Time: Nov 10, 2023 at 02:07 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -305,8 +305,6 @@ INSERT INTO `offices` (`ID`, `acronym`, `officeName`, `office`) VALUES
 (1, 'AD', 'ADMISSION', 0),
 (2, 'R', 'REGISTRAR', 0),
 (3, 'AC', 'ACCOUNTING', 0),
-(4, 'VE', 'VENISE', 0),
-(5, 'MA', 'MAGICAL', 0),
 (6, 'CL', 'CLINIC', 1),
 (7, 'AS', 'ASSETS', 1),
 (8, 'IT', 'ITRO', 1),
@@ -392,7 +390,8 @@ INSERT INTO `queue` (`id`, `student_id`, `queue_number`, `office`, `program`, `t
 (29, '231312', 'AD005', 'ADMISSION', 'SEA', '2023-10-10 14:27:08', 1, NULL),
 (46, '2020-12028', 'SCS001', 'ACADEMICS', 'SCS', '2023-10-26 13:46:38', 0, NULL),
 (47, '2020-12028', 'SCS002', 'ACADEMICS', 'SCS', '2023-10-26 13:51:37', 0, NULL),
-(48, 'GUEST', 'SCS003', 'ACADEMICS', '-', '2023-11-03 08:10:43', 0, NULL);
+(48, 'GUEST', 'SCS003', 'ACADEMICS', '-', '2023-11-03 08:10:43', 0, NULL),
+(49, 'GUEST', 'IT002', 'ITRO', '-', '2023-11-10 13:06:08', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -668,7 +667,7 @@ ALTER TABLE `offices`
 -- AUTO_INCREMENT for table `queue`
 --
 ALTER TABLE `queue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `registrar`
