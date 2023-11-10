@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 03, 2023 at 01:13 PM
+-- Generation Time: Nov 10, 2023 at 02:03 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -133,6 +133,24 @@ INSERT INTO `admin` (`users`, `id`, `email`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `admission`
+--
+
+CREATE TABLE `admission` (
+  `id` int(11) NOT NULL,
+  `queue_number` varchar(45) DEFAULT NULL,
+  `student_id` varchar(45) DEFAULT NULL,
+  `timestamp` timestamp NULL DEFAULT NULL,
+  `endorsed_from` varchar(45) DEFAULT NULL,
+  `transaction` varchar(45) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `program` varchar(45) DEFAULT NULL,
+  `status` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `admission_logs`
 --
 
@@ -199,6 +217,29 @@ CREATE TABLE `clinic` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `colleges`
+--
+
+CREATE TABLE `colleges` (
+  `ID` int(11) NOT NULL,
+  `acronym` varchar(11) NOT NULL,
+  `collegeName` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `colleges`
+--
+
+INSERT INTO `colleges` (`ID`, `acronym`, `collegeName`) VALUES
+(1, 'SCS', 'School of Computer Studies'),
+(2, 'SEA', 'School of Engineering and Architecture'),
+(3, 'SAS', 'School of Arts and Sciences'),
+(4, 'SABM', 'School of Accountancy and Business Management'),
+(5, 'SHS', 'Senior High School');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `guidance`
 --
 
@@ -242,6 +283,34 @@ CREATE TABLE `itso` (
 
 INSERT INTO `itso` (`id`, `queue_number`, `student_id`, `remarks`, `transaction`, `sent_time_stop`, `status`) VALUES
 (0, 'GD0033', '2020-543221', 'Validation of ID', NULL, '2023-10-26 18:19:44', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `offices`
+--
+
+CREATE TABLE `offices` (
+  `ID` int(11) NOT NULL,
+  `acronym` varchar(11) NOT NULL,
+  `officeName` varchar(255) NOT NULL,
+  `office` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `offices`
+--
+
+INSERT INTO `offices` (`ID`, `acronym`, `officeName`, `office`) VALUES
+(1, 'AD', 'ADMISSION', 0),
+(2, 'R', 'REGISTRAR', 0),
+(3, 'AC', 'ACCOUNTING', 0),
+(4, 'VE', 'VENISE', 0),
+(5, 'MA', 'MAGICAL', 0),
+(6, 'CL', 'CLINIC', 1),
+(7, 'AS', 'ASSETS', 1),
+(8, 'IT', 'ITRO', 1),
+(9, 'G', 'GUIDANCE', 1);
 
 -- --------------------------------------------------------
 
@@ -454,6 +523,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `admission`
+--
+ALTER TABLE `admission`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `admission_logs`
 --
 ALTER TABLE `admission_logs`
@@ -472,10 +547,22 @@ ALTER TABLE `clinic`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `colleges`
+--
+ALTER TABLE `colleges`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `guidance`
 --
 ALTER TABLE `guidance`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `offices`
+--
+ALTER TABLE `offices`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `program_chairs`
@@ -536,6 +623,12 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `admission`
+--
+ALTER TABLE `admission`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `admission_logs`
 --
 ALTER TABLE `admission_logs`
@@ -554,10 +647,22 @@ ALTER TABLE `clinic`
   MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
+-- AUTO_INCREMENT for table `colleges`
+--
+ALTER TABLE `colleges`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `guidance`
 --
 ALTER TABLE `guidance`
   MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `offices`
+--
+ALTER TABLE `offices`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `queue`
