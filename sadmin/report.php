@@ -134,15 +134,23 @@ if (!isset($_SESSION['email'])) {
 
                 <div class="text-center">
                     <select class="form-select-sm" id="officeSelect" aria-label="Default select example">
+                        <?php
+                        @include 'database.php';
+                        $sql = "SELECT * FROM offices";
+                        $result = $conn->query($sql);
+                        ?>
                         <option value="ALL-OFFICES">All Offices</option>
-                        <option selected value="ADMISSION">Admission</option>
-                        <option value="REGISTRAR">Registrar</option>
-                        <option value="ACCOUNTING">Accounting</option>
-                        <option value="ACADEMICS">Academics</option>
-                        <option value="CLINIC">Clinic</option>
-                        <option value="ASSETS">Assets</option>
-                        <option value="ITRO">ITRO</option>
-                        <option value="GUIDANCE">Guidance</option>
+
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $officeName = $row["officeName"];
+                                echo '<option value="' . $officeName  . '">' . $officeName  . '</option>';
+                            }
+                        } else {
+                            echo '<option value="">No offices available</option>';
+                        }
+                        ?>
                     </select>
                     <select class="form-select-sm" id="monthSelect" aria-label="Default select example">
                         <option selected value="01">January</option>

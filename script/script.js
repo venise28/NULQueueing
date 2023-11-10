@@ -16,7 +16,7 @@ function submitStudentId() {
         return;
     }
 
-    window.location.href = "nulqueue.html";
+    window.location.href = "nulqueue.php";
 }
 
 
