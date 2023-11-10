@@ -61,19 +61,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function getNextQueueNumber($office)
 {
     global $conn;
-    // Define office-specific prefixes
-    $prefixes = [
-        "ADMISSION" => "AD",
-        "REGISTRAR" => "R",
-        "ACCOUNTING" => "AC",
-        "CLINIC" => "CL",
-        "ASSETS" => "AS",
-        "ITRO" => "IT",
-        "GUIDANCE" => "G",
-        "ACADEMICS" => "F",
-    ];
 
-    $prefix = $prefixes[$office];
+    // Fetch the acronym from the offices table
+    $acronymSql = "SELECT acronym FROM offices WHERE officeName = '$office'";
+    $acronymResult = $conn->query($acronymSql);
+
+    if ($acronymResult->num_rows > 0) {
+        $acronymRow = $acronymResult->fetch_assoc();
+        $acronym = $acronymRow['acronym'];
+    } else {
+        // Default to a generic prefix if no acronym is found
+        $acronym = "DEFAULT";
+    }
+
+    // Use the fetched or default acronym as the prefix
+    $prefix = $acronym;
 
     $sql = "SELECT MAX(queue_number) as max_queue FROM queue WHERE office = '$office'";
     $result = $conn->query($sql);
@@ -82,7 +84,7 @@ function getNextQueueNumber($office)
         $row = $result->fetch_assoc();
         $maxQueue = $row['max_queue'];
         // Extract the numeric part of the queue number
-        $numericPart = (int)substr($maxQueue, strlen($prefix));
+        $numericPart = (int) substr($maxQueue, strlen($prefix));
         // Increment the numeric part
         $nextNumericPart = $numericPart + 1;
         // Format the next queue number
@@ -93,5 +95,6 @@ function getNextQueueNumber($office)
         return $prefix . "001";
     }
 }
+
 
 $conn->close();
