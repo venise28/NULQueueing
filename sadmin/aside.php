@@ -1,5 +1,7 @@
 <?php
 @include '../database.php';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -60,16 +62,20 @@
                     <h4 class="fw-bold text-light text-center">OFFICES</h4>
                 </button>
                 <ul class="dropdown-content offset-md-2" id="myDropdown">
-                    <li class="pt-1"><a href="admission.php" id="admission-link" class="fw-bold text-light text-decoration-none">ADMISSION</a></li>
-                    <li class="pt-1"><a href="registrar.php" id="registrar-link" class="fw-bold text-light text-decoration-none">REGISTRAR</a></li>
-                    <li class="pt-1"><a href="accounting.php" id="accounting-link" class="fw-bold text-light text-decoration-none">ACCOUNTING</a></li>
-                    <li class="pt-1"><a href="academics.php" id="academics-link" class="fw-bold text-light text-decoration-none">ACADEMICS</a></li>
-                    <li class="pt-1"><a href="guidance.php" id="guidance-link" class="fw-bold text-light text-decoration-none">GUIDANCE</a></li>
-                    <li class="pt-1"><a href="assets.php" id="assets-link" class="fw-bold text-light text-decoration-none">ASSETS</a></li>
-                    <li class="pt-1"><a href="clinic.php" id="clinic-link" class="fw-bold text-light text-decoration-none">CLINIC</a></li>
-                    <li class="pt-1"><a href="itso.php" id="itso-link" class="fw-bold text-light text-decoration-none">ITSO</a></li>
+                    <?php
+                    // Fetch office names from the offices table
+                    $query = "SELECT officeName FROM offices";
+                    $result = mysqli_query($conn, $query);
+
+                    // Display each office name as a list item
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        // Pass the office name as a parameter in the URL
+                        echo '<li class="pt-1"><a href="office.php?office=' . urlencode($row['officeName']) . '" class="fw-bold text-light text-decoration-none">' . $row['officeName'] . '</a></li>';
+                    }
+                    ?>
                 </ul>
             </div>
+
 
             <div class="d-lg-none">
                 <a href="#" class="stretched-link text-decoration-none text-light fw-bold d-flex justify-content-center"><i class="fa-lg bi bi-buildings text-light pe-2"></i></a>
