@@ -12,17 +12,17 @@ if (!isset($_SESSION['email'])) {
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-$sql = "SELECT * FROM accounting";
+$sql = "SELECT * FROM 'accounting'";
 $result = $conn->query($sql);
 
 // FOR FETCHING THE COMPLETED QUEUE
-$sqlCompleted = "SELECT COUNT(*) AS completed_count FROM accounting WHERE status = 1";
+$sqlCompleted = "SELECT COUNT(*) AS completed_count FROM 'accounting' WHERE status = 1";
 $resultCompleted = $conn->query($sqlCompleted);
 $rowCompleted = $resultCompleted->fetch_assoc();
 $completedCount = $rowCompleted['completed_count'];
 
 // FOR FETCHING THE PENDING QUEUE
-$sqlPending = "SELECT COUNT(*) AS pending_count FROM accounting WHERE status = 0";
+$sqlPending = "SELECT COUNT(*) AS pending_count FROM 'accounting' WHERE status = 0";
 $resultPending = $conn->query($sqlPending);
 $rowPending = $resultPending->fetch_assoc();
 $pendingCount = $rowPending['pending_count'];
