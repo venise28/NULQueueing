@@ -82,24 +82,17 @@ if (!isset($_SESSION['email'])) {
 
                 });
 
-                $("#officeSelect").on("change", function () {
-
-                    selectOffice = document.querySelector('#officeSelect');
-                    officeout = selectOffice.value;
-                    document.querySelector('.officeout').textContent = officeout;
-
-
+                $("#monthSelectStart, #monthSelectEnd, #yearSelect, #officeSelect").on("change", function () {
                     // Get selected month and office values
                     var selectedMonthStart = $("#monthSelectStart").val();
                     var selectedMonthEnd = $("#monthSelectEnd").val();
                     var selectedOffice = $("#officeSelect").val();
                     var selectedYear = $("#yearSelect").val();
 
-
                     // Perform an AJAX request to retrieve updated data
                     $.ajax({
                         type: "POST",
-                        url: "update_chart.php", // Replace with the URL of your PHP script
+                        url: "update_chart.php",
                         data: {
                             monthstart: selectedMonthStart,
                             monthend: selectedMonthEnd,
@@ -113,103 +106,10 @@ if (!isset($_SESSION['email'])) {
                             myChart.data.labels = newData.week;
                             myChart.update();
                             console.log(newData.customer);
-
                         }
                     });
                 });
 
-                $("#monthSelectStart").on("change", function () {
-                    // Get selected month and office values
-                    var selectedMonthStart = $("#monthSelectStart").val();
-                    var selectedMonthEnd = $("#monthSelectEnd").val();
-                    var selectedOffice = $("#officeSelect").val();
-                    var selectedYear = $("#yearSelect").val();
-
-                    // Perform an AJAX request to retrieve updated data
-                    $.ajax({
-                        type: "POST",
-                        url: "update_chart.php", // Replace with the URL of your PHP script
-                        data: {
-                            monthstart: selectedMonthStart,
-                            monthend: selectedMonthEnd,
-                            office: selectedOffice,
-                            year: selectedYear
-                        },
-                        success: function (response) {
-                            // Update the content div with the updated data
-                            const newData = JSON.parse(response);
-                            myChart.data.datasets[0].data = newData.customer;
-                            myChart.data.labels = newData.week;
-                            myChart.update();
-                            console.log(newData.customer);
-
-                        }
-                    });
-                });
-
-                $("#monthSelectEnd").on("change", function () {
-                    // Get selected month and office values
-                    var selectedMonthStart = $("#monthSelectStart").val();
-                    var selectedMonthEnd = $("#monthSelectEnd").val();
-                    var selectedOffice = $("#officeSelect").val();
-                    var selectedYear = $("#yearSelect").val();
-
-                    // Perform an AJAX request to retrieve updated data
-                    $.ajax({
-                        type: "POST",
-                        url: "update_chart.php", // Replace with the URL of your PHP script
-                        data: {
-                            monthstart: selectedMonthStart,
-                            monthend: selectedMonthEnd,
-                            office: selectedOffice,
-                            year: selectedYear
-                        },
-                        success: function (response) {
-                            // Update the content div with the updated data
-                            const newData = JSON.parse(response);
-                            myChart.data.datasets[0].data = newData.customer;
-                            myChart.data.labels = newData.week;
-                            myChart.update();
-                            console.log(newData.customer);
-
-                        }
-                    });
-                });
-
-                $("#yearSelect").on("change", function () {
-
-                    selectYear = document.querySelector('#yearSelect');
-                    yearout = selectYear.value;
-                    document.querySelector('.yearout').textContent = yearout;
-
-
-                    // Get selected month and office values
-                    var selectedMonthStart = $("#monthSelectStart").val();
-                    var selectedMonthEnd = $("#monthSelectEnd").val();
-                    var selectedOffice = $("#officeSelect").val();
-                    var selectedYear = $("#yearSelect").val();
-
-                    // Perform an AJAX request to retrieve updated data
-                    $.ajax({
-                        type: "POST",
-                        url: "update_chart.php", // Replace with the URL of your PHP script
-                        data: {
-                            monthstart: selectedMonthStart,
-                            monthend: selectedMonthEnd,
-                            office: selectedOffice,
-                            year: selectedYear
-                        },
-                        success: function (response) {
-                            // Update the content div with the updated data
-                            const newData = JSON.parse(response);
-                            myChart.data.datasets[0].data = newData.customer;
-                            myChart.data.labels = newData.week;
-                            myChart.update();
-                            console.log(newData.customer);
-
-                        }
-                    });
-                });
 
             });
         </script>
@@ -289,6 +189,10 @@ if (!isset($_SESSION['email'])) {
                     <button id="btn-print-this" class="btn btn-success btn-sm"> Print
                     </button>
 
+                    <form id="uploadCsv" action="export.php" method="POST">
+                        <button type="submit">Export to CSV</button>
+                    </form>
+
                 </div>
 
 
@@ -297,7 +201,7 @@ if (!isset($_SESSION['email'])) {
                     <div class="row justify-content-center mt-5" style="height:35vh; width:auto;">
                         <span class="officeout text-center fs-5 fw-bold nu_color"></span>
                         <div style="display: inline-block;" class="text-center">
-                            <span class="monthout text-center fs-5 fw-bold nu_color"></span> 
+                            <span class="monthout text-center fs-5 fw-bold nu_color"></span>
                             <span class="monthoutend text-center fs-5 fw-bold nu_color"></span>
                             <span class="yearout text-center fs-5 fw-bold nu_color"></span>
                         </div>
