@@ -45,77 +45,77 @@ if (!isset($_SESSION['email'])) {
 
 
             $(document).ready(function () {
+
+                document.getElementById('btn-print-this').addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent the form from being submitted
+                });
+
                 selectOffice = document.querySelector('#officeSelect');
                 officeout = selectOffice.value;
                 document.querySelector('.officeout').textContent = officeout;
 
 
-                var e = document.getElementById("monthSelect");
+                var e = document.getElementById("monthSelectStart");
                 monthout = e.options[e.selectedIndex].text;
                 document.querySelector('.monthout').textContent = monthout;
 
-                $("#monthSelect").on("change", function () {
+                selectYear = document.querySelector('#yearSelect');
+                yearout = selectYear.value;
+                document.querySelector('.yearout').textContent = yearout;
 
-                    var e = document.getElementById("monthSelect");
+                $("#monthSelectStart").on("change", function () {
+
+                    var e = document.getElementById("monthSelectStart");
                     monthout = e.options[e.selectedIndex].text;
                     document.querySelector('.monthout').textContent = monthout;
 
                 });
 
-                $("#officeSelect").on("change", function () {
+                $("#monthSelectEnd").on("change", function () {
 
-                    selectOffice = document.querySelector('#officeSelect');
-                    officeout = selectOffice.value;
-                    document.querySelector('.officeout').textContent = officeout;
+                    var e = document.getElementById("monthSelectEnd");
+                    monthoutend = 'to ' + e.options[e.selectedIndex].text;
+                    document.querySelector('.monthoutend').textContent = monthoutend;
 
+                });
 
+                $("#yearSelect").on("change", function () {
+
+                    var e = document.getElementById("yearSelect");
+                    yearout = ' ' + e.options[e.selectedIndex].text;
+                    document.querySelector('.yearout').textContent = yearout;
+
+                });
+
+                $("#monthSelectStart, #monthSelectEnd, #yearSelect, #officeSelect").on("change", function () {
                     // Get selected month and office values
-                    var selectedMonth = $("#monthSelect").val();
+                    var selectedMonthStart = $("#monthSelectStart").val();
+                    var selectedMonthEnd = $("#monthSelectEnd").val();
                     var selectedOffice = $("#officeSelect").val();
-
+                    var selectedYear = $("#yearSelect").val();
 
                     // Perform an AJAX request to retrieve updated data
                     $.ajax({
                         type: "POST",
-                        url: "update_chart.php", // Replace with the URL of your PHP script
+                        url: "update_chart.php",
                         data: {
-                            month: selectedMonth,
-                            office: selectedOffice
+                            monthstart: selectedMonthStart,
+                            monthend: selectedMonthEnd,
+                            office: selectedOffice,
+                            year: selectedYear
                         },
-                        success: function (datas) {
+                        success: function (response) {
                             // Update the content div with the updated data
-                            const newData = JSON.parse(datas);
-                            myChart.data.datasets[0].data = newData;
+                            const newData = JSON.parse(response);
+                            myChart.data.datasets[0].data = newData.customer;
+                            myChart.data.labels = newData.week;
                             myChart.update();
-                            console.log(datas);
-
+                            console.log(newData.customer);
                         }
                     });
                 });
 
-                $("#monthSelect").on("change", function () {
-                    // Get selected month and office values
-                    var selectedMonth = $("#monthSelect").val();
-                    var selectedOffice = $("#officeSelect").val();
 
-                    // Perform an AJAX request to retrieve updated data
-                    $.ajax({
-                        type: "POST",
-                        url: "update_chart.php", // Replace with the URL of your PHP script
-                        data: {
-                            month: selectedMonth,
-                            office: selectedOffice
-                        },
-                        success: function (data) {
-                            // Update the content div with the updated data
-                            const newData = JSON.parse(data);
-                            myChart.data.datasets[0].data = newData;
-                            myChart.update();
-                            console.log(data);
-
-                        }
-                    });
-                });
             });
         </script>
 
@@ -133,42 +133,76 @@ if (!isset($_SESSION['email'])) {
                 <h4 class="fs-2 pt-3 ps-5 pb-2 nu_color text-center"> Please select an office to generate a report </h4>
 
                 <div class="text-center">
-                    <select class="form-select-sm" id="officeSelect" aria-label="Default select example">
-                        <?php
-                        @include 'database.php';
-                        $sql = "SELECT * FROM offices";
-                        $result = $conn->query($sql);
-                        ?>
-                        <option value="ALL-OFFICES">All Offices</option>
+                    <form action="export.php" method="post">
+                        <select class="form-select-sm" name="officeSelect" id="officeSelect"
+                            aria-label="Default select example">
+                            <?php
+                            @include 'database.php';
+                            $sql = "SELECT * FROM offices";
+                            $result = $conn->query($sql);
+                            ?>
+                            <option value="ALL-OFFICES">All Offices</option>
 
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $officeName = $row["officeName"];
-                                echo '<option value="' . $officeName  . '">' . $officeName  . '</option>';
+                            <?php
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $officeName = $row["officeName"];
+                                    echo '<option value="' . $officeName . '">' . $officeName . '</option>';
+                                }
+                            } else {
+                                echo '<option value="">No offices available</option>';
                             }
-                        } else {
-                            echo '<option value="">No offices available</option>';
-                        }
-                        ?>
-                    </select>
-                    <select class="form-select-sm" id="monthSelect" aria-label="Default select example">
-                        <option selected value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+                            ?>
+                        </select>
+                        <select class="form-select-sm" name="monthSelectStart" id="monthSelectStart"
+                            aria-label="Default select example">
+                            <option selected value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
 
-                    <button id="btn-print-this" class="btn btn-success btn-sm"> Print
-                    </button>
+                        -
+
+                        <select class="form-select-sm" name="monthSelectEnd" id="monthSelectEnd"
+                            aria-label="Default select example">
+                            <option selected value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+
+                        <select class="form-select-sm" name="yearSelect" id="yearSelect"
+                            aria-label="Default select example">
+                            <option selected value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+
+                        <button id="btn-print-this" class="btn btn-success btn-sm"> Print
+                        </button>
+
+
+                        <input type="submit" value="Export CSV">
+                    </form>
+
 
                 </div>
 
@@ -177,8 +211,11 @@ if (!isset($_SESSION['email'])) {
 
                     <div class="row justify-content-center mt-5" style="height:35vh; width:auto;">
                         <span class="officeout text-center fs-5 fw-bold nu_color"></span>
-                        <span class="monthout text-center fs-5 fw-bold nu_color"></span>
-
+                        <div style="display: inline-block;" class="text-center">
+                            <span class="monthout text-center fs-5 fw-bold nu_color"></span>
+                            <span class="monthoutend text-center fs-5 fw-bold nu_color"></span>
+                            <span class="yearout text-center fs-5 fw-bold nu_color"></span>
+                        </div>
 
                         <?php
                         $tquery = $conn->query("SELECT week.week_name, 
