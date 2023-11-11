@@ -26,12 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $office = $_POST["office"];
     $studentId = $_POST["studentId"];
     $program = $_POST["program"];
+    $endorsed = "kiosk";
+
 
     // Get the next queue number for the selected office
     $queueNumber = getNextQueueNumber($office);
 
     // Insert the record into the database
-    $sql = "INSERT INTO queue (student_id, program, queue_number, office) VALUES ('$studentId', '$program', '$queueNumber', '$office')";
+    $sql = "INSERT INTO queue (student_id, program, queue_number, office, endorsed) VALUES ('$studentId', '$program', '$queueNumber', '$office', '$endorsed')";
 
     if ($conn->query($sql) === TRUE) {
         echo json_encode(["success" => true, "queue_number" => $queueNumber]);

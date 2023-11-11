@@ -234,18 +234,6 @@ function populateDropdown(programselected) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function updateCustomerCount() {
     $.ajax({
         url: 'db-process.php?action=customers',

@@ -6,6 +6,56 @@ if (!isset($_SESSION['email'])) {
     header('location: index.php');
     exit();
 }
+
+if (!isset($_SESSION['email'])) {
+    header('location: index.php');
+    exit();
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the office name and acronym from the form
+    $officeName = $_POST["officeName"];
+    $acronym = strtoupper($_POST["acronym"]);
+    $otherOffices = isset($_POST["otherOffices"]) ? 1 : 0;
+
+    // Create a sanitized table name from the office name
+    $tableName = preg_replace("/[^a-zA-Z0-9_]/", "", $officeName);
+
+    // SQL to check if table exists
+    $checkTableExistsSQL = "SHOW TABLES LIKE '$tableName'";
+    $result = $conn->query($checkTableExistsSQL);
+
+    if ($result->num_rows > 0) {
+        echo '<script>alert("Table ' . $tableName . ' already exists");</script>';
+    } else {
+        // SQL to create table without acronym
+        $sql = "CREATE TABLE $tableName (
+            `id` int(11) NOT NULL,
+            `queue_number` varchar(255) NOT NULL,
+            `student_id` varchar(12) NOT NULL,
+            `endorsed_from` varchar(255) DEFAULT NULL,
+            `timein` timestamp NOT NULL DEFAULT current_timestamp(),
+            `timeout` timestamp NULL DEFAULT NULL,
+            `remarks` int(11) DEFAULT NULL,
+            `transaction` varchar(255) DEFAULT NULL,
+            `status` int(11) DEFAULT NULL
+        )";
+
+        if ($conn->query($sql) === TRUE) {
+            // Insert the office details into the existing "offices" table with otherOffices value
+            $insertOfficeSQL = "INSERT INTO offices (acronym, officeName, office) VALUES ('$acronym', '$officeName', '$otherOffices')";
+            if ($conn->query($insertOfficeSQL) === TRUE) {
+                echo '<script>alert("Table ' . $tableName . ' created successfully, and office details added to offices table");</script>';
+            } else {
+                echo '<script>alert("Error inserting office details: ' . $conn->error . '");</script>';
+            }
+        } else {
+            echo '<script>alert("Error creating table: ' . $conn->error . '");</script>';
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -15,15 +65,12 @@ if (!isset($_SESSION['email'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USERS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="../styles/index.css">
-    
+
     <link rel="stylesheet" href="../styles/offices.css">
     <link rel="stylesheet" href="../styles/users.css">
 </head>
@@ -43,15 +90,12 @@ if (!isset($_SESSION['email'])) {
                             <div class="card card-db">
                                 <div class="card-body gap-3 py-2">
                                     <div class="d-flex gap-4 align-items-center justify-content-center py-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FFD41C"
-                                            class="bi bi-ticket-fill" viewBox="0 0 16 16">
-                                            <path
-                                                d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13Z" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FFD41C" class="bi bi-ticket-fill" viewBox="0 0 16 16">
+                                            <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13Z" />
                                         </svg>
 
                                         <div class="align-items-center justify-content-center">
-                                            <h2 class="my-0 me-4 fs-2 fw-bold nu_color px-auto mx-auto"
-                                                id="accounts-count">
+                                            <h2 class="my-0 me-4 fs-2 fw-bold nu_color px-auto mx-auto" id="accounts-count">
                                                 <div class="spinner-border" role="status">
                                                     <span class="visually-hidden">Loading...</span>
                                                 </div>
@@ -66,19 +110,19 @@ if (!isset($_SESSION['email'])) {
                         </div>
 
                     </div>
-                    <div
-                        class="col-6 col-md-3 align-self-end mb-3 search-container position-relative d-flex justify-content-end">
+                    <div class="col-6 col-md-3 align-self-end mb-3 search-container position-relative d-flex justify-content-end">
                         <form action="" method="get" class="py-0">
                             <i class="bi bi-search"></i>
-                            <input name="searchUser" class="search mb-0 rounded" type="search" placeholder="SEARCH"
-                                aria-label="Search" required value="<?php if (isset($_GET['searchUser'])) {
-                                    echo $_GET['searchUser'];
-                                } ?>" id="searchUserInput">
+                            <input name="searchUser" class="search mb-0 rounded" type="search" placeholder="SEARCH" aria-label="Search" required value="<?php if (isset($_GET['searchUser'])) {
+                                                                                                                                                            echo $_GET['searchUser'];
+                                                                                                                                                        } ?>" id="searchUserInput">
                         </form>
                     </div>
                     <div class="col-1 col-md-2 align-self-end justify-content-start mb-3">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#addUser"
-                            class="btn btn-green btn-lg my-2 my-sm-0 mx-2" type="submit">ADD USER</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#addUser" class="btn btn-green btn-lg my-2 my-sm-0 mx-2" type="submit">ADD USER</a>
+                    </div>
+                    <div class="col-1 col-md-2 align-self-end justify-content-start mb-3">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#addOfficeModal" class="btn btn-green btn-lg my-2 my-sm-0 mx-2" type="submit">ADD OFFICE</a>
                     </div>
 
                 </div>
@@ -100,7 +144,7 @@ if (!isset($_SESSION['email'])) {
                             <tr>
                                 <?php
 
-                                $results_per_page = 8; 
+                                $results_per_page = 8;
 
                                 if (isset($_GET['page'])) {
                                     $page = $_GET['page'];
@@ -156,30 +200,75 @@ if (!isset($_SESSION['email'])) {
                     </table>
                 </div>
 
-            <!-- Pagination -->
-            <div class="pagination-container d-flex justify-content-between align-items-center">
-                <span class="page-label" style="align-self-end"></span>
-                <div class="pagination">
-                    <?php
+                <!-- Pagination -->
+                <div class="pagination-container d-flex justify-content-between align-items-center">
+                    <span class="page-label" style="align-self-end"></span>
+                    <div class="pagination">
+                        <?php
                         $sql = "SELECT COUNT(*) AS total FROM user_accounts";
                         $result = mysqli_query($conn, $sql);
                         $row = mysqli_fetch_assoc($result);
                         $total_pages = ceil($row["total"] / $results_per_page);
-                        
+
                         echo "<span class='page-label1'>PAGE</span>";
                         for ($i = 1; $i <= $total_pages; $i++) {
                             echo "<a href='users.php?page=$i'";
                             if ($i == $page) echo " class='active'";
                             echo ">$i</a>";
                         }
-                    ?>
-            </div>
-            
-            </div>
+                        ?>
+                    </div>
 
+                </div>
+
+            </div>
         </div>
     </div>
+
+    <!-- ADD OFFICE MODAL STARTS -->
+    <div class="modal fade" id="addOfficeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-block border-0 pb-0">
+                <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
+                    ADD OFFICE</h1>
+                <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
+                    Enter the office name and acronym to add a new office.</p>
+            </div>
+            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+                <div class="modal-body pb-0 my-3">
+                    <div class="mb-2">
+                        <label for="officeName" class="text-start">Office Name</label>
+                        <input type="text" id="officeName" name="officeName" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="acronym" class="text-start">Acronym</label>
+                        <input type="text" id="acronym" name="acronym" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
+                    </div>
+                    <div class="mb-2 form-check">
+                        <input type="checkbox" id="otherOffices" name="otherOffices" class="form-check-input">
+                        <label for="otherOffices" class="form-check-label">Other Offices</label>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-end border-0 col">
+                    <button type="button" class="btn btn-white px-4" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" class="btn btn-green px-4" id="addOfficeBtn">ADD OFFICE</button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+    <!-- ADD OFFICE MODAL ENDS -->
+
+    <!-- Modal OFFICE NOTIFY STARTS -->
+    <div id="myModal" class="modal">
+        <div id="myModalContent">
+            <span id="closeModal" onclick="closeModal()">&times;</span>
+            <h1><?php echo $modalTitle; ?></h1>
+            <p><?php echo $modalMessage; ?></p>
+        </div>
+    </div>
+    <!-- Modal OFFICE NOTIFY ENDS -->
 
     <!-- add user modal -->
     <div class="modal fade " id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -194,16 +283,13 @@ if (!isset($_SESSION['email'])) {
                 <form action="addUsers.php" method="post" onsubmit="return validateForm();">
                     <div class="modal-body pb-0  my-3">
                         <label for="full_name" class="text-start">Full Name</label>
-                        <input type="text" id="full_name" name="full_name"
-                            class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
+                        <input type="text" id="full_name" name="full_name" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
                         <p class="text-danger" id="error_full_name" style="display: none;">Please enter full name</p>
 
                         <div class="row">
                             <div class="col">
                                 <label for="office" class="text-start">Office</label>
-                                <select id="office" name="office"
-                                    class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
-                                    aria-label="Default select example">
+                                <select id="office" name="office" class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold" aria-label="Default select example">
                                     <option value=""></option>
                                     <option value="ADMISSION">Admission</option>
                                     <option value="REGISTRAR">Registrar</option>
@@ -238,18 +324,14 @@ if (!isset($_SESSION['email'])) {
                         <div class="row">
                             <div class="col">
                                 <label for="username" class="text-start">username</label>
-                                <input type="text"
-                                    class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2"
-                                    id="username" name="username">
+                                <input type="text" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2" id="username" name="username">
                                 <p class="text-danger" id="error-username" style="display: none;">Please enter username
                                 </p>
                             </div>
 
                             <div class="col">
                                 <label for="password" class="text-start">Password</label>
-                                <input type="text"
-                                    class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2"
-                                    id="password" name="password">
+                                <input type="text" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2" id="password" name="password">
                                 <p class="text-danger" id="error-password" style="display: none;">Please enter password
                                 </p>
                             </div>
@@ -257,8 +339,7 @@ if (!isset($_SESSION['email'])) {
                     </div>
                     <div class="modal-footer d-flex justify-content-end border-0 col">
                         <button type="button" class="btn btn-white px-4 " data-bs-dismiss="modal">CANCEL</button>
-                        <input type="submit" class="btn btn-green px-4" onclick="confirmAddUser()" id="addUserGo"
-                            value="ADD USER">
+                        <input type="submit" class="btn btn-green px-4" onclick="confirmAddUser()" id="addUserGo" value="ADD USER">
                 </form>
             </div>
         </div>
@@ -355,16 +436,13 @@ if (!isset($_SESSION['email'])) {
                     <div class="modal-body pb-0  my-3">
                         <input type="hidden" id="ID" name="ID">
                         <label for="editFullName" class="text-start">Full Name</label>
-                        <input type="text" id="full_name" name="full_name"
-                            class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
+                        <input type="text" id="full_name" name="full_name" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
                         <p class="text-danger" id="error_editFullName" style="display: none;">Please enter full name</p>
 
                         <div class="row">
                             <div class="col">
                                 <label for="office" class="text-start">Office</label>
-                                <select id="office" name="office"
-                                    class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
-                                    aria-label="Default select example">
+                                <select id="office" name="office" class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold" aria-label="Default select example">
                                     <option value="ADMISSION">Admission</option>
                                     <option value="REGISTRAR">Registrar</option>
                                     <option value="ACCOUNTING">Accounting</option>
@@ -398,18 +476,14 @@ if (!isset($_SESSION['email'])) {
                         <div class="row">
                             <div class="col">
                                 <label for="username" class="text-start">Username</label>
-                                <input type="text"
-                                    class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2"
-                                    id="username" name="username">
+                                <input type="text" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2" id="username" name="username">
                                 <p class="text-danger" id="error-editUsername" style="display: none;">Please enter
                                     username</p>
                             </div>
 
                             <div class="col">
                                 <label for="password" class="text-start">Password</label>
-                                <input type="text"
-                                    class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2"
-                                    id="password" name="password">
+                                <input type="text" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2" id="password" name="password">
                                 <p class="text-danger" id="error-editPassword" style="display: none;">Please enter
                                     password</p>
                             </div>
