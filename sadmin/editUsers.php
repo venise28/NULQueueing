@@ -16,12 +16,12 @@ $office = $_POST['office'];
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// Check if record exists
+// Check if record existss
 $checkSql = "SELECT * FROM user_accounts WHERE ID='$ID'";
 $checkResult = $conn->query($checkSql);
 
 if ($checkResult) {
-    // update 
+    // update
     $insertSql = "UPDATE user_accounts 
                   SET full_name = '$full_name',
                       office = '$office',
