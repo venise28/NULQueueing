@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2023 at 02:07 PM
+-- Generation Time: Nov 11, 2023 at 02:50 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -45,7 +45,9 @@ CREATE TABLE `academics` (
 
 INSERT INTO `academics` (`id`, `queue_number`, `student_id`, `program`, `concern`, `endorsed_from`, `timestamp`, `remarks`, `transaction`) VALUES
 (45, 'SEA006', 'GUEST', 'SEA', 'Brian De Guzman', NULL, '2023-11-03 08:05:15', NULL, 'Subject Registration'),
-(46, 'SCS003', 'GUEST', 'SCS', 'Marlon Diloy', NULL, '2023-11-03 08:10:43', NULL, 'Subject Registration');
+(46, 'SCS003', 'GUEST', 'SCS', 'Marlon Diloy', NULL, '2023-11-03 08:10:43', NULL, 'Subject Registration'),
+(47, 'SCS004', 'GUEST', 'SCS', 'Marlon Diloy', NULL, '2023-11-10 13:12:48', NULL, 'Subject Registration'),
+(48, 'SCS005', 'GUEST', 'SCS', 'Marlon Diloy', NULL, '2023-11-11 13:38:11', NULL, 'Subject Registration');
 
 -- --------------------------------------------------------
 
@@ -235,7 +237,8 @@ INSERT INTO `colleges` (`ID`, `acronym`, `collegeName`) VALUES
 (2, 'SEA', 'School of Engineering and Architecture'),
 (3, 'SAS', 'School of Arts and Sciences'),
 (4, 'SABM', 'School of Accountancy and Business Management'),
-(5, 'SHS', 'Senior High School');
+(5, 'SHS', 'Senior High School'),
+(6, 'Fl', 'Fluffy');
 
 -- --------------------------------------------------------
 
@@ -287,6 +290,24 @@ INSERT INTO `itso` (`id`, `queue_number`, `student_id`, `remarks`, `transaction`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `new`
+--
+
+CREATE TABLE `new` (
+  `id` int(11) NOT NULL,
+  `queue_number` varchar(255) NOT NULL,
+  `student_id` varchar(12) NOT NULL,
+  `endorsed_from` varchar(255) DEFAULT NULL,
+  `timein` timestamp NOT NULL DEFAULT current_timestamp(),
+  `timeout` timestamp NULL DEFAULT NULL,
+  `remarks` int(11) DEFAULT NULL,
+  `transaction` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `offices`
 --
 
@@ -308,7 +329,8 @@ INSERT INTO `offices` (`ID`, `acronym`, `officeName`, `office`) VALUES
 (6, 'CL', 'CLINIC', 1),
 (7, 'AS', 'ASSETS', 1),
 (8, 'IT', 'ITRO', 1),
-(9, 'G', 'GUIDANCE', 1);
+(9, 'G', 'GUIDANCE', 1),
+(12, 'FL', 'New', 0);
 
 -- --------------------------------------------------------
 
@@ -358,40 +380,67 @@ CREATE TABLE `queue` (
   `program` varchar(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` int(11) NOT NULL,
-  `remarks` varchar(255) DEFAULT NULL
+  `remarks` varchar(255) DEFAULT NULL,
+  `endorsed` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `queue`
 --
 
-INSERT INTO `queue` (`id`, `student_id`, `queue_number`, `office`, `program`, `timestamp`, `status`, `remarks`) VALUES
-(1, '2020-123', 'AD001', 'ADMISSION', '', '2023-09-21 07:35:47', 1, NULL),
-(2, '2020-123', 'R001', 'REGISTRAR', '', '2023-09-23 03:19:13', 1, NULL),
-(3, '2020-12345', 'AC0011', 'ACCOUNTING', '', '2023-09-23 06:14:32', 1, NULL),
-(4, '2020-123', 'AC002', 'ACCOUNTING', '', '2023-09-23 06:14:40', 0, NULL),
-(5, '2020-123', 'AD002', 'ADMISSION', '', '2023-09-24 22:36:25', 1, NULL),
-(6, '2020-123', 'AS001', 'ASSETS', '', '2023-09-24 22:37:35', 0, NULL),
-(7, '2020-123', 'AC003', 'ACCOUNTING', '', '2023-09-25 06:49:46', 0, NULL),
-(8, '2020-123', 'CL001', 'CLINIC', '', '2023-09-28 02:41:32', 0, NULL),
-(9, '2020-123', 'AC004', 'ACCOUNTING', '', '2023-09-28 02:50:22', 0, NULL),
-(11, '2020-123', 'R002', 'REGISTRAR', '', '2023-09-28 02:50:39', 0, NULL),
-(12, '2020-123', 'R003', 'REGISTRAR', '', '2023-09-28 02:50:49', 0, NULL),
-(13, '2020-123', 'CL002', 'CLINIC', '', '2023-09-28 02:56:33', 0, NULL),
-(14, '2020-123', 'AS002', 'ASSETS', '', '2023-09-28 02:57:34', 0, NULL),
-(15, '2020-123', 'AS003', 'ASSETS', '', '2023-09-28 02:57:41', 0, NULL),
-(16, 'GUEST', 'AD003', 'ADMISSION', '', '2023-09-28 04:31:40', 0, NULL),
-(17, '2020-123', 'R004', 'REGISTRAR', '', '2023-09-28 04:31:46', 0, NULL),
-(18, '2020-123', 'CL003', 'CLINIC', '', '2023-09-28 04:35:04', 0, NULL),
-(19, '2020-123', 'IT001', 'ITRO', '', '2023-09-28 04:35:15', 0, NULL),
-(22, '2020-12001', 'AC011', 'ACCOUNTING', '', '0000-00-00 00:00:00', 1, NULL),
-(24, '2020-12001', 'AC123', 'ACCOUNTING', '', '0000-00-00 00:00:00', 0, NULL),
-(25, 'GUEST', 'AD004', 'ADMISSION', '', '2023-10-10 14:21:00', 0, NULL),
-(29, '231312', 'AD005', 'ADMISSION', 'SEA', '2023-10-10 14:27:08', 1, NULL),
-(46, '2020-12028', 'SCS001', 'ACADEMICS', 'SCS', '2023-10-26 13:46:38', 0, NULL),
-(47, '2020-12028', 'SCS002', 'ACADEMICS', 'SCS', '2023-10-26 13:51:37', 0, NULL),
-(48, 'GUEST', 'SCS003', 'ACADEMICS', '-', '2023-11-03 08:10:43', 0, NULL),
-(49, 'GUEST', 'IT002', 'ITRO', '-', '2023-11-10 13:06:08', 0, NULL);
+INSERT INTO `queue` (`id`, `student_id`, `queue_number`, `office`, `program`, `timestamp`, `status`, `remarks`, `endorsed`) VALUES
+(1, '2020-123', 'AD001', 'ADMISSION', '', '2023-09-21 07:35:47', 1, NULL, ''),
+(2, '2020-123', 'R001', 'REGISTRAR', '', '2023-09-23 03:19:13', 1, NULL, ''),
+(3, '2020-12345', 'AC0011', 'ACCOUNTING', '', '2023-09-23 06:14:32', 1, NULL, ''),
+(4, '2020-123', 'AC002', 'ACCOUNTING', '', '2023-09-23 06:14:40', 0, NULL, ''),
+(5, '2020-123', 'AD002', 'ADMISSION', '', '2023-09-24 22:36:25', 1, NULL, ''),
+(6, '2020-123', 'AS001', 'ASSETS', '', '2023-09-24 22:37:35', 0, NULL, ''),
+(7, '2020-123', 'AC003', 'ACCOUNTING', '', '2023-09-25 06:49:46', 0, NULL, ''),
+(8, '2020-123', 'CL001', 'CLINIC', '', '2023-09-28 02:41:32', 0, NULL, ''),
+(9, '2020-123', 'AC004', 'ACCOUNTING', '', '2023-09-28 02:50:22', 0, NULL, ''),
+(11, '2020-123', 'R002', 'REGISTRAR', '', '2023-09-28 02:50:39', 0, NULL, ''),
+(12, '2020-123', 'R003', 'REGISTRAR', '', '2023-09-28 02:50:49', 0, NULL, ''),
+(13, '2020-123', 'CL002', 'CLINIC', '', '2023-09-28 02:56:33', 0, NULL, ''),
+(14, '2020-123', 'AS002', 'ASSETS', '', '2023-09-28 02:57:34', 0, NULL, ''),
+(15, '2020-123', 'AS003', 'ASSETS', '', '2023-09-28 02:57:41', 0, NULL, ''),
+(16, 'GUEST', 'AD003', 'ADMISSION', '', '2023-09-28 04:31:40', 0, NULL, ''),
+(17, '2020-123', 'R004', 'REGISTRAR', '', '2023-09-28 04:31:46', 0, NULL, ''),
+(18, '2020-123', 'CL003', 'CLINIC', '', '2023-09-28 04:35:04', 0, NULL, ''),
+(19, '2020-123', 'IT001', 'ITRO', '', '2023-09-28 04:35:15', 0, NULL, ''),
+(22, '2020-12001', 'AC011', 'ACCOUNTING', '', '0000-00-00 00:00:00', 1, NULL, ''),
+(24, '2020-12001', 'AC123', 'ACCOUNTING', '', '0000-00-00 00:00:00', 0, NULL, ''),
+(25, 'GUEST', 'AD004', 'ADMISSION', '', '2023-10-10 14:21:00', 0, NULL, ''),
+(29, '231312', 'AD005', 'ADMISSION', 'SEA', '2023-10-10 14:27:08', 1, NULL, ''),
+(46, '2020-12028', 'SCS001', 'ACADEMICS', 'SCS', '2023-10-26 13:46:38', 0, NULL, ''),
+(47, '2020-12028', 'SCS002', 'ACADEMICS', 'SCS', '2023-10-26 13:51:37', 0, NULL, ''),
+(48, 'GUEST', 'SCS003', 'ACADEMICS', '-', '2023-11-03 08:10:43', 0, NULL, ''),
+(49, 'GUEST', 'IT002', 'ITRO', '-', '2023-11-10 13:06:08', 0, NULL, ''),
+(50, 'GUEST', 'SCS004', 'ACADEMICS', '-', '2023-11-10 13:12:48', 0, NULL, ''),
+(51, 'GUEST', 'AC124', 'ACCOUNTING', '-', '2023-11-11 01:00:20', 0, NULL, ''),
+(52, '123455', 'AS004', 'ASSETS', 'SAS', '2023-11-11 01:06:01', 0, NULL, ''),
+(53, '123455', 'IT003', 'ITRO', 'SAS', '2023-11-11 01:06:03', 0, NULL, ''),
+(54, 'GUEST', 'G001', 'GUIDANCE', '-', '2023-11-11 01:13:27', 0, NULL, ''),
+(55, 'GUEST', 'IT004', 'ITRO', '-', '2023-11-11 02:59:43', 0, NULL, ''),
+(56, 'GUEST', 'scs001', 'hello', '-', '2023-11-11 04:18:21', 0, NULL, ''),
+(57, 'GUEST', 'AC125', 'ACCOUNTING', '-', '2023-11-11 13:46:44', 0, NULL, 'kiosk');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `queue_logs`
+--
+
+CREATE TABLE `queue_logs` (
+  `id` int(11) NOT NULL,
+  `student_id` varchar(10) NOT NULL,
+  `queue_number` varchar(10) NOT NULL,
+  `office` varchar(20) NOT NULL,
+  `program` varchar(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` int(11) NOT NULL,
+  `remarks` varchar(255) DEFAULT NULL,
+  `endorsed` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -480,7 +529,6 @@ CREATE TABLE `user_accounts` (
   `office` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` varchar(255) NOT NULL,
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -488,10 +536,10 @@ CREATE TABLE `user_accounts` (
 -- Dumping data for table `user_accounts`
 --
 
-INSERT INTO `user_accounts` (`ID`, `full_name`, `office`, `username`, `password`, `role`, `status`) VALUES
-(1, 'Dora D. Explorer', 'CLINIC', 'Dddddora', '123456', 'Admin', NULL),
-(2, 'Olaf D. Snowman', 'ACCOUNTING', 'inSummer2', '123456', 'Admin', NULL),
-(3, 'Marlon Diloy', 'SCS', 'marlondiloy', '12345678', 'admin', 'available');
+INSERT INTO `user_accounts` (`ID`, `full_name`, `office`, `username`, `password`, `status`) VALUES
+(1, 'Dora D. Explorer', 'CLINIC', 'Dddddora', '123456', NULL),
+(2, 'Olaf D. Snowman', 'ACCOUNTING', 'inSummer2', '123456', NULL),
+(3, 'Marlon Diloy', 'SCS', 'marlondiloy', '12345678', 'available');
 
 --
 -- Indexes for dumped tables
@@ -576,6 +624,12 @@ ALTER TABLE `queue`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `queue_logs`
+--
+ALTER TABLE `queue_logs`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `registrar`
 --
 ALTER TABLE `registrar`
@@ -601,7 +655,7 @@ ALTER TABLE `user_accounts`
 -- AUTO_INCREMENT for table `academics`
 --
 ALTER TABLE `academics`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `academics_logs`
@@ -649,7 +703,7 @@ ALTER TABLE `clinic`
 -- AUTO_INCREMENT for table `colleges`
 --
 ALTER TABLE `colleges`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `guidance`
@@ -661,13 +715,19 @@ ALTER TABLE `guidance`
 -- AUTO_INCREMENT for table `offices`
 --
 ALTER TABLE `offices`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `queue`
 --
 ALTER TABLE `queue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT for table `queue_logs`
+--
+ALTER TABLE `queue_logs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `registrar`

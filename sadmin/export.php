@@ -10,27 +10,27 @@ $selectedOffice = $_POST['officeSelect'];
 if ($selectedOffice === 'ALL-OFFICES') {
 // Prepare and execute the query based on the selected parameters
 $query = "SELECT
-            COUNT(queue.timestamp) AS customer_count,
-            DATE_FORMAT(queue.timestamp, '%M %e, %Y') AS specific_date,
-            queue.office AS specific_office
-        FROM queue
+            COUNT(queue_logs.timestamp) AS customer_count,
+            DATE_FORMAT(queue_logs.timestamp, '%M %e, %Y') AS specific_date,
+            queue_logs.office AS specific_office
+        FROM queue_logs
         WHERE
-            YEAR(queue.timestamp) = $selectedYear
-            AND MONTH(queue.timestamp) BETWEEN $selectedStartMonth AND $selectedEndMonth
+            YEAR(queue_logs.timestamp) = $selectedYear
+            AND MONTH(queue_logs.timestamp) BETWEEN $selectedStartMonth AND $selectedEndMonth
         GROUP BY
             specific_date, specific_office
         ORDER BY
             specific_date, specific_office";
 } else {
     $query = "SELECT
-            COUNT(queue.timestamp) AS customer_count,
-            DATE_FORMAT(queue.timestamp, '%M %e, %Y') AS specific_date,
-            queue.office AS specific_office
-        FROM queue
+            COUNT(queue_logs.timestamp) AS customer_count,
+            DATE_FORMAT(queue_logs.timestamp, '%M %e, %Y') AS specific_date,
+            queue_logs.office AS specific_office
+        FROM queue_logs
         WHERE
-            YEAR(queue.timestamp) = $selectedYear
-            AND MONTH(queue.timestamp) BETWEEN $selectedStartMonth AND $selectedEndMonth
-            AND queue.office = '$selectedOffice'
+            YEAR(queue_logs.timestamp) = $selectedYear
+            AND MONTH(queue_logs.timestamp) BETWEEN $selectedStartMonth AND $selectedEndMonth
+            AND queue_logs.office = '$selectedOffice'
         GROUP BY
             specific_date, specific_office
         ORDER BY

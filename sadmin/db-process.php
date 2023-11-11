@@ -42,6 +42,19 @@ elseif ($_GET['action'] == 'accounts') {
 
 
    
+}
+elseif ($_GET['action'] == 'colleges') {
+    
+    $sql = "SELECT * FROM colleges";
+    $result = $conn->query($sql);
+
+    if ($result = mysqli_query($conn, $sql)) {
+        $customerrowcount = mysqli_num_rows($result);
+        echo $customerrowcount;
+    }
+
+
+   
 }else {
     echo "Invalid action.";
 }
