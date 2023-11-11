@@ -54,6 +54,10 @@ if (!isset($_SESSION['email'])) {
                 monthout = e.options[e.selectedIndex].text;
                 document.querySelector('.monthout').textContent = monthout;
 
+                selectYear = document.querySelector('#yearSelect');
+                yearout = selectYear.value;
+                document.querySelector('.yearout').textContent = yearout;
+
                 $("#monthSelectStart").on("change", function () {
 
                     var e = document.getElementById("monthSelectStart");
