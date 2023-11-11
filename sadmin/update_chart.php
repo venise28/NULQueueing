@@ -21,7 +21,7 @@ FROM (
         IFNULL(COUNT(q2.timestamp), 0) AS customer_count,
         DATE(q2.timestamp) AS specific_date
     FROM
-        queue q2
+        queue_logs q2
     WHERE
         YEAR(q2.timestamp) = $selectedYear
         AND MONTH(q2.timestamp) BETWEEN $selectedMonthStart AND $selectedMonthEnd
@@ -45,7 +45,7 @@ FROM (
         IFNULL(COUNT(q2.timestamp), 0) AS customer_count,
         DATE(q2.timestamp) AS specific_date
     FROM
-        queue q2
+        queue_logs q2
     WHERE
         YEAR(q2.timestamp) = $selectedYear
         AND MONTH(q2.timestamp) BETWEEN $selectedMonthStart AND $selectedMonthEnd
