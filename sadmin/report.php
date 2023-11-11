@@ -45,6 +45,11 @@ if (!isset($_SESSION['email'])) {
 
 
             $(document).ready(function () {
+
+                document.getElementById('btn-print-this').addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent the form from being submitted
+                });
+
                 selectOffice = document.querySelector('#officeSelect');
                 officeout = selectOffice.value;
                 document.querySelector('.officeout').textContent = officeout;
@@ -128,70 +133,76 @@ if (!isset($_SESSION['email'])) {
                 <h4 class="fs-2 pt-3 ps-5 pb-2 nu_color text-center"> Please select an office to generate a report </h4>
 
                 <div class="text-center">
-                    <select class="form-select-sm" id="officeSelect" aria-label="Default select example">
-                        <?php
-                        @include 'database.php';
-                        $sql = "SELECT * FROM offices";
-                        $result = $conn->query($sql);
-                        ?>
-                        <option value="ALL-OFFICES">All Offices</option>
+                    <form action="export.php" method="post">
+                        <select class="form-select-sm" name="officeSelect" id="officeSelect"
+                            aria-label="Default select example">
+                            <?php
+                            @include 'database.php';
+                            $sql = "SELECT * FROM offices";
+                            $result = $conn->query($sql);
+                            ?>
+                            <option value="ALL-OFFICES">All Offices</option>
 
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $officeName = $row["officeName"];
-                                echo '<option value="' . $officeName . '">' . $officeName . '</option>';
+                            <?php
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    $officeName = $row["officeName"];
+                                    echo '<option value="' . $officeName . '">' . $officeName . '</option>';
+                                }
+                            } else {
+                                echo '<option value="">No offices available</option>';
                             }
-                        } else {
-                            echo '<option value="">No offices available</option>';
-                        }
-                        ?>
-                    </select>
-                    <select class="form-select-sm" id="monthSelectStart" aria-label="Default select example">
-                        <option selected value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+                            ?>
+                        </select>
+                        <select class="form-select-sm" name="monthSelectStart" id="monthSelectStart"
+                            aria-label="Default select example">
+                            <option selected value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
 
-                    -
+                        -
 
-                    <select class="form-select-sm" id="monthSelectEnd" aria-label="Default select example">
-                        <option selected value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+                        <select class="form-select-sm" name="monthSelectEnd" id="monthSelectEnd"
+                            aria-label="Default select example">
+                            <option selected value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
 
-                    <select class="form-select-sm" id="yearSelect" aria-label="Default select example">
-                        <option selected value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
+                        <select class="form-select-sm" name="yearSelect" id="yearSelect"
+                            aria-label="Default select example">
+                            <option selected value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
 
-                    <button id="btn-print-this" class="btn btn-success btn-sm"> Print
-                    </button>
+                        <button id="btn-print-this" class="btn btn-success btn-sm"> Print
+                        </button>
 
-                    <form id="uploadCsv" action="export.php" method="POST">
-                        <button type="submit">Export to CSV</button>
+
+                        <input type="submit" value="Export CSV">
                     </form>
+
 
                 </div>
 

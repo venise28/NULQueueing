@@ -1,57 +1,62 @@
 <?php
 include '../database.php';
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-$selectedMonthStart = $_POST['monthstart'];
-$selectedMonthEnd = $_POST['monthend'];
-$selectedYear = $_POST['year'];
 
-// Your SQL query
-$sql = "SELECT
-COUNT(q2.timestamp) AS customer_count,
-DATE_FORMAT(q2.timestamp, '%M %e, %Y') AS specific_date,
-q2.office AS specific_office
-FROM
-queue q2
-WHERE
-YEAR(q2.timestamp) = 2023
-AND MONTH(q2.timestamp) BETWEEN 1 AND 12
-GROUP BY
-specific_date, specific_office
-ORDER BY
-specific_date, specific_office;";
+// Retrieve selected start month, end month, and year from the form
+$selectedStartMonth = $_POST['monthSelectStart'];
+$selectedEndMonth = $_POST['monthSelectEnd'];
+$selectedYear = $_POST['yearSelect'];
+$selectedOffice = $_POST['officeSelect'];
 
-// Execute the query
-$result = $conn->query($sql);
+if ($selectedOffice === 'ALL-OFFICES') {
+// Prepare and execute the query based on the selected parameters
+$query = "SELECT
+            COUNT(queue.timestamp) AS customer_count,
+            DATE_FORMAT(queue.timestamp, '%M %e, %Y') AS specific_date,
+            queue.office AS specific_office
+        FROM queue
+        WHERE
+            YEAR(queue.timestamp) = $selectedYear
+            AND MONTH(queue.timestamp) BETWEEN $selectedStartMonth AND $selectedEndMonth
+        GROUP BY
+            specific_date, specific_office
+        ORDER BY
+            specific_date, specific_office";
+} else {
+    $query = "SELECT
+            COUNT(queue.timestamp) AS customer_count,
+            DATE_FORMAT(queue.timestamp, '%M %e, %Y') AS specific_date,
+            queue.office AS specific_office
+        FROM queue
+        WHERE
+            YEAR(queue.timestamp) = $selectedYear
+            AND MONTH(queue.timestamp) BETWEEN $selectedStartMonth AND $selectedEndMonth
+            AND queue.office = '$selectedOffice'
+        GROUP BY
+            specific_date, specific_office
+        ORDER BY
+            specific_date, specific_office";
+}
 
-// Check if the query was successful
+try {
+    $result = $conn->query($query);
+} catch (mysqli_sql_exception $e) {
+    echo "Error: " . $e->getMessage();
+    exit;
+}
+
+// Generate the CSV file if no error occurs
 if ($result) {
-    // Set the headers for CSV file download
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="exported_data.csv"');
+    $csvContent = "";
+    $csvContent .= "Customer Count,Date,Year,Office\n";
 
-    // Create a file pointer connected to the output stream
-    $output = fopen('php://output', 'w');
-
-    // Write the CSV headers
-    fputcsv($output, array('Customer Count', 'Date'));
-
-    // Loop through the result set and write data to the CSV file
     while ($row = $result->fetch_assoc()) {
-        fputcsv($output, $row);
+        $csvContent .= "{$row['customer_count']},{$row['specific_date']},{$row['specific_office']}\n";
     }
 
-    // Close the file pointer
-    fclose($output);
-
-    // Close the database connection
-    $conn->close();
-    exit;
-} else {
-    // Handle the case where the query fails
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    // Set headers and output the CSV content
+    $today = date('Ymd');
+    header('Content-Type: application/csv');
+    header("Content-Disposition: attachment; filename=customer_data_{$today}.csv");
+    echo $csvContent;
 }
-
-}
-
 ?>
