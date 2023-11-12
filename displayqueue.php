@@ -155,6 +155,17 @@ if ($window1Data !== null && $window2Data !== null) {
         </div>
         <!-- BOTTOM CONTAINER ENDS (DATE ACADEMICS CLINIC ITRO GUIDANCE) -->
     </div>
+
+
+
+
+
+
+
+
+
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script/displayscript.js"></script>
 
