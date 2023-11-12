@@ -16,90 +16,86 @@
 
 <body>
     <div class="main-container">
-        <!-- TOP CONTAINER STARTS (REGISTRAR ACCOUNTING ADMISSIONS ASSETS) -->
-        <div class="registrar-container araa-office">
-            <h1 class="office-title">REGISTRAR</h1>
-            <ul>
-                <li class="queue-list"><p class="window">Window 1:</p><p class="window-q">R0001</p></li>
-                <li class="queue-list"><p class="window">Window 2:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">Window 3:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">Window 4:</p><p class="window-q">Loading...</p></li>
-            </ul>
-        </div>
-
-        <div class="accounting-container araa-office">
-            <h1 class="office-title">ACCOUNTING</h1>
-            <ul>
-                <li class="queue-list"><p class="window">Window 1:</p><p class="window-q">AC0001</p></li>
-                <li class="queue-list"><p class="window">Window 2:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">Window 3:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">Window 4:</p><p class="window-q">Loading...</p></li>
-            </ul>
-        </div>
-
-        <div class="admissions-assets-container">
-            <div class="admissions-container araa-office">
-                <h1 class="office-title">ADMISSIONS</h1>
-                <p>Loading...</p>
+        <!-- TOP CONTAINER STARTS (NOW SERVING & DATETIME) -->
+        <header class="heading-datetime-container">
+            <div class="heading-container">
+                <h1 class="heading-text">NOW SERVING</h1>
             </div>
+            <div class="datetime-container">
+                <h3 id="date"></h3>
+                <h1 id="time"></h1>
+            </div>
+        </header>
+        <!-- TOP CONTAINER ENDS (NOW SERVING & DATETIME) -->
 
-            <div class="assets-container araa-office">
-                <h1 class="office-title">ASSETS</h1>
-                <p>Loading...</p>
+        <!-- MIDDLE CONTAINER STARTS (REGISTRAR ACCOUNTING ADMISSIONS) -->
+        <div class="raa-container">
+            <div class="registrar-container">
+                <div class="registrar-heading">
+                    <h1>REGISTRAR</h1>
+                </div>
+                <div class="registrar-queue">
+                    <h2>R009</h2>
+                    <h2>WINDOW 1</h2>
+                </div>
+            </div>
+            <div class="accounting-container">
+                <div class="accounting-heading">
+                    <h1>ACCOUNTING</h1>
+                </div>
+                <div class="accounting-queue">
+                    <h2>R009</h2>
+                    <h2>WINDOW 1</h2>
+                </div>
+            </div>
+            <div class="admission-container">
+                <div class="admission-heading">
+                    <h1>ADMISSIONS</h1>
+                </div>
+                <div class="admission-queue">
+                    <h2>AD002</h2>
+                </div>
             </div>
         </div>
-        <!-- TOP CONTAINER ENDS (REGISTRAR ACCOUNTING ADMISSIONS ASSETS) -->
+        <!-- MIDDLE CONTAINER ENDS (REGISTRAR ACCOUNTING ADMISSIONS) -->
 
-        <!-- BOTTOM CONTAINER STARTS (DATE ACADEMICS CLINIC ITRO GUIDANCE) -->
-        <div class="date-container dac-container">
-            <h3 id="date"></h3>
-            <h1 id="time"></h1>
-        </div>
-
-        <div class="academics-container dac-container">
-            <h1>ACADEMICS</h1>
-            <ul>
-                <li class="queue-list"><p class="window">SCS:</p><p class="window-q">SCS0001</p></li>
-                <li class="queue-list"><p class="window">SABM:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">CEA:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">CAS:</p><p class="window-q">Loading...</p></li>
-                <li class="queue-list"><p class="window">SHS:</p><p class="window-q">Loading...</p></li>
-                <!-- <li>SABM: Loading...</li>
-                <li>CEA: Loading...</li>
-                <li>CAS: Loading...</li>
-                <li>SHS: Loading...</li> -->
-            </ul>
-        </div>
-
-        <div class="cig-container dac-container">
+        <!-- BOTTOM CONTAINER STARTS (ASSETS CLINIC ITRO GUIDANCE) -->
+        <div class="acig-container">
+            <div class="assets-container">
+                <div class="assets-heading">
+                    <h1>ASSETS</h1>
+                </div>
+                <div class="assets-queue">
+                    <h2>AS002</h2>
+                </div>
+            </div>
             <div class="clinic-container">
-                <h1>CLINIC</h1>
-                <p>CL0001</p>
+                <div class="clinic-heading">
+                    <h1>CLINIC</h1>
+                </div>
+                <div class="clinic-queue">
+                    <h2>CL001</h2>
+                </div>
             </div>
-
-            <div class="itro-container">
-                <h1>ITRO</h1>
-                <p>Loading...</p>
+            <div class="itso-container">
+                <div class="itso-heading">
+                    <h1>ITSO</h1>
+                </div>
+                <div class="itso-queue">
+                    <h2>IT001</h2>
+                </div>
             </div>
-
             <div class="guidance-container">
-                <h1>GUIDANCE</h1>
-                <p>Loading...</p>
+                <div class="guidance-heading">
+                    <h1>GUIDANCE</h1>
+                </div>
+                <div class="guidance-queue">
+                    <h2>G0001</h2>
+                </div>
             </div>
         </div>
-        <!-- BOTTOM CONTAINER ENDS (DATE ACADEMICS CLINIC ITRO GUIDANCE) -->
+        <!-- BOTTOM CONTAINER ENDS (ASSETS CLINIC ITRO GUIDANCE) -->
     </div>
-
-
-
-
-
-
-
-
-
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script/displayscript.js"></script>
 </body>
