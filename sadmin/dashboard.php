@@ -135,30 +135,44 @@ if (!isset($_SESSION['email'])) {
                 <div class="row justify-content-center mt-5" style="height:40vh; width:auto;">
 
                     <?php
-                    $query = $conn->query("SELECT office, COUNT(*) AS office_count
-                    FROM queue
-                    GROUP BY office;");
+                    // Fetch all table names ending with "_logs"
+                    $tableQuery = $conn->query("SELECT table_name
+                    FROM information_schema.tables
+                    WHERE table_name LIKE '%_logs'
+                      AND table_name NOT LIKE 'queue_logs';");
 
-                    foreach ($query as $data) {
-                        $office[] = $data['office'];
-                        $count[] = $data['office_count'];
+                    // Initialize arrays to store data
+                    $office = [];
+                    $count = [];
+                    $name = [];
+                    $time = [];
+
+                    // Process each table
+                    foreach ($tableQuery as $tableData) {
+                        $tableName = $tableData['table_name'];
+
+                        // Create a dynamic query for each table
+                        $query = "SELECT '$tableName' AS name, COUNT(*) AS office_count FROM $tableName";
+                        $tquery = "SELECT '$tableName' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time FROM $tableName WHERE timestamp IS NOT NULL AND timeout IS NOT NULL;";
+
+                        // Execute the queries
+                        $officeQuery = $conn->query($query);
+                        $timeQuery = $conn->query($tquery);
+
+                        // Process the results
+                        foreach ($officeQuery as $data) {
+                            $count[] = $data['office_count'];
+                        }
+
+                        foreach ($timeQuery as $data) {
+                            $name[] = $data['name'];
+                            $time[] = $data['average_time'];
+                        }
                     }
 
-                    $tquery = $conn->query("SELECT 'academics' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time
-                    FROM academics_logs
-                    WHERE timestamp IS NOT NULL AND timeout IS NOT NULL
-                    UNION ALL
-                    SELECT 'admissions' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time
-                    FROM admission_logs
-                    WHERE timestamp IS NOT NULL AND timeout IS NOT NULL;
-                    ");
-
-                    foreach ($tquery as $data) {
-                        $name[] = $data['name'];
-                        $time[] = $data['average_time'];
-                    }
-
+                    // Your chart rendering code goes here...
                     ?>
+
                     <canvas class="align-items-center" id="myChartBar"></canvas>
                     <canvas class="align-items-center" id="myChartPie"></canvas>
 
