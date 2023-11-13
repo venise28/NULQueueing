@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 13, 2023 at 09:44 AM
+-- Generation Time: Nov 13, 2023 at 10:38 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -133,7 +133,8 @@ INSERT INTO `accounting` (`id`, `queue_number`, `student_id`, `timestamp`, `endo
 (15, 'R12O1', '2020-120018', '2023-11-09 17:08:30', 'Registrar', 'Payment', 'Uniform Payment', 1, 1),
 (16, 'R12301', '2020-120018', '2023-11-09 17:25:09', 'Registrar', 'Registrar', 'Payment', 0, 0),
 (17, 'RO1240', '2020-120018', '2023-11-09 17:08:30', 'Regisrar', 'Registrar', 'Payment', 1, 1),
-(18, 'AC001', 'GUEST', '2023-11-13 01:12:05', NULL, '', NULL, 0, 0);
+(18, 'AC001', 'GUEST', '2023-11-13 01:12:05', NULL, '', NULL, 0, 0),
+(19, 'AC002', 'GUEST', '2023-11-13 02:32:39', NULL, '', NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -205,7 +206,9 @@ CREATE TABLE `admission` (
 INSERT INTO `admission` (`id`, `queue_number`, `student_id`, `timestamp`, `endorsed_from`, `transaction`, `remarks`, `program`, `status`) VALUES
 (1, 'ROO1', '2020-120018', '2023-11-09 17:08:30', 'Accounting', 'Payment', 'Endorse to admission test.', NULL, 0),
 (2, 'ROO1', '2020-120018', '2023-11-09 17:08:30', 'Accounting', 'Payment', 'SCS', 'SCS', 0),
-(3, 'AD001', 'GUEST', '2023-11-13 01:30:13', NULL, '', '', '-', 0);
+(3, 'AD001', 'GUEST', '2023-11-13 01:30:13', NULL, '', '', '-', 0),
+(4, 'AD002', 'GUEST', '2023-11-13 02:25:18', NULL, '', '', '-', 0),
+(5, 'AD003', 'GUEST', '2023-11-13 02:32:35', NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -297,7 +300,8 @@ CREATE TABLE `clinic` (
 --
 
 INSERT INTO `clinic` (`id`, `queue_number`, `student_id`, `remarks`, `transaction`, `timestamp`, `status`, `endorsed_from`) VALUES
-(14, 'R12O1', '2020-120018', 'Test to clinic', 'Payment', '2023-11-09 17:08:30', NULL, 'Accounting');
+(14, 'R12O1', '2020-120018', 'Test to clinic', 'Payment', '2023-11-09 17:08:30', NULL, 'Accounting'),
+(15, 'CL001', 'GUEST', '', NULL, '2023-11-13 02:32:55', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -364,7 +368,8 @@ CREATE TABLE `guidance` (
 INSERT INTO `guidance` (`id`, `queue_number`, `student_id`, `remarks`, `transaction`, `timestamp`, `status`, `endorsed_from`) VALUES
 (1, 'GD0011', '2020-123456', 'BSDFSF', 'SDFSDFSD', '2023-11-03 11:30:44', 0, ''),
 (2, 'GD0022', '2021-123321', 'EGSDGSDG', 'EWGSDGDS', '2023-11-03 11:30:46', 1, ''),
-(14, 'R1OO441', '2020-120018', 'Finally', 'Registrar', '2023-11-09 17:25:09', NULL, 'Accounting');
+(14, 'R1OO441', '2020-120018', 'Finally', 'Registrar', '2023-11-09 17:25:09', NULL, 'Accounting'),
+(15, 'G001', 'GUEST', '', NULL, '2023-11-13 02:32:48', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -407,7 +412,8 @@ CREATE TABLE `itso` (
 
 INSERT INTO `itso` (`id`, `queue_number`, `student_id`, `remarks`, `transaction`, `timestamp`, `status`, `endorsed_from`) VALUES
 (0, 'GD0033', '2020-543221', 'Validation of ID', NULL, '2023-10-26 18:19:44', NULL, ''),
-(0, 'R1OO1', '2020-120018', 'itro', 'Registrar', '2023-11-09 17:25:09', NULL, 'Accounting');
+(0, 'R1OO1', '2020-120018', 'itro', 'Registrar', '2023-11-09 17:25:09', NULL, 'Accounting'),
+(0, 'IT001', 'GUEST', '', NULL, '2023-11-13 02:32:50', NULL, '');
 
 -- --------------------------------------------------------
 
@@ -500,25 +506,13 @@ CREATE TABLE `queue` (
   `id` int(11) NOT NULL,
   `student_id` varchar(10) NOT NULL,
   `queue_number` varchar(10) NOT NULL,
-  `office` varchar(20) NOT NULL,
+  `office` varchar(255) NOT NULL,
   `program` varchar(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
   `status` int(11) NOT NULL,
   `remarks` varchar(255) DEFAULT NULL,
   `endorsed` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `queue`
---
-
-INSERT INTO `queue` (`id`, `student_id`, `queue_number`, `office`, `program`, `timestamp`, `status`, `remarks`, `endorsed`) VALUES
-(1, 'GUEST', 'AC001', 'ACCOUNTING', '-', '2023-11-13 08:12:05', 0, NULL, 'kiosk'),
-(2, 'GUEST', 'SEA001', 'ACADEMICS', '-', '2023-11-13 08:12:37', 0, NULL, 'kiosk'),
-(4, 'GUEST', 'AD001', 'ADMISSION', '-', '2023-11-13 08:30:13', 0, NULL, 'kiosk'),
-(5, '1231431', 'NEW001', 'ACADEMICS', 'SEA', '2023-11-13 08:39:17', 0, NULL, 'kiosk'),
-(7, 'GUEST', 'NE001', 'NEWZ', '-', '2023-11-13 08:41:57', 0, NULL, 'kiosk'),
-(8, 'GUEST', 'NE001', 'NEW OFFICE', '-', '2023-11-13 08:42:27', 0, NULL, 'kiosk');
 
 -- --------------------------------------------------------
 
@@ -603,7 +597,8 @@ CREATE TABLE `registrar` (
 INSERT INTO `registrar` (`id`, `queue_number`, `student_id`, `timestamp`, `endorsed_from`, `transaction`, `remarks`, `status`, `window`) VALUES
 (3, 'R003', '2121', '2023-11-12 11:03:12', '2121', '2121', '2121', 1, 'Window 2'),
 (4, 'R004', '2121', '2023-11-12 11:03:34', '2121', '2121', '2112', 0, NULL),
-(0, 'R1OO1', '2020-120018', '2023-11-09 17:25:09', 'Accounting', 'Registrar', 'This is just a test.', 0, NULL);
+(0, 'R1OO1', '2020-120018', '2023-11-09 17:25:09', 'Accounting', 'Registrar', 'This is just a test.', 0, NULL),
+(0, 'R001', 'GUEST', '2023-11-13 02:32:37', NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -817,7 +812,7 @@ ALTER TABLE `academics_queue`
 -- AUTO_INCREMENT for table `accounting`
 --
 ALTER TABLE `accounting`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `accounting_logs`
@@ -835,7 +830,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `admission`
 --
 ALTER TABLE `admission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `admission_logs`
@@ -853,7 +848,7 @@ ALTER TABLE `assets`
 -- AUTO_INCREMENT for table `clinic`
 --
 ALTER TABLE `clinic`
-  MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `colleges`
@@ -865,13 +860,13 @@ ALTER TABLE `colleges`
 -- AUTO_INCREMENT for table `guidance`
 --
 ALTER TABLE `guidance`
-  MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(64) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `offices`
 --
 ALTER TABLE `offices`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `program_chairs`
@@ -883,7 +878,7 @@ ALTER TABLE `program_chairs`
 -- AUTO_INCREMENT for table `queue`
 --
 ALTER TABLE `queue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `queue_logs`
