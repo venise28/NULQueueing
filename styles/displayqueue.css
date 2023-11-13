@@ -73,16 +73,21 @@ body::before {
     padding: 1rem 15rem;
 }
 
-.registrar-queue {
+.registrar-queue-container {
     position: relative;
-    display: flex;
-    justify-content: space-between;
     padding: 8rem 5rem 4rem 5rem;
     margin-top: -5rem;
     z-index: 1;
     background-color: var(--primary-color);
     border-radius: 75px;
 }
+
+.registrar-queue {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 
 .registrar-queue h2 {
     font-size: 5rem;
@@ -102,15 +107,19 @@ body::before {
     padding: 1rem 15rem;
 }
 
-.accounting-queue {
-    background-color: var(--primary-color);
-    border-radius: 75px;
+.accounting-queue-container {
     position: relative;
-    display: flex;
-    justify-content: space-between;
     padding: 8rem 5rem 4rem 5rem;
     margin-top: -5rem;
     z-index: 1;
+    background-color: var(--primary-color);
+    border-radius: 75px;
+}
+
+.accounting-queue {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .accounting-queue h2 {
@@ -131,16 +140,17 @@ body::before {
     padding: 1rem 4rem;
 }
 
-.admission-queue {
-    background-color: var(--primary-color);
-    border-radius: 75px;
+.admission-queue-container {
     position: relative;
-    text-align: center;
     padding: 8rem 5rem 4rem 5rem;
     margin-top: -5rem;
     z-index: 1;
     background-color: var(--primary-color);
     border-radius: 75px;
+}
+
+.admission-queue {
+    text-align: center;
 }
 
 .admission-queue h2 {
@@ -168,14 +178,17 @@ body::before {
     padding: 1rem 15rem;
 }
 
-.assets-queue {
+.assets-queue-container {
     position: relative;
-    text-align: center;
     padding: 8rem 5rem 4rem 5rem;
     margin-top: -5rem;
     z-index: 1;
     background-color: var(--primary-color);
     border-radius: 75px;
+}
+
+.assets-queue {
+    text-align: center;
 }
 
 .assets-queue h2 {
@@ -197,14 +210,17 @@ body::before {
     padding: 1rem 8rem;
 }
 
-.clinic-queue {
+.clinic-queue-container {
     position: relative;
-    text-align: center;
-    padding: 5rem;
-    margin-top: -2rem;
+    padding: 8rem 5rem 4rem 5rem;
+    margin-top: -5rem;
     z-index: 1;
     background-color: var(--primary-color);
     border-radius: 75px;
+}
+
+.clinic-queue {
+    text-align: center;
 }
 
 .clinic-queue h2 {
@@ -225,14 +241,17 @@ body::before {
     padding: 1rem 8rem;
 }
 
-.itso-queue {
+.itso-queue-container {
     position: relative;
-    text-align: center;
-    padding: 5rem;
-    margin-top: -2rem;
+    padding: 8rem 5rem 4rem 5rem;
+    margin-top: -5rem;
     z-index: 1;
     background-color: var(--primary-color);
     border-radius: 75px;
+}
+
+.itso-queue {
+    text-align: center;
 }
 
 .itso-queue h2 {
@@ -253,14 +272,17 @@ body::before {
     padding: 1rem 4rem;
 }
 
-.guidance-queue {
+.guidance-queue-container {
     position: relative;
-    text-align: center;
-    padding: 5rem;
-    margin-top: -2rem;
+    padding: 8rem 5rem 4rem 5rem;
+    margin-top: -5rem;
     z-index: 1;
     background-color: var(--primary-color);
     border-radius: 75px;
+}
+
+.guidance-queue {
+    text-align: center;
 }
 
 .guidance-queue h2 {
