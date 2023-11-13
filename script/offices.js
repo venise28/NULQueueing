@@ -81,27 +81,43 @@ var editButtons = document.querySelectorAll('.edit-button');
 
 editButtons.forEach(function (button) {
     button.addEventListener('click', function () {
-
         var officeId = this.getAttribute('data-officeid');
-
         editOffice(officeId);
     });
 });
 
 function editOffice(officeId) {
-
     console.log('Editing office with ID: ' + officeId);
-
 }
 
 function openEditOfficeModal(ID, acronym, officeName) {
-
     $('#editOfficeModal #ID').val(ID);
     $('#editOfficeModal #acronym').val(acronym);
-    $('#editOfficeModal #officeName').val(officeName);
+    $('#editOfficeModal #OfficeName').val(officeName);
 
     // Open the modal
     $('#editOfficeModal').modal('show');
 }
 
+$(document).ready(function () {
+
+    $('#editOfficeForm').submit(function (e) {
+        e.preventDefault(); 
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: 'editOffice.php',
+            data: formData,
+            success: function (response) {
+                location.reload();
+            },
+            error: function (error) {
+                console.error('Error submitting form:', error);
+            }
+        });
+    });
+});
 //FOR EDIT OFFICE ENDS
+

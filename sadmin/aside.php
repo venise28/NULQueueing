@@ -74,7 +74,8 @@
         <!-- OFFICES -->
         <div class="offices-container fs-5 row g-0  position-relative" style="width: 100%;">
             <div class="dropdown d-none d-lg-block dropdown-container">
-                <button class="dropbtn text-decoration-none text-light fw-bold d-flex justify-content-start" onclick="myDropdown()">
+                <button class="dropbtn text-decoration-none text-light fw-bold d-flex justify-content-start" 
+                    onclick="myDropdown()">
                     <i class="fa-lg bi bi-buildings text-light pe-2"></i>
                     <h4 class="fw-bold text-light text-center">OFFICES</h4>
                 </button>

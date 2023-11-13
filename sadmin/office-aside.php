@@ -11,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the office name and acronym from the form
-    $officeName = $_POST["officeName"];
+    $officeName = strtoupper($_POST["officeName"]);
     $acronym = strtoupper($_POST["acronym"]);
     $otherOffices = isset($_POST["otherOffices"]) ? 1 : 0;
 
