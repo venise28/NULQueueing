@@ -102,43 +102,12 @@ $(".btn").click(function () {
 });
 
 
-// DONE EVENT LISTENER
-// document.querySelector("#btn-back").addEventListener("click", function () {
-//     // Clear storage
-//     localStorage.removeItem("studentId");
-//     localStorage.removeItem("program");
-
-//     window.location.href = "index.html";
-// });
-
-
-// Function to populate the select dropdown
-// function populateProgramChairs(programName) {
-
-//     // Fetch data
-//     $.ajax({
-//         url: "academics.php",
-//         type: "GET",
-//         data: { program: programName },
-//         success: function (data) {
-//             $("#program-chair-select").append(data);
-//         }
-//     });
-
-//     $("#done-button").click(function () {
-//         var selectedOption = $("#program-chair-select option:selected");
-//         var name = selectedOption.text().split(" - ")[0];
-//         $("#selectedOptionValue").text(name);
-//     });
-// }
-
-
-// Handle the submit button click event
+/ Handle the submit button click event
 function insertAcads() {
     var studentId = localStorage.getItem("studentId");
-    var selectedChair = $("#program-chair-select option:selected");
+    var name = $("#program-chair-select option:selected");
 
-    var name = selectedChair.text().split('<---')[0].trim(); //cut the 
+    
     var program = document.getElementById("modalTitle1").innerText;
     var program_queue = localStorage.getItem("program");
     var office = document.getElementById("modalTitle1").innerText;
@@ -171,67 +140,89 @@ function insertAcads() {
     });
 };
 
-// $(document).ready(function () {
-//     populateProgramChairs();
-// });
 
 
 
 function populateDropdown(programselected) {
-    // Create a function to update the dropdown options
-    function updateDropdown() {
+    // Make an Ajax request to fetch data based on the selected program
+    $.ajax({
+        url: "academics.php",
+        type: "GET",
+        data: { program: programselected },
+        dataType: "json",
+        success: function (data) {
+            // Clear existing options
+            $('#program-chair-select').empty();
+
+            // Add the retrieved options to the select element
+            $.each(data, function (key, value) {
+                $('#program-chair-select').append($('<option>', {
+                    value: key,
+                    text: value
+                }));
+            });
+        },
+        error: function () {
+            console.error("Error fetching data from the server.");
+        }
+    });
+
+
+    $("#done-button").click(function () {
+        var selectedChair = $('#program-chair-select option:selected').text();
+
+        $('#selected-chair').text(selectedChair);
+    });
+}
+
+
+
+
+//Lagay sa main interface from ACADEMICS
+$(document).ready(function() {
+    function updateQueueNumbers() {
         $.ajax({
-            url: "academics.php",
-            type: "GET",
-            data: { program: programselected },
-            dataType: "json",
-            success: function (data) {
-                // Clear existing options
-                $('#program-chair-select').empty();
+            url: "display_queue.php",
+            type: "POST",
+            data: {},
+            success: function(data) {
+                // Assuming that the PHP script returns the queue numbers as JSON
+                var queueData = JSON.parse(data);
 
-                // Add the retrieved options to the select element
-                $.each(data, function (key, value) {
-                    var option = $('<option>', {
-                        value: key,
-                        text: value.full_name
-                    });
-
-                    if (value.status === 'offline') {
-                        option.prop('disabled', true);
-                        option.text(value.full_name + ' <--- unavailable --->');
-                    }
-                    else if (value.status === 'unavailable') {
-                        option.prop('disabled', true);
-                        option.text(value.full_name + ' <--- unavailable --->');
-                    }
-                    else {
-                        option.text(value.full_name + ' <--- available --->');
-                    }
-
-                    $('#program-chair-select').append(option);
-                });
-            },
-            error: function () {
-                console.error("Error fetching data from the server.");
+                // Update the queue numbers on the webpage
+                //SCS
+                $("#BSCS_queueNum").text(queueData.BSCS);
+                $("#BSIT_BSIS_queueNum").text(queueData.BSITBSIS);
+                //SEA
+                $("#BSCE_queueNum").text(queueData.BSCE);
+                $("#BSCpE_queueNum").text(queueData.BSCpE);
+                $("#BSArch_queueNum").text(queueData.BSArch);
+                //SAS
+                $("#BSCrim_queueNum").text(queueData.BSCrim);
+                $("#BSESS_queueNum").text(queueData.BSESS);
+                $("#BSPsych_queueNum").text(queueData.BSPsych);
+                $("#BMMA_ABCOMM_queueNum").text(queueData.MMAABCOMM);
+                //SABM
+                $("#BSTM_queueNum").text(queueData.BSTM);
+                $("#BSBA_queueNum").text(queueData.BSBA);
+                $("#BSA_queueNum").text(queueData.BSA);
+                //SHS
+                $("#STEM_queueNum").text(queueData.ABM);
+                $("#ABM_queueNum").text(queueData.STEM);
+                $("#HUMSS_queueNum").text(queueData.HUMSS);
+                // Add more lines for other programs as needed
             }
         });
     }
 
-    // Initial call to populate the dropdown
-    updateDropdown();
+    // Call the function initially
+    updateQueueNumbers();
+
+    // Set an interval to update the queue numbers every 5 seconds (5000 milliseconds)
+    setInterval(updateQueueNumbers, 1000);
+});
 
 
-
-    $("#done-button").click(function () {
-        var selectedOption = $('#program-chair-select option:selected');
-        var selectedChair = selectedOption.text(); // Get the text of the selected option
-
-        var nameWithoutStatus = selectedChair.split('<---')[0].trim();
-
-        $('#selected-chair').text(nameWithoutStatus);
-    });
-
-}
 
 
 function updateCustomerCount() {
