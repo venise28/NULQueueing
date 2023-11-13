@@ -21,6 +21,24 @@ function insertQueueToAdmission($data)
     }
 }
 
+function insertQueueToTables($tabledata)
+{
+    global $conn;
+    $studentId = $tabledata['studentId'];
+    $queueNumber = $tabledata['queue_number'];
+    $timeStamp = date('Y-m-d H:i:s');
+    $office = strtolower(str_replace(' ', '', $tabledata['office']));
+
+    $sql = "INSERT INTO $office (queue_number, student_id, timestamp) VALUES ('$queueNumber', '$studentId', '$timeStamp')";
+
+    if ($conn->query($sql) === TRUE) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 // Handle the request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $office = $_POST["office"];
@@ -51,6 +69,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ];
 
         insertQueueToAdmission($admissionData);
+    }
+
+    if ($office !== "ADMISSION" && $office !== "ACADEMICS"){
+        $tabledata = [
+            "studentId" => $studentId,
+            "queue_number" => $queueNumber,
+            "office" => $office
+        ];
+
+        insertQueueToTables($tabledata);
     }
 } else {
     echo "Invalid request";
