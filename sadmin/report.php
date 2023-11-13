@@ -113,6 +113,26 @@ if (!isset($_SESSION['email'])) {
                             console.log(newData.customer);
                         }
                     });
+
+                    // Perform an AJAX request to retrieve updated data
+                    $.ajax({
+                        type: "POST",
+                        url: "update_chart_time.php",
+                        data: {
+                            monthstart: selectedMonthStart,
+                            monthend: selectedMonthEnd,
+                            office: selectedOffice,
+                            year: selectedYear
+                        },
+                        success: function (response) {
+                            // Update the content div with the updated data
+                            const newData = JSON.parse(response);
+                            myChartLine.data.datasets[0].data = newData.averageTime;
+                            myChartLine.data.labels = newData.weekDateRangeAvgTime;
+                            myChartLine.update();
+                            console.log(newData.averageTime);
+                        }
+                    });
                 });
 
 
@@ -217,42 +237,6 @@ if (!isset($_SESSION['email'])) {
                             <span class="yearout text-center fs-5 fw-bold nu_color"></span>
                         </div>
 
-                        <?php
-                        $tquery = $conn->query("SELECT week.week_name, 
-                        IFNULL(AVG(timeout - timestamp), 0) AS average_time
-                 FROM (
-                     SELECT 'WEEK 1' AS week_name
-                     UNION
-                     SELECT 'WEEK 2' AS week_name
-                     UNION
-                     SELECT 'WEEK 3' AS week_name
-                     UNION
-                     SELECT 'WEEK 4' AS week_name
-                 ) AS week
-                 LEFT JOIN academics_logs al ON
-                     (DAY(al.timestamp) BETWEEN 
-                         CASE week.week_name
-                             WHEN 'WEEK 1' THEN 1
-                             WHEN 'WEEK 2' THEN 8
-                             WHEN 'WEEK 3' THEN 15
-                             WHEN 'WEEK 4' THEN 22
-                         END
-                     AND
-                         CASE week.week_name
-                             WHEN 'WEEK 1' THEN 7
-                             WHEN 'WEEK 2' THEN 14
-                             WHEN 'WEEK 3' THEN 21
-                             WHEN 'WEEK 4' THEN DAY(LAST_DAY(al.timestamp))
-                         END)
-                     AND MONTH(al.timestamp) = 10
-                 GROUP BY week.week_name;
-                                            ");
-
-                        foreach ($tquery as $data) {
-                            $name[] = $data['week_name'];
-                            $time[] = $data['average_time'];
-                        }
-                        ?>
 
 
                         <canvas class="align-items-center" id="myChartBar"></canvas>
@@ -264,13 +248,13 @@ if (!isset($_SESSION['email'])) {
 
                             const ctx1 = document.getElementById('myLineChart');
 
-                            new Chart(ctx1, {
+                            const myChartLine = new Chart(ctx1, {
                                 type: 'line',
                                 data: {
-                                    labels: <?php echo json_encode($name) ?>,
+                                    labels: ["WEEK 1", "WEEK 2", "WEEK 3", "WEEK 4"],
                                     datasets: [{
                                         label: 'Time',
-                                        data: <?php echo json_encode($time) ?>,
+                                        data: ["0", "0", "0", "0"],
                                         borderColor: "#3EDAD8",
                                         backgroundColor: ["#3EDAD8", "#3EDAD8", "#2D8BBA", "#2F5F98", "#2C92D5"],
                                         borderWidth: 1
