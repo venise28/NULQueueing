@@ -182,7 +182,7 @@ function populateDropdown(programselected) {
 $(document).ready(function() {
     function updateQueueNumbers() {
         $.ajax({
-            url: "display_queue.php",
+            url: "display_academics.php",
             type: "POST",
             data: {},
             success: function(data) {
