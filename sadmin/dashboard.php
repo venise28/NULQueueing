@@ -135,6 +135,16 @@ if (!isset($_SESSION['email'])) {
                 <div class="row justify-content-center mt-5" style="height:40vh; width:auto;">
 
                     <?php
+
+                    $countquery = $conn->query("SELECT office, COUNT(*) AS office_count
+                    FROM queue
+                    GROUP BY office
+                    ");
+
+                    foreach ($countquery as $data) {
+                        $officecount[] = $data['office'];
+                        $customercount[] = $data['office_count'];
+                    }
                     // Fetch all table names ending with "_logs"
                     $tableQuery = $conn->query("SELECT table_name
                     FROM information_schema.tables
@@ -153,7 +163,7 @@ if (!isset($_SESSION['email'])) {
 
                         // Create a dynamic query for each table
                         $query = "SELECT '$tableName' AS name, COUNT(*) AS office_count FROM $tableName";
-                        $tquery = "SELECT '$tableName' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time FROM $tableName WHERE timestamp IS NOT NULL AND timeout IS NOT NULL;";
+                        $tquery = "SELECT '$tableName' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)/60) AS average_time FROM $tableName WHERE timestamp IS NOT NULL AND timeout IS NOT NULL;";
 
                         // Execute the queries
                         $officeQuery = $conn->query($query);
@@ -185,10 +195,10 @@ if (!isset($_SESSION['email'])) {
                         new Chart(ctx1, {
                             type: 'pie',
                             data: {
-                                labels: <?php echo json_encode($office) ?>,
+                                labels: <?php echo json_encode($officecount) ?>,
                                 datasets: [{
                                     label: '# of Customers',
-                                    data: <?php echo json_encode($count) ?>,
+                                    data: <?php echo json_encode($customercount) ?>,
                                     backgroundColor: ["#3EDAD8", "#3EDAD8", "#2D8BBA", "#2F5F98", "#2C92D5"],
                                     borderWidth: 1
                                 }]
