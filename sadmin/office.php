@@ -62,55 +62,6 @@ if ($rowTableName) {
 } else {
     echo '<p>No data found for the selected office.</p>';
 }
-
-// FOR ADDING OFFICE
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the office name and acronym from the form
-    $officeName = strtoupper($_POST["officeName"]);
-    $acronym = strtoupper($_POST["acronym"]);
-    $otherOffices = isset($_POST["otherOffices"]) ? 1 : 0;
-
-    // Create a sanitized table name from the office name
-    $tableName = preg_replace("/[^a-zA-Z0-9_]/", "", $officeName);
-
-    // SQL to check if table exists
-    $checkTableExistsSQL = "SHOW TABLES LIKE '$tableName'";
-    $result = $conn->query($checkTableExistsSQL);
-
-    if ($result->num_rows > 0) {
-        echo '<script>alert("Table ' . $tableName . ' already exists");</script>';
-    } else {
-        // SQL to create table without acronym
-        $sql = "CREATE TABLE $tableName (
-            `id` int(11) NOT NULL,
-            `queue_number` varchar(255) NOT NULL,
-            `student_id` varchar(12) NOT NULL,
-            `endorsed_from` varchar(255) DEFAULT NULL,
-            `timein` timestamp NOT NULL DEFAULT current_timestamp(),
-            `timeout` timestamp NULL DEFAULT NULL,
-            `remarks` int(11) DEFAULT NULL,
-            `transaction` varchar(255) DEFAULT NULL,
-            `status` int(11) DEFAULT NULL
-        )";
-
-        if ($conn->query($sql) === TRUE) {
-            // Insert the office details into the existing "offices" table with otherOffices value
-            $insertOfficeSQL = "INSERT INTO offices (acronym, officeName, office) VALUES ('$acronym', '$officeName', '$otherOffices')";
-            if ($conn->query($insertOfficeSQL) === TRUE) {
-                // Redirect with the new 'office' parameter
-                header("Location: $_SERVER[PHP_SELF]?office=" . urlencode($officeName));
-                exit();
-            } else {
-                echo '<script>alert("Error inserting office details: ' . $conn->error . '");</script>';
-            }
-        } else {
-            echo '<script>alert("Error creating table: ' . $conn->error . '");</script>';
-        }
-    }
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -253,42 +204,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <!-- TABLE ENDS -->
-
-                <!-- EDIT OFFICE MODAL STARTS -->
-                <div class="modal fade" id="editOfficeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header d-block border-0 pb-0">
-                                <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
-                                    EDIT OFFICE</h1>
-                                <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
-                                    Modify the office details and click "SAVE CHANGES".</p>
-                            </div>
-                            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-                                <div class="modal-body pb-0 my-3">
-                                    <div class="mb-2">
-                                        <label for="updatedOfficeName" class="text-start">Updated Office Name</label>
-                                        <input type="text" id="updatedOfficeName" name="updatedOfficeName" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="updatedAcronym" class="text-start">Updated Acronym</label>
-                                        <input type="text" id="updatedAcronym" name="updatedAcronym" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
-                                    </div>
-                                    <div class="mb-2 form-check">
-                                        <input type="checkbox" id="otherOfficesUpdated" name="otherOfficesUpdated" class="form-check-input">
-                                        <label for="otherOfficesUpdated" class="form-check-label">Other Offices</label>
-                                    </div>
-                                </div>
-                                <div class="modal-footer d-flex justify-content-end border-0 col">
-                                    <button type="button" class="btn btn-white px-4" data-bs-dismiss="modal">CANCEL</button>
-                                    <button type="submit" class="btn btn-primary px-4" id="editOfficeBtn">SAVE CHANGES</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!-- EDIT OFFICE MODAL ENDS -->
-
             </div>
         </div>
     </div>
