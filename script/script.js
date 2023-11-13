@@ -500,7 +500,7 @@ $(document).ready(function () {
     setInterval(getItsoCustomerCount, 1000); 
 });
 
-// DYNAMIC
+// DYNAMIC GET PER OFFICE CUSTOMER COUNT
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
