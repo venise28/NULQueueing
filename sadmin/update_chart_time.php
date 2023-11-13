@@ -59,7 +59,7 @@ if ($selectedOffice === 'ALL-OFFICES') {
         // Create a dynamic query for each logs table
         $timeQuery = $conn->query("
         SELECT
-        AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time,
+        AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)/60) AS average_time,
         CONCAT(
             DATE_FORMAT(MIN(timestamp), '%M %e, %Y'),
             CASE WHEN MIN(timestamp) <> MAX(timestamp) 
@@ -130,7 +130,7 @@ if ($selectedOffice === 'ALL-OFFICES') {
         // Create a dynamic query for each logs table
         $timeQuery = $conn->query("
         SELECT
-        AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time,
+        AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)/60) AS average_time,
         CONCAT(
             DATE_FORMAT(MIN(timestamp), '%M %e, %Y'),
             CASE WHEN MIN(timestamp) <> MAX(timestamp) 
