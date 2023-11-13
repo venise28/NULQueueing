@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         // SQL to create table without acronym
         $sql = "CREATE TABLE $tableName (
-            `id` int(11) NOT NULL,
+            `id` int(11) NOT NULL AUTO_INCREMENT,
             `queue_number` varchar(255) NOT NULL,
             `student_id` varchar(12) NOT NULL,
             `endorsed_from` varchar(255) DEFAULT NULL,
@@ -35,7 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             `timeout` timestamp NULL DEFAULT NULL,
             `remarks` int(11) DEFAULT NULL,
             `transaction` varchar(255) DEFAULT NULL,
-            `status` int(11) DEFAULT NULL
+            `status` int(11) DEFAULT NULL,
+            PRIMARY KEY (`id`)
         )";
 
         if ($conn->query($sql) === TRUE) {
