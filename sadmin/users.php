@@ -7,11 +7,6 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-if (!isset($_SESSION['email'])) {
-    header('location: index.php');
-    exit();
-}
-
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the office name and acronym from the form
@@ -55,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -121,8 +115,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="col-1 col-md-2 align-self-end justify-content-start mb-3">
                         <a href="#" data-bs-toggle="modal" data-bs-target="#addUser" class="btn btn-green btn-lg my-2 my-sm-0 mx-2" type="submit">ADD USER</a>
                     </div>
+                    <!-- Button to open the Add Office modal -->
                     <div class="col-1 col-md-2 align-self-end justify-content-start mb-3">
                         <a href="#" data-bs-toggle="modal" data-bs-target="#addOfficeModal" class="btn btn-green btn-lg my-2 my-sm-0 mx-2" type="submit">ADD OFFICE</a>
+                    </div>
+                    <!-- Button to open the Edit Office modal -->
+                    <div class="col-1 col-md-2 align-self-end justify-content-start mb-3">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#editOfficeModal" class="btn btn-green btn-lg my-2 my-sm-0 mx-2" type="submit">EDIT OFFICE</a>
                     </div>
 
                 </div>
@@ -227,38 +226,71 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- ADD OFFICE MODAL STARTS -->
     <div class="modal fade" id="addOfficeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header d-block border-0 pb-0">
-                <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
-                    ADD OFFICE</h1>
-                <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
-                    Enter the office name and acronym to add a new office.</p>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-block border-0 pb-0">
+                    <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
+                        ADD OFFICE</h1>
+                    <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
+                        Enter the office name and acronym to add a new office.</p>
+                </div>
+                <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+                    <div class="modal-body pb-0 my-3">
+                        <div class="mb-2">
+                            <label for="officeName" class="text-start">Office Name</label>
+                            <input type="text" id="officeName" name="officeName" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="acronym" class="text-start">Acronym</label>
+                            <input type="text" id="acronym" name="acronym" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
+                        </div>
+                        <div class="mb-2 form-check">
+                            <input type="checkbox" id="otherOffices" name="otherOffices" class="form-check-input">
+                            <label for="otherOffices" class="form-check-label">Other Offices</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-end border-0 col">
+                        <button type="button" class="btn btn-white px-4" data-bs-dismiss="modal">CANCEL</button>
+                        <button type="submit" class="btn btn-green px-4" id="addOfficeBtn">ADD OFFICE</button>
+                    </div>
+                </form>
             </div>
-            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
-                <div class="modal-body pb-0 my-3">
-                    <div class="mb-2">
-                        <label for="officeName" class="text-start">Office Name</label>
-                        <input type="text" id="officeName" name="officeName" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
-                    </div>
-                    <div class="mb-2">
-                        <label for="acronym" class="text-start">Acronym</label>
-                        <input type="text" id="acronym" name="acronym" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
-                    </div>
-                    <div class="mb-2 form-check">
-                        <input type="checkbox" id="otherOffices" name="otherOffices" class="form-check-input">
-                        <label for="otherOffices" class="form-check-label">Other Offices</label>
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-end border-0 col">
-                    <button type="button" class="btn btn-white px-4" data-bs-dismiss="modal">CANCEL</button>
-                    <button type="submit" class="btn btn-green px-4" id="addOfficeBtn">ADD OFFICE</button>
-                </div>
-            </form>
         </div>
     </div>
-</div>
     <!-- ADD OFFICE MODAL ENDS -->
+
+    <!-- EDIT OFFICE MODAL STARTS -->
+    <div class="modal fade" id="editOfficeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-block border-0 pb-0">
+                    <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
+                        EDIT OFFICE</h1>
+                    <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
+                        Modify the office name and acronym.</p>
+                </div>
+                <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+                    <div class="modal-body pb-0 my-3">
+                        <div class="mb-2">
+                            <label for="updatedOfficeName" class="text-start">Updated Office Name</label>
+                            <input type="text" id="updatedOfficeName" name="updatedOfficeName" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" value="<?php echo $existingOfficeName; ?>" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="updatedAcronym" class="text-start">Updated Acronym</label>
+                            <input type="text" id="updatedAcronym" name="updatedAcronym" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" value="<?php echo $existingAcronym; ?>" required>
+                        </div>
+                        <!-- Add a hidden input field to store the officeId -->
+                        <input type="hidden" name="officeId" value="<?php echo $officeId; ?>">
+                    </div>
+                    <div class="modal-footer d-flex justify-content-end border-0 col">
+                        <button type="button" class="btn btn-white px-4" data-bs-dismiss="modal">CANCEL</button>
+                        <button type="submit" class="btn btn-green px-4" id="editOfficeBtn">SAVE CHANGES</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- EDIT OFFICE MODAL ENDS -->
 
     <!-- Modal OFFICE NOTIFY STARTS -->
     <div id="myModal" class="modal">

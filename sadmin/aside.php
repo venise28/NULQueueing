@@ -54,10 +54,27 @@
             </div>
         </div>
 
+       <!-- COLLEGES -->
+       <div class="fs-5 row g-0 dashboard-bg position-relative p-4 " style="width: 100%;">
+            <div class="col-md-2 offset-md-2 d-none d-lg-block">
+                <a href="college.php"
+                    class="stretched-link text-decoration-none text-light fw-bold d-flex justify-content-start"><i
+                        class="fa-lg bi bi-building-fill-gear text-light pe-2"></i>
+                    <h4 class="fw-bold text-light text-center">COLLEGES</h4>
+                </a>
+            </div>
+
+            <div class="d-lg-none">
+                <a href="college.php"
+                    class="stretched-link text-decoration-none text-light fw-bold d-flex justify-content-center"><i
+                        class="fa-lg bi bi-people-fill text-light pe-2"></i></a>
+            </div>
+        </div>
+
         <!-- OFFICES -->
         <div class="offices-container fs-5 row g-0  position-relative" style="width: 100%;">
             <div class="dropdown d-none d-lg-block dropdown-container">
-                <button class="dropbtn text-decoration-none text-light fw-bold d-flex justify-content-start" onclick="toggleDropdown()">
+                <button class="dropbtn text-decoration-none text-light fw-bold d-flex justify-content-start" onclick="myDropdown()">
                     <i class="fa-lg bi bi-buildings text-light pe-2"></i>
                     <h4 class="fw-bold text-light text-center">OFFICES</h4>
                 </button>
@@ -112,13 +129,33 @@
 
     <script>
         function toggleDropdown() {
-            var officesDropdown = document.getElementById("myDropdown");
-            if (officesDropdown.style.display === "block") {
-                officesDropdown.style.display = "none";
-            } else {
-                officesDropdown.style.display = "block";
-            }
+            var dropdown = document.getElementById("myDropdown");
+            dropdown.classList.toggle("show");
         }
+
+        // Redirect to office-aside.php when the "OFFICES" header is clicked
+        function redirectToOfficeAside() {
+            window.location.href = "office-aside.php";
+        }
+
+        // Handle clicks on list items
+        document.addEventListener("DOMContentLoaded", function () {
+            var listItems = document.querySelectorAll("#myDropdown li");
+            listItems.forEach(function (item) {
+                item.addEventListener("click", function () {
+                    // Get the office name from the clicked list item
+                    var officeName = item.textContent.trim();
+                    // Redirect to office.php with the office name
+                    window.location.href = "office.php?office=" + encodeURIComponent(officeName);
+                });
+            });
+
+            // Handle click on the "OFFICES" header
+            var officesHeader = document.querySelector(".dropbtn h4");
+            officesHeader.addEventListener("click", function () {
+                redirectToOfficeAside();
+            });
+        });
     </script>
 </body>
 

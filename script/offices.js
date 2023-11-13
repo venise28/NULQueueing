@@ -37,3 +37,71 @@ myTable = () => {
     }
 }
 
+
+//FOR Office-aside.php
+document.getElementById('searchOfficesInput').addEventListener('input', function () {
+    const searchValue = this.value.trim();
+    if (searchValue === '') {
+        window.location.href = 'office-aside.php';
+    }
+});
+
+//FOR DELETE OFFICE STARTS
+function deleteOffice(officeId, officeName) {
+    // Update modal content with dynamic information
+    $("#deleteModalBody").html("Are you sure you want to delete the office '" + officeName + "'?");
+
+    // Show the modal
+    $("#deleteModal").modal('show');
+
+    // Set up event listener for the delete button in the modal
+    $("#confirmDeleteButton").off("click").on("click", function () {
+        // Send an AJAX request to delete the office
+        $.ajax({
+            type: "POST",
+            url: "deleteOffice.php",
+            data: { officeId: officeId },
+            success: function (data) {
+                // Reload the page after successful deletion
+                location.reload();
+            }
+        });
+
+        // Hide the modal after clicking the delete button
+        $("#deleteModal").modal('hide');
+    });
+}
+//FOR DELETE OFFICE ENDS
+
+
+
+
+//FOR EDIT OFFICE STARTS
+var editButtons = document.querySelectorAll('.edit-button');
+
+editButtons.forEach(function (button) {
+    button.addEventListener('click', function () {
+
+        var officeId = this.getAttribute('data-officeid');
+
+        editOffice(officeId);
+    });
+});
+
+function editOffice(officeId) {
+
+    console.log('Editing office with ID: ' + officeId);
+
+}
+
+function openEditOfficeModal(ID, acronym, officeName) {
+
+    $('#editOfficeModal #ID').val(ID);
+    $('#editOfficeModal #acronym').val(acronym);
+    $('#editOfficeModal #officeName').val(officeName);
+
+    // Open the modal
+    $('#editOfficeModal').modal('show');
+}
+
+//FOR EDIT OFFICE ENDS
