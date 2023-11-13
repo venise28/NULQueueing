@@ -269,6 +269,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         Name</p>
                                 </div>
                             </div>
+                            <div class="mb-2 form-check">
+                                <input type="checkbox" id="otherOfficesUpdated" name="otherOfficesUpdated" class="form-check-input">
+                                <label for="otherOfficesUpdated" class="form-check-label">Other Offices</label>
+                            </div>
                         </div>
 
                         <div class="modal-footer d-flex justify-content-end border-0 col">
