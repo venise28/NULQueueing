@@ -46,9 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $studentId = $_POST["studentId"];
         $endorsed = "kiosk";
 
-        // Check $office and set it to "ACADEMICS" if true
-        $allowedOffices = ["SCS", "SEA", "SAS", "SABM", "SHS"];
-        if (in_array($office, $allowedOffices)) {
+        // Check if the office exists in the colleges table
+        $officeExistsQuery = "SELECT acronym FROM colleges WHERE acronym = '$office'";
+        $officeExistsResult = $conn->query($officeExistsQuery);
+
+        if ($officeExistsResult->num_rows > 0) {
             $office = "ACADEMICS";
         }
 
@@ -68,15 +70,20 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 function getNextQueueNumber($program)
 {
     global $conn;
-    $prefixes = [
-        "SCS" => "SCS",
-        "SAS" => "SAS",
-        "SEA" => "SEA",
-        "SABM" => "SAB",
-        "SHS" => "SHS",
-    ];
+    // Fetch the acronym from the offices table
+    $acronymSql = "SELECT acronym FROM colleges WHERE acronym = '$program'";
+    $acronymResult = $conn->query($acronymSql);
 
-    $prefix = $prefixes[$program];
+    if ($acronymResult->num_rows > 0) {
+        $acronymRow = $acronymResult->fetch_assoc();
+        $acronym = $acronymRow['acronym'];
+    } else {
+        // Default to a generic prefix if no acronym is found
+        $acronym = "DEFAULT";
+    }
+
+    // Use the fetched or default acronym as the prefix
+    $prefix = $acronym;
 
     $sql = "SELECT MAX(queue_number) as max_queue FROM academics WHERE program = '$program'";
     $result = $conn->query($sql);
