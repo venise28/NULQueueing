@@ -12,7 +12,7 @@ if (isset($_POST['officeId'])) {
 
     if ($officeResult) {
         $officeRow = mysqli_fetch_assoc($officeResult);
-        $officeName = $officeRow['officeName'];
+        $officeName = strtolower(str_replace(' ', '', $officeRow['officeName']));
 
         // Perform the deletion of the row
         $deleteRowQuery = "DELETE FROM offices WHERE ID = $officeId";
