@@ -11,17 +11,25 @@ if ($officeResult) {
     while ($officeRow = $officeResult->fetch_assoc()) {
         $officeName = $officeRow['officeName'];
 
-        // Use prepared statements for security
-        $sql = "SELECT COUNT(*) AS customer_count FROM `queue` WHERE office = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "s", $officeName);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $row = mysqli_fetch_assoc($result);
-        $customerCount = $row['customer_count'];
+        // Check if the selected office exists in the 'offices' table
+        $sqlCheckOffice = "SELECT * FROM offices WHERE officeName = '$officeName'";
+        $resultCheckOffice = $conn->query($sqlCheckOffice);
 
-        // Add the office and customer count to the response array
-        $response[] = ["office" => $officeName, "customer_count" => $customerCount];
+        if ($resultCheckOffice->num_rows > 0) {
+            // Use prepared statements for security
+            $sql = "SELECT COUNT(*) AS customer_count FROM `$officeName`";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $row = mysqli_fetch_assoc($result);
+            $customerCount = $row['customer_count'];
+
+            // Add the office and customer count to the response array
+            $response[] = ["office" => $officeName, "customer_count" => $customerCount];
+        } else {
+            // Add a placeholder for non-existent offices
+            $response[] = ["office" => $officeName, "customer_count" => 0];
+        }
     }
 }
 
