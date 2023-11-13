@@ -133,6 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <th scope="col">ID</th>
                                 <th scope="col">Full Name</th>
                                 <th scope="col">Office</th>
+                                <th scope="col">Window</th>
                                 <th scope="col">Username</th>
                                 <!-- <th scope="col">Password</th> -->
                                 <!-- <th scope="col">Role</th> -->
@@ -165,6 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             echo "<td>" . $items['ID'] . "</td>";
                                             echo "<td>" . $items['full_name'] . "</td>";
                                             echo "<td>" . $items['office'] . "</td>";
+                                            echo "<td>" . $items['window'] . "</td>";
                                             echo "<td>" . $items['username'] . "</td>";
                                             echo "<td>" . $items['password'] . "</td>";
                                             echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2' type='submit'>Edit</button>";
@@ -185,10 +187,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         echo "<td>" . $row['ID'] . "</td>";
                                         echo "<td>" . $row['full_name'] . "</td>";
                                         echo "<td>" . $row['office'] . "</td>";
+                                        echo "<td>" . $row['window'] . "</td>";
                                         echo "<td>" . $row['username'] . "</td>";
                                         //echo "<td>" . $row['password'] . "</td>";
                                         // echo "<td>" . $row['role'] . "</td>";
-                                        echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2 edit-button' onclick='openEditUserModal(" . $row['ID'] . ", \"" . $row['full_name'] . "\", \"" . $row['office'] . "\",  \"" . $row['username'] . "\" , \"" . $row['password'] . "\")'>Edit</button>";
+                                        echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2 edit-button' onclick='openEditUserModal(" . $row['ID'] . ", \"" . $row['full_name'] . "\", \"" . $row['office'] . "\", \"" . $row['window'] . "\", \"" . $row['username'] . "\" , \"" . $row['password'] . "\")'>Edit</button>";
                                         echo "<button class='btn btn-red my-2 my-sm-0 mx-2' type='button' onclick='deleteUser(" . $row['ID'] . ")'>Delete</button>";
                                         echo "</tr>";
                                     }
@@ -339,18 +342,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <p class="text-danger" id="error-office" style="display: none;">Please select an office
                                 </p>
                             </div>
-
-                            <!-- <div class="col">
-                                <label for="role" class="text-start">Role</label>
-                                <select
-                                    class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
-                                    aria-label="Default select example" id="role" name="role">
-                                    <option value="Admin">Admin</option>
-                                    <option value="Super Admin">Super Admin</option>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <label for="window" class="text-start">Window</label>
+                                <select id="selectWindow" name="selectWindow" class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold" aria-label="Default select example">
+                                    <option value=""></option>
+                                    <option value="Window 1">Window 1</option>
+                                    <option value="Window 2">Window 2</option>
+                                    <option value="Window 3">Window 3</option>
+                                    <option value="Window 4">Window 4</option>
+                                    <option value="Window 5">Window 5</option>
+                                    <option value="Window 6">Window 6</option>
+                                    
                                 </select>
-                                <p class="text-danger" id="error-role" style="display: none;">Please select a role</p>
-                            </div> -->
-
+                                <p class="text-danger" id="error-office" style="display: none;">Please select a window
+                                </p>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -378,81 +387,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     </div>
     </div>
-
-    <!-- - edit users modal -
-    <div class="modal fade" id="editUserr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header d-block border-0 pb-0">
-                    <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
-                        EDIT USER</h1>
-                    <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
-                        Edit the details of the selected user.</p>
-                </div>
-                <form action="editUsers.php" method="post">
-                    <div class="modal-body pb-0 my-3">
-                        <input type="hidden" id="ID" name="ID">
-                        <label for="full_name" class="text-start">Full Name</label>
-                        <input type="text" id="full_name" name="full_name"
-                            class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
-                        <p class="text-danger" id="error_fullName" style="display: none;">Please enter full name</p>
-
-                        <div class="row">
-                            <div class="col">
-                                <label for="office" class="text-start">Office</label>
-                                <select id="office" name="office"
-                                    class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
-                                    aria-label="Default select example">
-
-                                    <option value="ADMISSION">Admission</option>
-                                    <option value="REGISTRAR">Registrar</option>
-                                    <option value="ACCOUNTING">Accounting</option>
-                                    <option value="ACADEMICS">Academics</option>
-                                    <option value="CLINIC">Clinic</option>
-                                    <option value="ASSETS">Assets</option>
-                                    <option value="ITRO">ITRO</option>
-                                    <option value="GUIDANCE">Guidance</option>
-                                </select>
-                                <p class="text-danger" id="error-office" style="display: none;">Please select an office
-                                </p>
-                            </div>
-
-                            <div class="col">
-                                <label for="role" class="text-start">Role</label>
-                                <select
-                                    class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
-                                    aria-label="Default select example" id="role" name="role">
-                                    <option value="Admin">Admin</option>
-                                    <option value="Super Admin">Super Admin</option>
-                                </select>
-
-                                <p class="text-danger" id="error-role" style="display: none;">Please select a role</p>
-                            </div>
-                        </div>
-
-                        <label for="username" class="text-start">Username</label>
-                        <input type="text" id="username" name="username"
-                            class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
-                        <p class="text-danger" id="error_username" style="display: none;">Please enter username</p>
-
-                        <label for="password" class="text-start">Password</label>
-                        <input type="password" id="password" name="password"
-                            class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
-                        <p class="text-danger" id="error_password" style="display: none;">Please enter password</p>
-                    </div>
-
-                    <div class="modal-footer d-block border-0">
-                        <button type="button" class="btn btn-secondary custom-secondary-color border-0"
-                            data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary custom-primary-color border-0"
-                            name="edit_user">Update
-                            User</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
 
     <!--edit modal-->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -491,18 +425,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <p class="text-danger" id="error-editOffice" style="display: none;">Please select an
                                     office</p>
                             </div>
+                        </div>
 
-                            <!-- <div class="col">
-                                <label for="role" class="text-start">Role</label>
-                                <select
-                                    class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
-                                    aria-label="Default select example" id="role" name="role">
-                                    <option value="Admin">Admin</option>
-                                    <option value="Super Admin">Super Admin</option>
+                        <div class="row">
+                            <div class="col">
+                                <label for="window" class="text-start">Window</label>
+                                <select id="selectWindow" name="selectWindow" class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold" aria-label="Default select example">
+                                    <option value=""></option>
+                                    <option value="Window 1">Window 1</option>
+                                    <option value="Window 2">Window 2</option>
+                                    <option value="Window 3">Window 3</option>
+                                    <option value="Window 4">Window 4</option>
+                                    <option value="Window 5">Window 5</option>
+                                    <option value="Window 6">Window 6</option>
+                                    
                                 </select>
-                                <p class="text-danger" id="error-editRole" style="display: none;">Please select a role
+                                <p class="text-danger" id="error-window" style="display: none;">Please select a window
                                 </p>
-                            </div> -->
+                            </div>
                         </div>
 
                         <div class="row">
@@ -530,7 +470,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
 
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="../script/script.js"></script>
         <script src="../script/offices.js"></script>
@@ -538,5 +477,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <script src="/chart.js"></script>
         <script src="../script/users.js"></script>
 </body>
-
 </html>

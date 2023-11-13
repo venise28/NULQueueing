@@ -13,6 +13,7 @@ if ($conn->connect_error) {
 $ID = $_POST['ID'];
 $full_name = $_POST['full_name'];
 $office = $_POST['office'];
+$window = $_POST['selectWindow'];
 $username = $_POST['username'];
 $password = $_POST['password'];
 
@@ -26,6 +27,7 @@ if ($checkResult) {
                   SET full_name = '$full_name',
                       office = '$office',
                       username = '$username',
+                      window = '$window',
                       password = '$password'
                   WHERE ID = '$ID'";
                   

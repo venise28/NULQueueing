@@ -16,7 +16,7 @@ function submitStudentId() {
         return;
     }
 
-    window.location.href = "nulqueue.html";
+    window.location.href = "nulqueue.php";
 }
 
 
@@ -234,18 +234,6 @@ function populateDropdown(programselected) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 function updateCustomerCount() {
     $.ajax({
         url: 'db-process.php?action=customers',
@@ -291,6 +279,17 @@ function updateAccountsCount() {
     });
 }
 
+function updateCollegeCount() {
+    $.ajax({
+        url: 'db-process.php?action=colleges',
+        type: 'GET',
+        success: function (data) {
+            // Update count
+            $('#colleges-count').text(data);
+        },
+    });
+}
+
 $(document).ready(function () {
 
     $('#check').click(function () {
@@ -301,10 +300,12 @@ $(document).ready(function () {
     updateCompletedCount();
     updatePendingCount();
     updateAccountsCount();
+    updateCollegeCount();
     setInterval(updateCustomerCount, 1000);
     setInterval(updateCompletedCount, 1000);
     setInterval(updatePendingCount, 1000);
     setInterval(updateAccountsCount, 1000);
+    setInterval(updateCollegeCount, 1000);
 });
 
 

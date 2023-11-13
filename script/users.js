@@ -9,23 +9,23 @@ document.getElementById('searchUserInput').addEventListener('input', function ()
 function validateForm() {
     var fullName = document.getElementById("full_name").value;
     var office = document.getElementById("office").value;
-    var role = document.getElementById("role").value;
+    var window = document.getElementById("selectWindow").value;
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 
     var fullNameError = document.getElementById("error_full_name");
     var officeError = document.getElementById("error-office");
-    var roleError = document.getElementById("error-role");
+    var windowError = document.getElementById("error-window");
     var usernameError = document.getElementById("error-username");
     var passwordError = document.getElementById("error-password");
 
     fullNameError.style.display = fullName === "" ? "block" : "none";
     officeError.style.display = office === "" ? "block" : "none";
-    roleError.style.display = role === "" ? "block" : "none";
+    windowError.style.display = role === "" ? "block" : "none";
     usernameError.style.display = username === "" ? "block" : "none";
     passwordError.style.display = password === "" ? "block" : "none";
 
-    if (fullName === "" || office === "" || role === "" || username === "" || password === "") {
+    if (fullName === "" || office === "" || window === "" || username === "" || password === "") {
         return false; // Prevent form submission
     }
 
@@ -77,11 +77,12 @@ function editUser(userId) {
     // You can use AJAX or any other logic to edit the user
 }
 
-function openEditUserModal(ID, full_name, office, username, password) {
+function openEditUserModal(ID, full_name, office, selectWindow, username, password) {
 
     $('#editUserModal #ID').val(ID);
     $('#editUserModal #full_name').val(full_name);
     $('#editUserModal #office').val(office);
+    $('#editUserModal #selectWindow').val(selectWindow);
     $('#editUserModal #username').val(username);
     $('#editUserModal #password').val(password);
 
