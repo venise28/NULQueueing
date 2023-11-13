@@ -290,6 +290,22 @@ function updateCollegeCount() {
     });
 }
 
+// GET OFFICE COUNTS STARTS
+function updateOfficeCount() {
+    $.ajax({
+        url: 'db-process.php?action=offices',
+        type: 'GET',
+        success: function (data) {
+            // Update count
+            $('#offices-count').text(data);
+        },
+        error: function (error) {
+            console.error('Error fetching office count:', error);
+        }
+    });
+}
+// GET OFFICE COUNTS ENDS
+
 $(document).ready(function () {
 
     $('#check').click(function () {
@@ -301,6 +317,8 @@ $(document).ready(function () {
     updatePendingCount();
     updateAccountsCount();
     updateCollegeCount();
+    updateOfficeCount();
+    setInterval(updateOfficeCount, 1000);
     setInterval(updateCustomerCount, 1000);
     setInterval(updateCompletedCount, 1000);
     setInterval(updatePendingCount, 1000);
