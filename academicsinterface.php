@@ -15,7 +15,6 @@
 </head>
 
 <body>
-
     <div class="container-fluid">
         <div class="row">
             <div class="rounded-end-5 col-4 blue-bg position-fixed">
@@ -30,37 +29,33 @@
             <div class="col-8 p-5 offset-4">
                 <h4 class="fst-italic fs-3 p-5 fw-bold text-center nu_color">Howdy, Nationalian! Please select your
                     office.</h4>
-                <div class="d-flex justify-content-center align-items-center flex-wrap">
-
+                <div class="btn_selection d-flex justify-content-center align-items-center flex-wrap">
                     <?php
                     @include 'database.php';
-                    $sql = "SELECT officeName FROM offices WHERE office = 0 AND officeName != 'ACADEMICS'";
+                    $sql = "SELECT * FROM colleges";
                     $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         // Output buttons dynamically based on the data
                         $counter = 0;
                         while ($row = $result->fetch_assoc()) {
-                            $officeName = $row["officeName"];
+                            $collegeName = strtoupper($row["collegeName"]);
+                            $collegeAcronym = $row["acronym"];
                             $buttonClass = ($counter % 2 == 0) ? "btn-blue" : "btn-yellow";
 
                             echo '<button href="#" class="fw-bold btn ' . $buttonClass . ' p-5 m-2 flex-grow-1" data-bs-toggle="modal" 
-              data-bs-target="#firstModal" data-title="' . $officeName . '">' . $officeName . '</button>';
+              data-bs-target="#acadModal" data-title="' . $collegeAcronym . '" onclick="populateDropdown(\'' . $collegeAcronym . '\')">' . $collegeName . '</button>';
                             $counter++;
                         }
                     } else {
                         echo "0 results";
                     }
                     ?>
-                    <!-- <button href="#" class="fw-bold btn btn-blue p-5 m-2 flex-grow-1" data-bs-toggle="modal"
-                        data-bs-target="#firstModal" data-title="ADMISSION">ADMISSION</button>
-
-                    <button href="#" class="fw-bold btn btn-yellow p-5 m-2 flex-grow-1" data-bs-toggle="modal"
-                        data-bs-target="#firstModal" data-title="REGISTRAR">REGISTRAR</button>
-                    <button href="#" class="fw-bold btn btn-blue p-5 m-2 flex-grow-1" data-bs-toggle="modal"
-                        data-bs-target="#firstModal" data-title="ACCOUNTING">ACCOUNTING</button> -->
-                    <a href="academicsinterface.php" class="fw-bold btn btn-yellow p-5 m-2 flex-grow-1">ACADEMICS</a>
-                    <a href="otheroffices.php" class="fw-bold btn btn-blue p-5 m-2 flex-grow-1">OTHER OFFICES</a>
+                    <!-- <button href="#" class="fw-bold btn btn-blue p-5 m-2 flex-grow-1" data-bs-toggle="modal" data-bs-target="#acadModal" data-title="SCS" onclick="populateDropdown('SCS')">SCHOOL OF COMPUTER STUDIES</button>
+                    <button href="#" class="fw-bold btn btn-yellow p-5 m-2 flex-grow-1" data-bs-toggle="modal" data-bs-target="#acadModal" data-title="SEA" onclick="populateDropdown('SEA')">SCHOOL OF ENGINEERING AND ARCHITECTURE</button>
+                    <button href="#" class="fw-bold btn btn-blue p-5 m-2 flex-grow-1" data-bs-toggle="modal" data-bs-target="#acadModal" data-title="SAS" onclick="populateDropdown('SAS')">SCHOOL OF ARTS AND SCIENCES</button>
+                    <button href="#" class="fw-bold btn btn-yellow p-5 m-2 flex-grow-1" data-bs-toggle="modal" data-bs-target="#acadModal" data-title="SABM" onclick="populateDropdown('SABM')">SCHOOL OF ACCOUNTANCY, BUSINESS AND MANAGEMENT</button> 
+                    <button href="#" class="fw-bold btn btn-blue p-5 m-2 flex-grow-1" data-bs-toggle="modal" data-bs-target="#acadModal" data-title="SHS" onclick="populateDropdown('SHS')">SENIOR HIGH SCHOOL</button> -->
                 </div>
                 <button onclick="history.back()" class="btn btn-back p-1 m-2 float-end"><img src="assets/backbtn.png"
                         alt="Back" class="img-fluid" style="max-height: auto; max-width: 100%;"></button>
@@ -69,53 +64,6 @@
     </div>
     </div>
     </div>
-    <!-- Modal -->
-
-    <!-- First Modal -->
-    <div class="modal fade" id="firstModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header d-block border-0">
-                    <h1 class="modal-title fs-4 text-center custom-bold custom-primary-color" id="modalTitle1">
-                        Loading...
-                    </h1>
-                </div>
-                <div class="modal-body text-center custom-italic custom-bold custom-primary-color">
-                    Do you wish to queue at the selected office?
-                </div>
-                <div class="modal-footer d-flex justify-content-center border-0">
-                    <button type="button" class="btn btn-yes px-4 rounded-pill" data-bs-toggle="modal"
-                        data-bs-target="#thirdModal" onclick="registerStudent()">YES</button>
-                    <button type="button" class="btn btn-no px-4 rounded-pill" data-bs-dismiss="modal">NO</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 1st MODAL REGISTRAR ENDS -->
-
-    <!-- Modal -->
-    <div class="modal fade" id="thirdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header d-block border-0 pb-0">
-                    <h1 class="modal-title fs-4 text-center custom-bold custom-primary-color" id="modalTitle3">
-                        REGISTRAR</h1>
-                    <p class="modal-secondary text-center custom-secondary-color custom-italic p-0 m-0">Please proceed
-                        to your selected office. Take note of your Queuing Number:</p>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                </div>
-                <div class="modal-body text-center pb-0">
-                    <span class="custom-primary-color fs-1 queue-number" id="queueNumber">Loading...</span>
-                </div>
-                <div class="modal-footer d-flex flex-column border-0">
-                    <button type="button" class="btn btn-yes px-4 rounded" data-bs-dismiss="modal">DONE</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 3rd MODAL REGISTRAR ENDS -->
-
     <!--Academics Modal-->
 
     <div class="modal fade" id="acadModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -154,21 +102,40 @@
                         queue at the selected office?</p>
                 </div>
 
-                <h4 class="text-center custom-primary-color p-0 m-0" id="selectedOptionValue"></h4>
+                <h4 class="text-center custom-primary-color p-0 m-0" id="selected-chair"></h4>
 
                 <div class="modal-footer d-flex justify-content-center border-0">
                     <button type="button" class="btn btn-yes px-4 rounded" data-bs-toggle="modal"
-                        data-bs-target="#thirdModal" id="submit-button">YES</button>
+                        data-bs-target="#thirdModal" onclick="insertAcads()">YES</button>
                     <button type="button" class="btn btn-no px-4 rounded" data-bs-dismiss="modal">NO</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Third Modal -->
+    <div class="modal fade" id="thirdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-block border-0 pb-0">
+                    <h1 class="modal-title fs-4 text-center custom-bold custom-primary-color" id="modalTitle3">
+                        REGISTRAR</h1>
+                    <p class="modal-secondary text-center custom-secondary-color custom-italic p-0 m-0">Please proceed
+                        to your selected office. Take note of your Queuing Number:</p>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                </div>
+                <div class="modal-body text-center pb-0">
+                    <span class="custom-primary-color fs-1 queue-number" id="queueNumber">Loading...</span>
+                </div>
+                <div class="modal-footer d-flex flex-column border-0">
+                    <button type="button" class="btn btn-yes px-4 rounded" data-bs-dismiss="modal">DONE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 3rd MODAL REGISTRAR ENDS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script/script.js"></script>
-
-
 </body>
 
 </html>

@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             `queue_number` varchar(255) NOT NULL,
             `student_id` varchar(12) NOT NULL,
             `endorsed_from` varchar(255) DEFAULT NULL,
-            `timein` timestamp NOT NULL DEFAULT current_timestamp(),
+            `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
             `timeout` timestamp NULL DEFAULT NULL,
             `remarks` int(11) DEFAULT NULL,
             `transaction` varchar(255) DEFAULT NULL,
