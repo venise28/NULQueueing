@@ -136,9 +136,8 @@ if (!isset($_SESSION['email'])) {
 
                     <?php
                     $query = $conn->query("SELECT office, COUNT(*) AS office_count
-                FROM queue
-                GROUP BY office
-                HAVING office_count > 1;");
+                    FROM queue
+                    GROUP BY office;");
 
                     foreach ($query as $data) {
                         $office[] = $data['office'];
