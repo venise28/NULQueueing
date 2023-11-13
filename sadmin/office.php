@@ -25,27 +25,33 @@ if (isset($_GET['office'])) {
     echo '<p>No office selected.</p>';
 }
 
+//FOR CUSTOMER COMPLETED AND PENDING
 // Check if the selected office exists in the 'offices' table
 if ($rowTableName) {
     $officeTableName = $rowTableName['officeName'];
 
     // Use prepared statements for security
-    $sql = "SELECT * FROM `$officeTableName`";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM `queue` WHERE office = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $officeTableName);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     // Validate the result
     if ($result) {
         // FOR FETCHING THE COMPLETED QUEUE
-        $sqlCompleted = "SELECT COUNT(*) AS completed_count FROM `$officeTableName` WHERE status = 1";
+        $sqlCompleted = "SELECT COUNT(*) AS completed_count FROM `queue` WHERE office = ? AND status = 1";
         $stmtCompleted = mysqli_prepare($conn, $sqlCompleted);
+        mysqli_stmt_bind_param($stmtCompleted, "s", $officeTableName);
         mysqli_stmt_execute($stmtCompleted);
         $resultCompleted = mysqli_stmt_get_result($stmtCompleted);
         $rowCompleted = mysqli_fetch_assoc($resultCompleted);
         $completedCount = $rowCompleted['completed_count'];
 
         // FOR FETCHING THE PENDING QUEUE
-        $sqlPending = "SELECT COUNT(*) AS pending_count FROM `$officeTableName` WHERE status = 0";
+        $sqlPending = "SELECT COUNT(*) AS pending_count FROM `queue` WHERE office = ? AND status = 0";
         $stmtPending = mysqli_prepare($conn, $sqlPending);
+        mysqli_stmt_bind_param($stmtPending, "s", $officeTableName);
         mysqli_stmt_execute($stmtPending);
         $resultPending = mysqli_stmt_get_result($stmtPending);
         $rowPending = mysqli_fetch_assoc($resultPending);
@@ -56,6 +62,55 @@ if ($rowTableName) {
 } else {
     echo '<p>No data found for the selected office.</p>';
 }
+
+// FOR ADDING OFFICE
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the office name and acronym from the form
+    $officeName = strtoupper($_POST["officeName"]);
+    $acronym = strtoupper($_POST["acronym"]);
+    $otherOffices = isset($_POST["otherOffices"]) ? 1 : 0;
+
+    // Create a sanitized table name from the office name
+    $tableName = preg_replace("/[^a-zA-Z0-9_]/", "", $officeName);
+
+    // SQL to check if table exists
+    $checkTableExistsSQL = "SHOW TABLES LIKE '$tableName'";
+    $result = $conn->query($checkTableExistsSQL);
+
+    if ($result->num_rows > 0) {
+        echo '<script>alert("Table ' . $tableName . ' already exists");</script>';
+    } else {
+        // SQL to create table without acronym
+        $sql = "CREATE TABLE $tableName (
+            `id` int(11) NOT NULL,
+            `queue_number` varchar(255) NOT NULL,
+            `student_id` varchar(12) NOT NULL,
+            `endorsed_from` varchar(255) DEFAULT NULL,
+            `timein` timestamp NOT NULL DEFAULT current_timestamp(),
+            `timeout` timestamp NULL DEFAULT NULL,
+            `remarks` int(11) DEFAULT NULL,
+            `transaction` varchar(255) DEFAULT NULL,
+            `status` int(11) DEFAULT NULL
+        )";
+
+        if ($conn->query($sql) === TRUE) {
+            // Insert the office details into the existing "offices" table with otherOffices value
+            $insertOfficeSQL = "INSERT INTO offices (acronym, officeName, office) VALUES ('$acronym', '$officeName', '$otherOffices')";
+            if ($conn->query($insertOfficeSQL) === TRUE) {
+                // Redirect with the new 'office' parameter
+                header("Location: $_SERVER[PHP_SELF]?office=" . urlencode($officeName));
+                exit();
+            } else {
+                echo '<script>alert("Error inserting office details: ' . $conn->error . '");</script>';
+            }
+        } else {
+            echo '<script>alert("Error creating table: ' . $conn->error . '");</script>';
+        }
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +163,7 @@ if ($rowTableName) {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="#FFD41C" class="bi bi-people-fill" viewBox="0 0 16 16">
                                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                 </svg>
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="completed-accounting-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="completed-office-count">
                                     <?php echo $completedCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">COMPLETED</p>
@@ -125,7 +180,7 @@ if ($rowTableName) {
                                     <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13Z" />
                                 </svg>
 
-                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="pending-accounting-count">
+                                <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="pending-office-count">
                                     <?php echo $pendingCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">PENDING</p>
@@ -136,6 +191,10 @@ if ($rowTableName) {
                 </div>
                 <!-- DETAILED NUMBERS IN BOX ENDS -->
 
+
+
+
+
                 <!-- TABLE STARTS -->
                 <div class="table-search-container">
                     <div class="search-container position-relative d-flex justify-content-end">
@@ -144,46 +203,95 @@ if ($rowTableName) {
                     </div>
                     <div class="table-container" style="overflow-x:auto;">
                         <?php
-                        // Check if the selected office exists in the 'offices' table
-                        if ($rowTableName) {
-                            $officeTableName = $rowTableName['officeName'];
+                        // Check if the 'office' parameter is set in the URL
+                        if (isset($_GET['office'])) {
+                            // Retrieve the selected office name from the URL
+                            $selectedOffice = urldecode($_GET['office']);
 
-                            // Fetch all columns for the selected office's table
-                            $query = "SELECT * FROM `$officeTableName`";
-                            $result = mysqli_query($conn, $query);
+                            // Fetch data from the 'queue' table for the selected office
+                            $query = "SELECT * FROM `queue` WHERE `office` = ?";
+                            $stmt = mysqli_prepare($conn, $query);
 
-                            // Display the selected office information
-                            echo '<table id="myTable" class="myTable" border="1">';
+                            // Check if the statement was prepared successfully
+                            if ($stmt) {
+                                mysqli_stmt_bind_param($stmt, "s", $selectedOffice);
+                                mysqli_stmt_execute($stmt);
+                                $result = mysqli_stmt_get_result($stmt);
 
-                            // Display header row
-                            echo '<tr class="header">';
-                            while ($fieldInfo = mysqli_fetch_field($result)) {
-                                echo '<th>' . $fieldInfo->name . '</th>';
-                            }
-                            echo '</tr>';
+                                if (mysqli_num_rows($result) > 0) {
+                                    // Display the table header
+                                    echo '<table id="myTable" class="myTable" border="1">';
+                                    echo '<tr class="header">';
+                                    while ($fieldInfo = mysqli_fetch_field($result)) {
+                                        echo '<th>' . $fieldInfo->name . '</th>';
+                                    }
+                                    echo '</tr>';
 
-                            // Display data rows
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<tr>';
-                                foreach ($row as $value) {
-                                    echo '<td>' . $value . '</td>';
+                                    // Display data rows
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '<tr>';
+                                        foreach ($row as $value) {
+                                            echo '<td>' . $value . '</td>';
+                                        }
+                                        echo '</tr>';
+                                    }
+
+                                    echo '</table>';
+                                } else {
+                                    echo '<p>No data found for the selected office.</p>';
                                 }
-                                echo '</tr>';
+                            } else {
+                                // Handle the case when the statement could not be prepared
+                                echo '<p>Unable to prepare the SQL statement.</p>';
                             }
-
-                            echo '</table>';
                         } else {
-                            echo '<p>No data found for the selected office.</p>';
+                            // Handle the case when no office is selected
+                            echo '<p>No office selected.</p>';
                         }
                         ?>
                     </div>
                 </div>
 
                 <!-- TABLE ENDS -->
+
+                <!-- EDIT OFFICE MODAL STARTS -->
+                <div class="modal fade" id="editOfficeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header d-block border-0 pb-0">
+                                <h1 class="modal-title fs-3 text-center custom-bold custom-secondary-color" id="modalTitle2">
+                                    EDIT OFFICE</h1>
+                                <p class="modal-secondary fs-4 fst-italic fw-bold text-center custom-primary-color p-0 m-0">
+                                    Modify the office details and click "SAVE CHANGES".</p>
+                            </div>
+                            <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+                                <div class="modal-body pb-0 my-3">
+                                    <div class="mb-2">
+                                        <label for="updatedOfficeName" class="text-start">Updated Office Name</label>
+                                        <input type="text" id="updatedOfficeName" name="updatedOfficeName" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="updatedAcronym" class="text-start">Updated Acronym</label>
+                                        <input type="text" id="updatedAcronym" name="updatedAcronym" class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold" required>
+                                    </div>
+                                    <div class="mb-2 form-check">
+                                        <input type="checkbox" id="otherOfficesUpdated" name="otherOfficesUpdated" class="form-check-input">
+                                        <label for="otherOfficesUpdated" class="form-check-label">Other Offices</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-end border-0 col">
+                                    <button type="button" class="btn btn-white px-4" data-bs-dismiss="modal">CANCEL</button>
+                                    <button type="submit" class="btn btn-primary px-4" id="editOfficeBtn">SAVE CHANGES</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- EDIT OFFICE MODAL ENDS -->
+
             </div>
         </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../script/offices.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
