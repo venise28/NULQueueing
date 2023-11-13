@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 13, 2023 at 10:38 AM
+-- Generation Time: Nov 13, 2023 at 10:42 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -114,7 +114,7 @@ CREATE TABLE `accounting` (
   `queue_number` varchar(64) NOT NULL,
   `student_id` varchar(64) NOT NULL,
   `timestamp` timestamp NULL DEFAULT current_timestamp(),
-  `endorsed` varchar(255) DEFAULT NULL,
+  `endorsed_from` varchar(255) DEFAULT NULL,
   `transaction` varchar(255) NOT NULL,
   `remarks` varchar(255) DEFAULT NULL,
   `status` int(11) DEFAULT 0,
@@ -125,16 +125,14 @@ CREATE TABLE `accounting` (
 -- Dumping data for table `accounting`
 --
 
-INSERT INTO `accounting` (`id`, `queue_number`, `student_id`, `timestamp`, `endorsed`, `transaction`, `remarks`, `status`, `availability`) VALUES
+INSERT INTO `accounting` (`id`, `queue_number`, `student_id`, `timestamp`, `endorsed_from`, `transaction`, `remarks`, `status`, `availability`) VALUES
 (1, 'ROO1', '2020-120018', '2023-11-09 17:08:30', 'Registrar', 'Payment', 'Uniform Payment', 1, 1),
-(2, 'R1OO1', '2020-120018', '2023-11-09 17:25:09', 'Registrar', 'Registrar', 'Payment', 1, 1),
-(11, 'ROO12', '2020-120018', '2023-11-09 17:08:30', 'Regisrar', 'Registrar', 'Payment', 1, 1),
-(13, 'R1OO441', '2020-120018', '2023-11-09 17:25:09', 'Registrar', 'Registrar', 'Payment', 0, 1),
-(15, 'R12O1', '2020-120018', '2023-11-09 17:08:30', 'Registrar', 'Payment', 'Uniform Payment', 1, 1),
+(2, 'R1OO1', '2020-120018', '2023-11-09 17:25:09', 'Registrar', 'Registrar', 'Payment', 0, 0),
+(11, 'ROO12', '2020-120018', '2023-11-09 17:08:30', 'Regisrar', 'Registrar', 'Payment', 0, 0),
+(13, 'R1OO441', '2020-120018', '2023-11-09 17:25:09', 'Registrar', 'Registrar', 'Payment', 0, 0),
+(15, 'R12O1', '2020-120018', '2023-11-09 17:08:30', 'Registrar', 'Payment', 'Uniform Payment', 0, 0),
 (16, 'R12301', '2020-120018', '2023-11-09 17:25:09', 'Registrar', 'Registrar', 'Payment', 0, 0),
-(17, 'RO1240', '2020-120018', '2023-11-09 17:08:30', 'Regisrar', 'Registrar', 'Payment', 1, 1),
-(18, 'AC001', 'GUEST', '2023-11-13 01:12:05', NULL, '', NULL, 0, 0),
-(19, 'AC002', 'GUEST', '2023-11-13 02:32:39', NULL, '', NULL, 0, 0);
+(17, 'RO1240', '2020-120018', '2023-11-09 17:08:30', 'Regisrar', 'Registrar', 'Payment', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -514,6 +512,13 @@ CREATE TABLE `queue` (
   `endorsed` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `queue`
+--
+
+INSERT INTO `queue` (`id`, `student_id`, `queue_number`, `office`, `program`, `timestamp`, `status`, `remarks`, `endorsed`) VALUES
+(1, 'GUEST', 'R001', 'REGISTRAR', '-', '2023-11-13 09:40:31', 0, NULL, 'kiosk');
+
 -- --------------------------------------------------------
 
 --
@@ -598,7 +603,8 @@ INSERT INTO `registrar` (`id`, `queue_number`, `student_id`, `timestamp`, `endor
 (3, 'R003', '2121', '2023-11-12 11:03:12', '2121', '2121', '2121', 1, 'Window 2'),
 (4, 'R004', '2121', '2023-11-12 11:03:34', '2121', '2121', '2112', 0, NULL),
 (0, 'R1OO1', '2020-120018', '2023-11-09 17:25:09', 'Accounting', 'Registrar', 'This is just a test.', 0, NULL),
-(0, 'R001', 'GUEST', '2023-11-13 02:32:37', NULL, NULL, NULL, 0, NULL);
+(0, 'R001', 'GUEST', '2023-11-13 02:32:37', NULL, NULL, NULL, 0, NULL),
+(0, 'R001', 'GUEST', '2023-11-13 02:40:31', NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -812,7 +818,7 @@ ALTER TABLE `academics_queue`
 -- AUTO_INCREMENT for table `accounting`
 --
 ALTER TABLE `accounting`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `accounting_logs`
@@ -878,7 +884,7 @@ ALTER TABLE `program_chairs`
 -- AUTO_INCREMENT for table `queue`
 --
 ALTER TABLE `queue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `queue_logs`
