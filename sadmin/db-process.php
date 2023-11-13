@@ -52,10 +52,16 @@ elseif ($_GET['action'] == 'colleges') {
         $customerrowcount = mysqli_num_rows($result);
         echo $customerrowcount;
     }
+}elseif ($_GET['action'] == 'offices') {
+    $sql = "SELECT * FROM offices";
+    $result = $conn->query($sql);
 
-
-   
-}else {
+    if ($result = mysqli_query($conn, $sql)) {
+        $customerrowcount = mysqli_num_rows($result);
+        echo $customerrowcount;
+    } 
+}
+else {
     echo "Invalid action.";
 }
 ?>

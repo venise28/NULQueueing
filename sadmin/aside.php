@@ -83,23 +83,6 @@
             </div>
         </div>
 
-       <!-- COLLEGES -->
-       <div class="fs-5 row g-0 dashboard-bg position-relative p-4 " style="width: 100%;">
-            <div class="col-md-2 offset-md-2 d-none d-lg-block">
-                <a href="college.php"
-                    class="stretched-link text-decoration-none text-light fw-bold d-flex justify-content-start"><i
-                        class="fa-lg bi bi-building-fill-gear text-light pe-2"></i>
-                    <h4 class="fw-bold text-light text-center">COLLEGES</h4>
-                </a>
-            </div>
-
-            <div class="d-lg-none">
-                <a href="college.php"
-                    class="stretched-link text-decoration-none text-light fw-bold d-flex justify-content-center"><i
-                        class="fa-lg bi bi-people-fill text-light pe-2"></i></a>
-            </div>
-        </div>
-
         <!-- OFFICES -->
         <div class="offices-container fs-5 row g-0  position-relative" style="width: 100%;">
             <div class="dropdown d-none d-lg-block dropdown-container">
