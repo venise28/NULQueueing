@@ -27,9 +27,9 @@ if ($checkResult->num_rows == 0) {
         VALUES ('$full_name', '$office', '$window', '$username', '$password')";
 
     if ($conn->query($insertSql) === TRUE) {
-        //echo '<script>alert("User added successfully!");</script>';
-        //echo '<script>window.location.href = "users.php";</script>';
-        //exit();
+        echo '<script>alert("User added successfully!");</script>';
+        echo '<script>window.location.href = "users.php";</script>';
+        exit();
     } else {
         echo "Error: " . $insertSql . "<br>" . $conn->error;
     }
