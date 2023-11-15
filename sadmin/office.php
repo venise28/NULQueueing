@@ -156,33 +156,44 @@ if ($rowTableName) {
                     </div>
                     <div class="table-container" style="overflow-x:auto;">
                         <?php
+
                         // Check if the selected office exists in the 'offices' table
                         if ($rowTableName) {
-                            //FOR TABLE WITH NO _LOGS
-                            // $officeTableName = $rowTableName['officeName'];
-
-                            //FOR TABLE WITH _LOGS
+                            // FOR TABLE WITH _LOGS
                             $officeTableName = $rowTableName['officeName'] . '_logs';
 
-                            // Fetch all columns for the selected office's table
-                            $query = "SELECT * FROM `$officeTableName`";
-                            $result = mysqli_query($conn, $query);
+                            // Fetch all columns excluding 'availability' and 'window'
+                            $queryColumns = "SHOW COLUMNS FROM `$officeTableName`";
+                            $resultColumns = mysqli_query($conn, $queryColumns);
+
+                            // Extract column names excluding 'availability' and 'window'
+                            $columnsToSelect = [];
+                            while ($row = mysqli_fetch_assoc($resultColumns)) {
+                                $columnName = $row['Field'];
+                                if ($columnName !== 'availability' && $columnName !== 'window') {
+                                    $columnsToSelect[] = $columnName;
+                                }
+                            }
+
+                            // Fetch all data for the selected office
+                            $queryData = "SELECT " . implode(', ', $columnsToSelect) . " FROM `$officeTableName`";
+                            $resultData = mysqli_query($conn, $queryData);
 
                             // Display the selected office information
                             echo '<table id="myTable" class="myTable" border="1">';
 
                             // Display header row
                             echo '<tr class="header">';
-                            while ($fieldInfo = mysqli_fetch_field($result)) {
-                                echo '<th>' . $fieldInfo->name . '</th>';
+                            foreach ($columnsToSelect as $columnName) {
+                                echo '<th>' . $columnName . '</th>';
                             }
                             echo '</tr>';
 
                             // Display data rows
-                            while ($row = mysqli_fetch_assoc($result)) {
+                            while ($row = mysqli_fetch_assoc($resultData)) {
                                 echo '<tr>';
-                                foreach ($row as $value) {
-                                    echo '<td>' . $value . '</td>';
+                                foreach ($columnsToSelect as $columnName) {
+                                    echo '<td>' . $row[$columnName] . '</td>';
                                 }
                                 echo '</tr>';
                             }
@@ -191,6 +202,42 @@ if ($rowTableName) {
                         } else {
                             echo '<p>No data found for the selected office.</p>';
                         }
+                        // //FOR GETTING ALL THE ROWS DATA IN TABLE
+                        // // Check if the selected office exists in the 'offices' table
+                        // if ($rowTableName) {
+                        //     //FOR TABLE WITH NO _LOGS
+                        //     // $officeTableName = $rowTableName['officeName'];
+
+                        //     //FOR TABLE WITH _LOGS
+                        //     $officeTableName = $rowTableName['officeName'] . '_logs';
+
+                        //     // Fetch all columns for the selected office's table
+                        //     $query = "SELECT * FROM `$officeTableName`";
+                        //     $result = mysqli_query($conn, $query);
+
+                        //     // Display the selected office information
+                        //     echo '<table id="myTable" class="myTable" border="1">';
+
+                        //     // Display header row
+                        //     echo '<tr class="header">';
+                        //     while ($fieldInfo = mysqli_fetch_field($result)) {
+                        //         echo '<th>' . $fieldInfo->name . '</th>';
+                        //     }
+                        //     echo '</tr>';
+
+                        //     // Display data rows
+                        //     while ($row = mysqli_fetch_assoc($result)) {
+                        //         echo '<tr>';
+                        //         foreach ($row as $value) {
+                        //             echo '<td>' . $value . '</td>';
+                        //         }
+                        //         echo '</tr>';
+                        //     }
+
+                        //     echo '</table>';
+                        // } else {
+                        //     echo '<p>No data found for the selected office.</p>';
+                        // }
                         ?>
                     </div>
                 </div>
