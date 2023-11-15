@@ -27,7 +27,11 @@ if (isset($_GET['office'])) {
 
 // Check if the selected office exists in the 'offices' table
 if ($rowTableName) {
-    $officeTableName = $rowTableName['officeName'];
+    //FOR TABLE WITH NO _LOGS
+    // $officeTableName = $rowTableName['officeName'];
+
+    //FOR TABLE WITH _LOGS
+    $officeTableName = $rowTableName['officeName'] . '_logs';
 
     // Use prepared statements for security
     $sql = "SELECT * FROM `$officeTableName`";
@@ -50,6 +54,14 @@ if ($rowTableName) {
         $resultPending = mysqli_stmt_get_result($stmtPending);
         $rowPending = mysqli_fetch_assoc($resultPending);
         $pendingCount = $rowPending['pending_count'];
+
+        // Count all rows in the table
+        $sqlCustomerCount = "SELECT COUNT(*) AS customer_count FROM `$officeTableName`";
+        $stmtCustomerCount = mysqli_prepare($conn, $sqlCustomerCount);
+        mysqli_stmt_execute($stmtCustomerCount);
+        $resultCustomerCount = mysqli_stmt_get_result($stmtCustomerCount);
+        $rowCustomerCount = mysqli_fetch_assoc($resultCustomerCount);
+        $customerCount = $rowCustomerCount['customer_count'];
     } else {
         echo '<p>Error fetching data for the selected office.</p>';
     }
@@ -79,7 +91,7 @@ if ($rowTableName) {
             <?php include 'aside.php'; ?>
             <div class="col-9 offset-3">
                 <h4 class="fs-2 pt-5 ps-5 pb-2 nu_color text-start">
-                    <?php echo $officeTableName; ?>
+                    <?php echo str_replace('_logs', '', $officeTableName); ?>
                 </h4>
                 <hr>
 
@@ -93,7 +105,7 @@ if ($rowTableName) {
                                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
                                 </svg>
                                 <h2 class="mt-2 me-5  fw-bold nu_color float-end" id="office-count">
-                                    ...
+                                    <?php echo $customerCount; ?>
                                 </h2>
                                 <p class="fs-5 mt-n4 nu_color float-end">CUSTOMERS</p>
 
@@ -146,7 +158,11 @@ if ($rowTableName) {
                         <?php
                         // Check if the selected office exists in the 'offices' table
                         if ($rowTableName) {
-                            $officeTableName = $rowTableName['officeName'];
+                            //FOR TABLE WITH NO _LOGS
+                            // $officeTableName = $rowTableName['officeName'];
+
+                            //FOR TABLE WITH _LOGS
+                            $officeTableName = $rowTableName['officeName'] . '_logs';
 
                             // Fetch all columns for the selected office's table
                             $query = "SELECT * FROM `$officeTableName`";
