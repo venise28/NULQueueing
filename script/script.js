@@ -356,8 +356,8 @@ function getAdmissionCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAdmissionCustomerCount(); 
-    setInterval(getAdmissionCustomerCount, 1000); 
+    getAdmissionCustomerCount();
+    setInterval(getAdmissionCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN ACCOUNTING
@@ -376,8 +376,8 @@ function getAccountingCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAccountingCustomerCount(); 
-    setInterval(getAccountingCustomerCount, 1000); 
+    getAccountingCustomerCount();
+    setInterval(getAccountingCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN REGISTRAR
@@ -396,8 +396,8 @@ function getRegistrarCustomerCount() {
 }
 
 $(document).ready(function () {
-    getRegistrarCustomerCount(); 
-    setInterval(getRegistrarCustomerCount, 1000); 
+    getRegistrarCustomerCount();
+    setInterval(getRegistrarCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN ACADEMICS
@@ -416,8 +416,8 @@ function getAcademicsCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAcademicsCustomerCount(); 
-    setInterval(getAcademicsCustomerCount, 1000); 
+    getAcademicsCustomerCount();
+    setInterval(getAcademicsCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN ASSETS
@@ -436,8 +436,8 @@ function getAssetsCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAssetsCustomerCount(); 
-    setInterval(getAssetsCustomerCount, 1000); 
+    getAssetsCustomerCount();
+    setInterval(getAssetsCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN GUIDANCE
@@ -456,8 +456,8 @@ function getGuidanceCustomerCount() {
 }
 
 $(document).ready(function () {
-    getGuidanceCustomerCount(); 
-    setInterval(getGuidanceCustomerCount, 1000); 
+    getGuidanceCustomerCount();
+    setInterval(getGuidanceCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN CLINIC
@@ -476,8 +476,8 @@ function getClinicCustomerCount() {
 }
 
 $(document).ready(function () {
-    getClinicCustomerCount(); 
-    setInterval(getClinicCustomerCount, 1000); 
+    getClinicCustomerCount();
+    setInterval(getClinicCustomerCount, 1000);
 });
 
 // FOR SUPER ADMIN ITSO
@@ -496,52 +496,52 @@ function getItsoCustomerCount() {
 }
 
 $(document).ready(function () {
-    getItsoCustomerCount(); 
-    setInterval(getItsoCustomerCount, 1000); 
+    getItsoCustomerCount();
+    setInterval(getItsoCustomerCount, 1000);
 });
 
-// DYNAMIC GET PER OFFICE CUSTOMER COUNT
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
+// // DYNAMIC GET PER OFFICE CUSTOMER COUNT WITH NO LOGS
+// function getParameterByName(name, url) {
+//     if (!url) url = window.location.href;
+//     name = name.replace(/[\[\]]/g, "\\$&");
+//     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+//         results = regex.exec(url);
+//     if (!results) return null;
+//     if (!results[2]) return '';
+//     return decodeURIComponent(results[2].replace(/\+/g, " "));
+// }
 
-function getOfficeCustomerCount() {
-    $.ajax({
-        url: 'office-db-process.php',
-        type: 'GET',
-        dataType: 'json', // Expect JSON response
-        success: (data) => {
-            // Clear existing content
-            const officeCountContainer = $('#office-count').empty();
+// function getOfficeCustomerCount() {
+//     $.ajax({
+//         url: 'office-db-process.php',
+//         type: 'GET',
+//         dataType: 'json', // Expect JSON response
+//         success: (data) => {
+//             // Clear existing content
+//             const officeCountContainer = $('#office-count').empty();
 
-            // Dynamically get the selected office from the URL parameter named 'office'
-            const selectedOffice = getParameterByName('office');
+//             // Dynamically get the selected office from the URL parameter named 'office'
+//             const selectedOffice = getParameterByName('office');
 
-            // Check if the selected office data is found
-            const selectedOfficeData = data.find(item => item.office === selectedOffice);
-            if (selectedOfficeData) {
-                const officeElement = $(`<span class="office-count-item">${selectedOfficeData.customer_count}</span>`);
-                officeCountContainer.append(officeElement);
-            } else {
-                console.log(`Data not found for the selected office: ${selectedOffice}`);
-            }
-        },
-        error: (xhr, status, error) => {
-            console.log(`Error: ${error}`);
-        }
-    });
-}
+//             // Check if the selected office data is found
+//             const selectedOfficeData = data.find(item => item.office === selectedOffice);
+//             if (selectedOfficeData) {
+//                 const officeElement = $(`<span class="office-count-item">${selectedOfficeData.customer_count}</span>`);
+//                 officeCountContainer.append(officeElement);
+//             } else {
+//                 console.log(`Data not found for the selected office: ${selectedOffice}`);
+//             }
+//         },
+//         error: (xhr, status, error) => {
+//             console.log(`Error: ${error}`);
+//         }
+//     });
+// }
 
-$(document).ready(function () {
-    getOfficeCustomerCount();
-    setInterval(getOfficeCustomerCount, 1000);
-});
+// $(document).ready(function () {
+//     getOfficeCustomerCount();
+//     setInterval(getOfficeCustomerCount, 1000);
+// });
 
 
 
@@ -561,8 +561,8 @@ $(document).ready(function () {
 // }
 
 // $(document).ready(function () {
-//     getOfficeCustomerCount(); 
-//     setInterval(getOfficeCustomerCount, 1000); 
+//     getOfficeCustomerCount();
+//     setInterval(getOfficeCustomerCount, 1000);
 // });
 
 
