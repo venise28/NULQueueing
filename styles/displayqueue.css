@@ -28,8 +28,9 @@ body::before {
 }
 
 .main-container {
-    width: 90%;
-    margin: 5rem auto;
+    display: flex;
+    margin: 5rem;
+    gap: 5rem;
     overflow-y: hidden;
 }
 
