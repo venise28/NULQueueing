@@ -171,9 +171,15 @@
                 });
             });
 
-            // Handle click on the "OFFICES" header
+            // Handle click on the "OFFICES" header using h4
             var officesHeader = document.querySelector(".dropbtn h4");
-            officesHeader.addEventListener("click", function () {
+            officesHeader.addEventListener("click", function() {
+                redirectToOfficeAside();
+            });
+
+            // Handle click on the "OFFICES" header using button
+            var officesButton = document.querySelector(".dropbtn");
+            officesButton.addEventListener("click", function() {
                 redirectToOfficeAside();
             });
         });
