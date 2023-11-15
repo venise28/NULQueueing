@@ -1,6 +1,27 @@
 <?php
 @include 'database.php';
 
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office']) && isset($_POST['window']) && isset($_POST['queue_number'])) {
+    $office = $_POST['office'];
+    $window = $_POST['window'];
+    $queueNumber = $_POST['queue_number'];
+
+    $insertSql = "INSERT INTO display (officeName, window, queue_number) VALUES ('$office', '$window', '$queueNumber')";
+    $conn->query($insertSql);
+
+
+    $queueCountSql = "SELECT COUNT(*) AS count FROM display WHERE officeName = '$office'";
+    $queueCountResult = $conn->query($queueCountSql);
+    $queueCount = $queueCountResult->fetch_assoc()['count'];
+
+
+    if ($queueCount > 2) {
+        $deleteOldestSql = "DELETE FROM display WHERE officeName = '$office' ORDER BY id LIMIT 1";
+        $conn->query($deleteOldestSql);
+    }
+}
+
 $sql = "SELECT DISTINCT officeName FROM offices";
 $result = $conn->query($sql);
 
@@ -21,64 +42,117 @@ $result = $conn->query($sql);
 
 <body>
     <div class="main-container">
-        <!-- TOP CONTAINER STARTS (NOW SERVING & DATETIME) -->
-        <header class="heading-datetime-container">
-            <div class="heading-container-serving">
-                <h1 class="heading-text-serving">NOW SERVING</h1>
+
+        <!-- PENDING OF THE QUEUE STARTS -->
+        <div class="pending-container">
+            <div class="pending-heading heading-container">
+                <h1 class="heading-text">NUMBER</h1>
             </div>
-            <div class="datetime-container">
-                <h3 id="date"></h3>
-                <h1 id="time"></h1>
+            <div class="pending-queue queue">
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
+                <h2>AD0002</h2>
             </div>
-        </header>
-        <!-- TOP CONTAINER ENDS (NOW SERVING & DATETIME) -->
+        </div>
+        <!-- PENDING OF THE QUEUE ENDS -->
 
-        <!-- OFFICES WITH QUEUE STARTS -->
-        <?php
-        if ($result->num_rows > 0) {
-            // Output a single section tag for all office containers
-            echo '<section class="offices-container">';
+        <!-- SERVING OF THE QUEUE STARTS -->
+        <div class="serving-container">
+            <!-- TOP CONTAINER STARTS (NOW SERVING & DATETIME) -->
+            <header class="heading-datetime-container">
+                <div class="heading-container-serving">
+                    <h1 class="heading-text-serving">NOW SERVING</h1>
+                </div>
+                <div class="datetime-container">
+                    <h3 id="date"></h3>
+                    <h1 id="time"></h1>
+                </div>
+            </header>
+            <!-- TOP CONTAINER ENDS (NOW SERVING & DATETIME) -->
 
-            // Output office containers dynamically based on the data
-            while ($row = $result->fetch_assoc()) {
-                $officeName = $row["officeName"];
 
-                // Fetch data for the current office
-                $officeDataSql = "SELECT * FROM offices WHERE officeName = '$officeName'";
-                $officeDataResult = $conn->query($officeDataSql);
+            <!-- OFFICES WITH QUEUE STARTS -->
+            <section class="offices-container" id="officesContainer">
+                <?php
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $officeName = $row["officeName"];
 
-                if ($officeDataResult->num_rows > 0) {
-                    echo '<div class="' . $officeName . '-office-container office">';
-                    echo '<div class="heading-container">';
-                    echo '<h1 class="heading-text">' . $officeName . '</h1>';
-                    echo '</div>';
-                    echo '<div class="' . $officeName . '-queue-container">';
+                        // Fetch data from the 'display' table for the current office
+                        $officeDataSql = "SELECT * FROM display WHERE officeName = '$officeName' ORDER BY id DESC LIMIT 2";
+                        $officeDataResult = $conn->query($officeDataSql);
 
-                    while ($officeRow = $officeDataResult->fetch_assoc()) {
-                        echo '<div class="' . $officeName . '-queue queue">';
-                        echo '<h2 class="queue-text">R001</h2>'; //paki delete na lang nito if yung pag generate dynamic na
-                        // echo '<h2>' . $officeRow["queueNumber"] . '</h2>'; //eto ipapalit once na dynamic na yung pag generate
-                        // echo '<h2>' . $officeRow["window"] . '</h2>'; // eto for window lagay na lang conditional if meron yung inyo or wala
+                        echo '<div class="' . $officeName . '-office-container office">';
+                        echo '<div class="heading-container">';
+                        echo '<h1 class="heading-text">' . $officeName . '</h1>';
                         echo '</div>';
+                        echo '<div class="' . $officeName . '-queue-container" id="' . $officeName . 'QueueContainer">';
+
+                        if ($officeDataResult->num_rows > 0) {
+                            while ($officeRow = $officeDataResult->fetch_assoc()) {
+                                $window = $officeRow["window"];
+                                $queueNumber = $officeRow["queue_number"];
+
+                                echo '<div class="' . $officeName . '-queue queue">';
+                                echo '<h2 class="queue-text">' . $window . ': ' . $queueNumber . '</h2>';
+                                echo '</div>';
+                            }
+                        } else {
+                            // Display an empty queue container if no data is found for the current office
+                            echo '<div class="' . $officeName . '-queue queue">';
+                            echo '<h2 class="queue-text">-</h2>';
+                            echo '</div>';
+                        }
+
+                        echo '</div>'; // Close queue container
+                        echo '</div>'; // Close office container
                     }
-
-                    echo '</div>'; // Close queue container
-                    echo '</div>'; // Close office container
+                } else {
+                    echo "0 results";
                 }
-            }
-
-            // Close the section tag after all office containers
-            echo '</section>';
-        } else {
-            echo "0 results";
-        }
-        ?>
-        <!-- OFFICES WITH QUEUE ENDS -->
-
+                ?>
+            </section>
+            <!-- OFFICES WITH QUEUE ENDS -->
+        </div>
+        <!-- SERVING OF THE QUEUE ENDS -->
 
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script/displayscript.js"></script>
+    <script>
+        function fetchQueueData() {
+            <?php
+
+            $result->data_seek(0);
+            while ($row = $result->fetch_assoc()) {
+                $officeName = $row["officeName"];
+            ?>
+                $.ajax({
+                    url: 'fetch_queues.php',
+                    type: 'POST',
+                    data: {
+                        office: '<?php echo $officeName; ?>'
+                    },
+                    success: function(data) {
+                        $('#<?php echo $officeName; ?>QueueContainer').html(data);
+                    }
+                });
+            <?php } ?>
+        }
+
+        // Fetch queue data on page load
+        fetchQueueData();
+
+        setInterval(fetchQueueData, 15000);
+    </script>
 </body>
 
 </html>
