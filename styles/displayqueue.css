@@ -81,7 +81,8 @@ body::before {
 
 .queue {
     position: relative;
-    padding: 8rem 5rem 4rem 5rem;
+    /* padding: 8rem 5rem 4rem 5rem; */
+    padding: 5rem 5rem 1rem 5rem;
     margin-top: -3rem;
     background-color: var(--primary-color);
     border-radius: 75px;
@@ -93,6 +94,18 @@ body::before {
     text-align: center;
 }
 
+.pending-container{
+    width: 30%;
+}
+
+.pending-queue {
+    padding: 4rem 0 2rem 0;
+    overflow: auto;
+}
+
+.pending-queue h2 {
+    font-size: 3.5rem;
+}
 /* MEDIA QUERY*/
 @media (max-width: 3600px) {
     html {

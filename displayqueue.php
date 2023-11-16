@@ -48,18 +48,7 @@ $result = $conn->query($sql);
             <div class="pending-heading heading-container">
                 <h1 class="heading-text">NUMBER</h1>
             </div>
-            <div class="pending-queue queue">
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
-                <h2>AD0002</h2>
+            <div class="pending-queue queue" id="pendingQueue">
             </div>
         </div>
         <!-- PENDING OF THE QUEUE ENDS -->
@@ -94,17 +83,19 @@ $result = $conn->query($sql);
                         echo '<div class="heading-container">';
                         echo '<h1 class="heading-text">' . $officeName . '</h1>';
                         echo '</div>';
-                        echo '<div class="' . $officeName . '-queue-container" id="' . $officeName . 'QueueContainer">';
+                        //echo '<div class="' . $officeName . '-queue-container" id="' . $officeName . 'QueueContainer">';
 
                         if ($officeDataResult->num_rows > 0) {
+                            echo '<div class="' . $officeName . '-queue queue">'; // Open the queue div once
+
                             while ($officeRow = $officeDataResult->fetch_assoc()) {
                                 $window = $officeRow["window"];
                                 $queueNumber = $officeRow["queue_number"];
 
-                                echo '<div class="' . $officeName . '-queue queue">';
                                 echo '<h2 class="queue-text">' . $window . ': ' . $queueNumber . '</h2>';
-                                echo '</div>';
                             }
+
+                            echo '</div>'; // Close the queue div
                         } else {
                             // Display an empty queue container if no data is found for the current office
                             echo '<div class="' . $officeName . '-queue queue">';
@@ -112,7 +103,7 @@ $result = $conn->query($sql);
                             echo '</div>';
                         }
 
-                        echo '</div>'; // Close queue container
+                        //echo '</div>'; // Close queue container
                         echo '</div>'; // Close office container
                     }
                 } else {
@@ -152,6 +143,23 @@ $result = $conn->query($sql);
         fetchQueueData();
 
         setInterval(fetchQueueData, 15000);
+
+        //FOR PENDING QUEUE
+        function fetchPendingQueue() {
+            $.ajax({
+                url: 'fetch_pending_queue.php',
+                type: 'GET',
+                success: function(data) {
+                    $('#pendingQueue').html(data);
+                }
+            });
+        }
+
+        // Fetch pending queue data on page load
+        fetchPendingQueue();
+
+        // Update pending queue every 15 seconds
+        setInterval(fetchPendingQueue, 15000);
     </script>
 </body>
 
