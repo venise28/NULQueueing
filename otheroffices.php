@@ -106,7 +106,7 @@
     </div>
     <!-- 3rd MODAL REGISTRAR ENDS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script/script.js"></script>
+    <script src="script/queue.js"></script>
 </body>
 
 </html>

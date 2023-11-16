@@ -83,10 +83,11 @@ $result = $conn->query($sql);
                         echo '<div class="heading-container">';
                         echo '<h1 class="heading-text">' . $officeName . '</h1>';
                         echo '</div>';
-                        //echo '<div class="' . $officeName . '-queue-container" id="' . $officeName . 'QueueContainer">';
+                        // echo '<div class="' . $officeName . '-queue-container" id="' . $officeName . 'QueueContainer">';
 
                         if ($officeDataResult->num_rows > 0) {
-                            echo '<div class="' . $officeName . '-queue queue">'; // Open the queue div once
+                            // echo '<div class="' . $officeName . '-queue queue">'; // Open the queue div once
+                            echo '<div class="' . $officeName . '-queue queue" id="' . $officeName . 'QueueContainer">';
 
                             while ($officeRow = $officeDataResult->fetch_assoc()) {
                                 $window = $officeRow["window"];

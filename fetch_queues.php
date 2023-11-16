@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
 
             // Display only the latest queue for each window
             if (!in_array($window, $currentWindows)) {
-                $queues[] = '<div class="' . $office . '-queue queue"><h2 class="queue-text">' . $window . ': ' . $queueNumber . '</h2></div>';
+                $queues[] = '<div class="' . $office . '-queue queue"><h2 class="queue-text">Window ' . $window . ': ' . $queueNumber . '</h2></div>';
                 $currentWindows[] = $window;
             }
 
@@ -36,8 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
             }
         }
 
-        // Display the queues in reverse order
-        echo implode("", array_reverse($queues));
+        // Display the reversed queues
+        echo implode("", $queues);
     } else {
         // Display an empty queue container if no data is found for the current office
         echo '<div class="' . $office . '-queue queue"><h2 class="queue-text">-</h2></div>';
