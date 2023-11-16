@@ -102,12 +102,43 @@ $(".btn").click(function () {
 });
 
 
-/ Handle the submit button click event
+// DONE EVENT LISTENER
+// document.querySelector("#btn-back").addEventListener("click", function () {
+//     // Clear storage
+//     localStorage.removeItem("studentId");
+//     localStorage.removeItem("program");
+
+//     window.location.href = "index.html";
+// });
+
+
+// Function to populate the select dropdown
+// function populateProgramChairs(programName) {
+
+//     // Fetch data
+//     $.ajax({
+//         url: "academics.php",
+//         type: "GET",
+//         data: { program: programName },
+//         success: function (data) {
+//             $("#program-chair-select").append(data);
+//         }
+//     });
+
+//     $("#done-button").click(function () {
+//         var selectedOption = $("#program-chair-select option:selected");
+//         var name = selectedOption.text().split(" - ")[0];
+//         $("#selectedOptionValue").text(name);
+//     });
+// }
+
+
+// Handle the submit button click event
 function insertAcads() {
     var studentId = localStorage.getItem("studentId");
-    var name = $("#program-chair-select option:selected");
+    var selectedChair = $("#program-chair-select option:selected");
 
-    
+    var name = selectedChair.text().split('<---')[0].trim(); //cut the 
     var program = document.getElementById("modalTitle1").innerText;
     var program_queue = localStorage.getItem("program");
     var office = document.getElementById("modalTitle1").innerText;
@@ -140,89 +171,67 @@ function insertAcads() {
     });
 };
 
+// $(document).ready(function () {
+//     populateProgramChairs();
+// });
 
 
 
 function populateDropdown(programselected) {
-    // Make an Ajax request to fetch data based on the selected program
-    $.ajax({
-        url: "academics.php",
-        type: "GET",
-        data: { program: programselected },
-        dataType: "json",
-        success: function (data) {
-            // Clear existing options
-            $('#program-chair-select').empty();
-
-            // Add the retrieved options to the select element
-            $.each(data, function (key, value) {
-                $('#program-chair-select').append($('<option>', {
-                    value: key,
-                    text: value
-                }));
-            });
-        },
-        error: function () {
-            console.error("Error fetching data from the server.");
-        }
-    });
-
-
-    $("#done-button").click(function () {
-        var selectedChair = $('#program-chair-select option:selected').text();
-
-        $('#selected-chair').text(selectedChair);
-    });
-}
-
-
-
-
-//Lagay sa main interface from ACADEMICS
-$(document).ready(function() {
-    function updateQueueNumbers() {
+    // Create a function to update the dropdown options
+    function updateDropdown() {
         $.ajax({
-            url: "display_academics.php",
-            type: "POST",
-            data: {},
-            success: function(data) {
-                // Assuming that the PHP script returns the queue numbers as JSON
-                var queueData = JSON.parse(data);
+            url: "academics.php",
+            type: "GET",
+            data: { program: programselected },
+            dataType: "json",
+            success: function (data) {
+                // Clear existing options
+                $('#program-chair-select').empty();
 
-                // Update the queue numbers on the webpage
-                //SCS
-                $("#BSCS_queueNum").text(queueData.BSCS);
-                $("#BSIT_BSIS_queueNum").text(queueData.BSITBSIS);
-                //SEA
-                $("#BSCE_queueNum").text(queueData.BSCE);
-                $("#BSCpE_queueNum").text(queueData.BSCpE);
-                $("#BSArch_queueNum").text(queueData.BSArch);
-                //SAS
-                $("#BSCrim_queueNum").text(queueData.BSCrim);
-                $("#BSESS_queueNum").text(queueData.BSESS);
-                $("#BSPsych_queueNum").text(queueData.BSPsych);
-                $("#BMMA_ABCOMM_queueNum").text(queueData.MMAABCOMM);
-                //SABM
-                $("#BSTM_queueNum").text(queueData.BSTM);
-                $("#BSBA_queueNum").text(queueData.BSBA);
-                $("#BSA_queueNum").text(queueData.BSA);
-                //SHS
-                $("#STEM_queueNum").text(queueData.ABM);
-                $("#ABM_queueNum").text(queueData.STEM);
-                $("#HUMSS_queueNum").text(queueData.HUMSS);
-                // Add more lines for other programs as needed
+                // Add the retrieved options to the select element
+                $.each(data, function (key, value) {
+                    var option = $('<option>', {
+                        value: key,
+                        text: value.full_name
+                    });
+
+                    if (value.status === 'offline') {
+                        option.prop('disabled', true);
+                        option.text(value.full_name + ' <--- unavailable --->');
+                    }
+                    else if (value.status === 'unavailable') {
+                        option.prop('disabled', true);
+                        option.text(value.full_name + ' <--- unavailable --->');
+                    }
+                    else {
+                        option.text(value.full_name + ' <--- available --->');
+                    }
+
+                    $('#program-chair-select').append(option);
+                });
+            },
+            error: function () {
+                console.error("Error fetching data from the server.");
             }
         });
     }
 
-    // Call the function initially
-    updateQueueNumbers();
-
-    // Set an interval to update the queue numbers every 5 seconds (5000 milliseconds)
-    setInterval(updateQueueNumbers, 1000);
-});
+    // Initial call to populate the dropdown
+    updateDropdown();
 
 
+
+    $("#done-button").click(function () {
+        var selectedOption = $('#program-chair-select option:selected');
+        var selectedChair = selectedOption.text(); // Get the text of the selected option
+
+        var nameWithoutStatus = selectedChair.split('<---')[0].trim();
+
+        $('#selected-chair').text(nameWithoutStatus);
+    });
+
+}
 
 
 function updateCustomerCount() {
@@ -347,8 +356,8 @@ function getAdmissionCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAdmissionCustomerCount();
-    setInterval(getAdmissionCustomerCount, 1000);
+    getAdmissionCustomerCount(); 
+    setInterval(getAdmissionCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN ACCOUNTING
@@ -367,8 +376,8 @@ function getAccountingCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAccountingCustomerCount();
-    setInterval(getAccountingCustomerCount, 1000);
+    getAccountingCustomerCount(); 
+    setInterval(getAccountingCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN REGISTRAR
@@ -387,8 +396,8 @@ function getRegistrarCustomerCount() {
 }
 
 $(document).ready(function () {
-    getRegistrarCustomerCount();
-    setInterval(getRegistrarCustomerCount, 1000);
+    getRegistrarCustomerCount(); 
+    setInterval(getRegistrarCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN ACADEMICS
@@ -407,8 +416,8 @@ function getAcademicsCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAcademicsCustomerCount();
-    setInterval(getAcademicsCustomerCount, 1000);
+    getAcademicsCustomerCount(); 
+    setInterval(getAcademicsCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN ASSETS
@@ -427,8 +436,8 @@ function getAssetsCustomerCount() {
 }
 
 $(document).ready(function () {
-    getAssetsCustomerCount();
-    setInterval(getAssetsCustomerCount, 1000);
+    getAssetsCustomerCount(); 
+    setInterval(getAssetsCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN GUIDANCE
@@ -447,8 +456,8 @@ function getGuidanceCustomerCount() {
 }
 
 $(document).ready(function () {
-    getGuidanceCustomerCount();
-    setInterval(getGuidanceCustomerCount, 1000);
+    getGuidanceCustomerCount(); 
+    setInterval(getGuidanceCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN CLINIC
@@ -467,8 +476,8 @@ function getClinicCustomerCount() {
 }
 
 $(document).ready(function () {
-    getClinicCustomerCount();
-    setInterval(getClinicCustomerCount, 1000);
+    getClinicCustomerCount(); 
+    setInterval(getClinicCustomerCount, 1000); 
 });
 
 // FOR SUPER ADMIN ITSO
@@ -487,52 +496,52 @@ function getItsoCustomerCount() {
 }
 
 $(document).ready(function () {
-    getItsoCustomerCount();
-    setInterval(getItsoCustomerCount, 1000);
+    getItsoCustomerCount(); 
+    setInterval(getItsoCustomerCount, 1000); 
 });
 
-// // DYNAMIC GET PER OFFICE CUSTOMER COUNT WITH NO LOGS
-// function getParameterByName(name, url) {
-//     if (!url) url = window.location.href;
-//     name = name.replace(/[\[\]]/g, "\\$&");
-//     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-//         results = regex.exec(url);
-//     if (!results) return null;
-//     if (!results[2]) return '';
-//     return decodeURIComponent(results[2].replace(/\+/g, " "));
-// }
+// DYNAMIC GET PER OFFICE CUSTOMER COUNT
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
-// function getOfficeCustomerCount() {
-//     $.ajax({
-//         url: 'office-db-process.php',
-//         type: 'GET',
-//         dataType: 'json', // Expect JSON response
-//         success: (data) => {
-//             // Clear existing content
-//             const officeCountContainer = $('#office-count').empty();
+function getOfficeCustomerCount() {
+    $.ajax({
+        url: 'office-db-process.php',
+        type: 'GET',
+        dataType: 'json', // Expect JSON response
+        success: (data) => {
+            // Clear existing content
+            const officeCountContainer = $('#office-count').empty();
 
-//             // Dynamically get the selected office from the URL parameter named 'office'
-//             const selectedOffice = getParameterByName('office');
+            // Dynamically get the selected office from the URL parameter named 'office'
+            const selectedOffice = getParameterByName('office');
 
-//             // Check if the selected office data is found
-//             const selectedOfficeData = data.find(item => item.office === selectedOffice);
-//             if (selectedOfficeData) {
-//                 const officeElement = $(`<span class="office-count-item">${selectedOfficeData.customer_count}</span>`);
-//                 officeCountContainer.append(officeElement);
-//             } else {
-//                 console.log(`Data not found for the selected office: ${selectedOffice}`);
-//             }
-//         },
-//         error: (xhr, status, error) => {
-//             console.log(`Error: ${error}`);
-//         }
-//     });
-// }
+            // Check if the selected office data is found
+            const selectedOfficeData = data.find(item => item.office === selectedOffice);
+            if (selectedOfficeData) {
+                const officeElement = $(`<span class="office-count-item">${selectedOfficeData.customer_count}</span>`);
+                officeCountContainer.append(officeElement);
+            } else {
+                console.log(`Data not found for the selected office: ${selectedOffice}`);
+            }
+        },
+        error: (xhr, status, error) => {
+            console.log(`Error: ${error}`);
+        }
+    });
+}
 
-// $(document).ready(function () {
-//     getOfficeCustomerCount();
-//     setInterval(getOfficeCustomerCount, 1000);
-// });
+$(document).ready(function () {
+    getOfficeCustomerCount();
+    setInterval(getOfficeCustomerCount, 1000);
+});
 
 
 
@@ -552,8 +561,8 @@ $(document).ready(function () {
 // }
 
 // $(document).ready(function () {
-//     getOfficeCustomerCount();
-//     setInterval(getOfficeCustomerCount, 1000);
+//     getOfficeCustomerCount(); 
+//     setInterval(getOfficeCustomerCount, 1000); 
 // });
 
 
