@@ -192,7 +192,7 @@ if (!isset($_SESSION['email'])) {
 
                         const ctx1 = document.getElementById('myChartPie');
 
-                        new Chart(ctx1, {
+                        const myPieChart = new Chart(ctx1, {
                             type: 'pie',
                             data: {
                                 labels: <?php echo json_encode($officecount) ?>,
@@ -215,7 +215,7 @@ if (!isset($_SESSION['email'])) {
 
                         const ctx2 = document.getElementById('myChartBar');
 
-                        new Chart(ctx2, {
+                        const myBarChart = new Chart(ctx2, {
                             type: 'bar',
                             data: {
                                 labels: <?php echo json_encode($name) ?>,
@@ -237,6 +237,47 @@ if (!isset($_SESSION['email'])) {
                             }
 
                         });
+
+
+                        // Update Pie Chart
+                        function updatePieChart() {
+                            $.ajax({
+                                url: 'update_chartdb.php', // Create a PHP file to fetch data
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Update pie chart data
+                                    myPieChart.data.labels = data.officecount;
+                                    myPieChart.data.datasets[0].data = data.customercount;
+                                    myPieChart.update();
+                                },
+                                error: function (error) {
+                                    console.log('Error fetching pie chart data: ', error);
+                                }
+                            });
+                        }
+
+                        // update bar chart data
+                        function updateBarChart() {
+                            $.ajax({
+                                url: 'update_chartdb.php', // Create a PHP file to fetch data
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Update bar chart data
+                                    myBarChart.data.labels = data.name;
+                                    myBarChart.data.datasets[0].data = data.time;
+                                    myBarChart.update();
+                                },
+                                error: function (error) {
+                                    console.log('Error fetching bar chart data: ', error);
+                                }
+                            });
+                        }
+                        setInterval(function () {
+                            updatePieChart();
+                            updateBarChart();
+                        }, 1000);
                     </script>
 
                 </div>

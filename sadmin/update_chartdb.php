@@ -45,13 +45,10 @@ foreach ($tableQuery as $tableData) {
     }
 }
 
-$response = [
-    'count' => $count,
+echo json_encode([
     'name' => $name,
     'time' => $time,
     'customercount' => $customercount,
     'officecount' => $officecount
-];
-
-echo json_encode($response);
+]);
 ?>
