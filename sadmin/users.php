@@ -308,6 +308,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
+
                         <!-- New select option for ACADEMICS -->
                         <div id="academicsSelectOption" style="display: none;">
                             <div class="row">
@@ -339,6 +340,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
+                        <div id="addcourseview" style="display: none;">
+                            <label for="full_name" class="text-start">Course</label>
+                            <input type="text" id="addcourse" name="addcourse"
+                                class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
+                        </div>
+
                         <div class="row">
                             <div class="col">
                                 <label for="window" class="text-start">Window</label>
@@ -346,12 +353,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
                                     aria-label="Default select example">
                                     <option value=""></option>
-                                    <option value="Window 1">Window 1</option>
-                                    <option value="Window 2">Window 2</option>
-                                    <option value="Window 3">Window 3</option>
-                                    <option value="Window 4">Window 4</option>
-                                    <option value="Window 5">Window 5</option>
-                                    <option value="Window 6">Window 6</option>
+                                    <option value="1">Window 1</option>
+                                    <option value="2">Window 2</option>
+                                    <option value="3">Window 3</option>
+                                    <option value="4">Window 4</option>
+                                    <option value="5">Window 5</option>
+                                    <option value="6">Window 6</option>
 
                                 </select>
                                 <p class="text-danger" id="error-office" style="display: none;">Please select a window
@@ -371,11 +378,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <div class="col">
                                 <label for="password" class="text-start">Password</label>
-                                <input type="text"
+                                <input type="password"
                                     class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2"
-                                    id="password" name="password">
+                                    id="addpassword" name="password">
                                 <p class="text-danger" id="error-password" style="display: none;">Please enter password
                                 </p>
+                                <div class="mb-4 form-check">
+                                    <input type="checkbox" class="form-check-input" id="showaddPasswordCheckbox"
+                                        onchange="toggleaddPasswordVisibility()">
+                                    <label class="form-check-label float-start" for="showaddPasswordCheckbox">Show
+                                        password</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -482,6 +495,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
+                        <div id="editcourseview" style="display: none;">
+                            <label for="full_name" class="text-start">Course</label>
+                            <input type="text" id="editcourse" name="editcourse"
+                                class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2">
+                        </div>
+
                         <div class="row">
                             <div class="col">
                                 <label for="window" class="text-start">Window</label>
@@ -489,12 +508,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     class="h5 form-select text-start selectpicker rounded border-1 mb-2 border-dark font-weight-bold"
                                     aria-label="Default select example">
                                     <option value=""></option>
-                                    <option value="Window 1">Window 1</option>
-                                    <option value="Window 2">Window 2</option>
-                                    <option value="Window 3">Window 3</option>
-                                    <option value="Window 4">Window 4</option>
-                                    <option value="Window 5">Window 5</option>
-                                    <option value="Window 6">Window 6</option>
+                                    <option value="1">Window 1</option>
+                                    <option value="2">Window 2</option>
+                                    <option value="3">Window 3</option>
+                                    <option value="4">Window 4</option>
+                                    <option value="5">Window 5</option>
+                                    <option value="6">Window 6</option>
 
                                 </select>
                                 <p class="text-danger" id="error-window" style="display: none;">Please select a window
@@ -514,11 +533,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <div class="col">
                                 <label for="password" class="text-start">Password</label>
-                                <input type="text"
+                                <input type="password"
                                     class="form-control text-start rounded border-1 border-dark custom-primary-color font-weight-bold mb-2"
                                     id="password" name="password">
                                 <p class="text-danger" id="error-editPassword" style="display: none;">Please enter
                                     password</p>
+                                    <div class="mb-4 form-check">
+                                    <input type="checkbox" class="form-check-input" id="showPasswordCheckbox"
+                                        onchange="togglePasswordVisibility()">
+                                    <label class="form-check-label float-start" for="showPasswordCheckbox">Show
+                                        password</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -574,21 +599,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     document.getElementById('office').addEventListener('change', function () {
         var academicsSelectOption = document.getElementById('academicsSelectOption');
+        var academicsCourseOption = document.getElementById('addcourseview');
         if (this.value === 'ACADEMICS') {
             academicsSelectOption.style.display = 'block';
+            academicsCourseOption.style.display = 'block';
         } else {
             academicsSelectOption.style.display = 'none';
+            academicsCourseOption.style.display = 'none';
         }
     });
 
     document.getElementById('editoffice').addEventListener('change', function () {
         var academicsSelectOption = document.getElementById('editacademicsSelectOption');
+        var academicsCourseOption = document.getElementById('editcourseview');
         if (this.value === 'ACADEMICS') {
             academicsSelectOption.style.display = 'block';
+            academicsCourseOption.style.display = 'block';
         } else {
             academicsSelectOption.style.display = 'none';
+            academicsCourseOption.style.display = 'none';
         }
     });
+</script>
+<script>
+    function togglePasswordVisibility() {
+        var passwordInput = document.getElementById("password");
+        var passwordCheckbox = document.getElementById("showPasswordCheckbox");
+
+        if (passwordCheckbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+
+    function toggleaddPasswordVisibility() {
+        var passwordInput = document.getElementById("addpassword");
+        var passwordCheckbox = document.getElementById("showaddPasswordCheckbox");
+
+        if (passwordCheckbox.checked) {
+            passwordInput.type = "text";
+        } else {
+            passwordInput.type = "password";
+        }
+    }
+ 
 </script>
 
 </html>

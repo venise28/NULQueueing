@@ -46,6 +46,32 @@ if (!isset($_SESSION['email'])) {
 
             $(document).ready(function () {
 
+                $('#btn-empty-queue').click(function () {
+                    if (confirm('Are you sure you want to empty the queue?')) {
+                        $.ajax({
+                            url: 'empty-queue.php',
+                            method: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
+                                    alert('Queue emptied successfully!');
+                                    location.reload();
+                                } else {
+                                    alert('Error emptying queue: ' + response.error);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('AJAX request failed with status ' + status + ': ' + error);
+                            }
+                        });
+                    }
+                });
+
+
+                document.getElementById('btn-empty-queue').addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent the form from being submitted
+                });
+
                 document.getElementById('btn-print-this').addEventListener('click', function (e) {
                     e.preventDefault(); // Prevent the form from being submitted
                 });
@@ -218,9 +244,8 @@ if (!isset($_SESSION['email'])) {
 
                         <button id="btn-print-this" class="btn btn-success btn-sm"> Print
                         </button>
-
-
                         <input type="submit" value="Export CSV">
+                        <button id="btn-empty-queue" class="btn btn-danger btn-sm"> Empty Queue</button>
                     </form>
 
 
@@ -264,7 +289,7 @@ if (!isset($_SESSION['email'])) {
                                     plugins: {
                                         title: {
                                             display: true,
-                                            text: 'AVERAGE TIME PER WEEK',
+                                            text: 'AVERAGE SERVING TIME',
                                         }
                                     }
                                 }
@@ -288,7 +313,7 @@ if (!isset($_SESSION['email'])) {
                                     plugins: {
                                         title: {
                                             display: true,
-                                            text: 'CUSTOMERS PER WEEK',
+                                            text: 'AVERAGE CUSTOMERS',
                                         }
                                     }
                                 }
