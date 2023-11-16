@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-//FOR ADDING OFFICES
+//FOR ADDING OFFICES TWO TABLE ONE WITH LOGS
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the office name and acronym from the form
@@ -15,8 +15,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $acronym = strtoupper($_POST["acronym"]);
     $otherOffices = isset($_POST["otherOffices"]) ? 1 : 0;
 
-    // Create a sanitized table name from the office name
+    // Create the original table name without acronym
     $tableName = preg_replace("/[^a-zA-Z0-9_]/", "", $officeName);
+
+    // Append "_logs" to the original table name
+    $logsTableName = $tableName . "_logs";
 
     // SQL to check if table exists
     $checkTableExistsSQL = "SHOW TABLES LIKE '$tableName'";
@@ -25,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         echo '<script>alert("Table ' . $tableName . ' already exists");</script>';
     } else {
-        // SQL to create table without acronym
+        // SQL to create original table without acronym
         $sql = "CREATE TABLE $tableName (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `queue_number` varchar(255) NOT NULL,
@@ -46,6 +49,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo '<script>alert("Table ' . $tableName . ' created successfully, and office details added to offices table");</script>';
             } else {
                 echo '<script>alert("Error inserting office details: ' . $conn->error . '");</script>';
+            }
+
+            // SQL to create second table with "_logs"
+            $logsTableSQL = "CREATE TABLE $logsTableName (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `queue_number` varchar(255) NOT NULL,
+                `student_id` varchar(12) NOT NULL,
+                `endorsed_from` varchar(255) DEFAULT NULL,
+                `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+                `timeout` timestamp NULL DEFAULT NULL,
+                `remarks` int(11) DEFAULT NULL,
+                `transaction` varchar(255) DEFAULT NULL,
+                `status` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            )";
+
+            if ($conn->query($logsTableSQL) !== TRUE) {
+                echo '<script>alert("Error creating table: ' . $conn->error . '");</script>';
             }
         } else {
             echo '<script>alert("Error creating table: ' . $conn->error . '");</script>';
