@@ -69,3 +69,8 @@ a{
 .myTable th {
     color: white;
 }
+
+.fixed-header {
+    position: sticky;
+    top: 0;
+}

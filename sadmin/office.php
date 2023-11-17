@@ -154,7 +154,7 @@ if ($rowTableName) {
                         <i class="bi bi-search"></i>
                         <input type="text" class="search" id="myInput" onkeyup="myTable()" placeholder="SEARCH" title="Type">
                     </div>
-                    <div class="table-container" style="overflow-x:auto;">
+                    <div class="table-container" style="max-height: 521px; overflow-y: scroll; overflow-x: auto;">
                         <?php
 
                         // Check if the selected office exists in the 'offices' table
@@ -183,7 +183,7 @@ if ($rowTableName) {
                             echo '<table id="myTable" class="myTable" border="1">';
 
                             // Display header row
-                            echo '<tr class="header">';
+                            echo '<tr class="header fixed-header">';
                             foreach ($columnsToSelect as $columnName) {
                                 echo '<th>' . $columnName . '</th>';
                             }
@@ -202,46 +202,9 @@ if ($rowTableName) {
                         } else {
                             echo '<p>No data found for the selected office.</p>';
                         }
-                        // //FOR GETTING ALL THE ROWS DATA IN TABLE
-                        // // Check if the selected office exists in the 'offices' table
-                        // if ($rowTableName) {
-                        //     //FOR TABLE WITH NO _LOGS
-                        //     // $officeTableName = $rowTableName['officeName'];
-
-                        //     //FOR TABLE WITH _LOGS
-                        //     $officeTableName = $rowTableName['officeName'] . '_logs';
-
-                        //     // Fetch all columns for the selected office's table
-                        //     $query = "SELECT * FROM `$officeTableName`";
-                        //     $result = mysqli_query($conn, $query);
-
-                        //     // Display the selected office information
-                        //     echo '<table id="myTable" class="myTable" border="1">';
-
-                        //     // Display header row
-                        //     echo '<tr class="header">';
-                        //     while ($fieldInfo = mysqli_fetch_field($result)) {
-                        //         echo '<th>' . $fieldInfo->name . '</th>';
-                        //     }
-                        //     echo '</tr>';
-
-                        //     // Display data rows
-                        //     while ($row = mysqli_fetch_assoc($result)) {
-                        //         echo '<tr>';
-                        //         foreach ($row as $value) {
-                        //             echo '<td>' . $value . '</td>';
-                        //         }
-                        //         echo '</tr>';
-                        //     }
-
-                        //     echo '</table>';
-                        // } else {
-                        //     echo '<p>No data found for the selected office.</p>';
-                        // }
                         ?>
                     </div>
                 </div>
-
                 <!-- TABLE ENDS -->
             </div>
         </div>
