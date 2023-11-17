@@ -12,6 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
 
     $limit = $officeLimits[$office] ?? 1;
 
+    // Check if the number of rows in the display table exceeds 50
+    $checkRowCountSql = "SELECT COUNT(*) as rowCount FROM display WHERE officeName = '$office'";
+    $rowCountResult = $conn->query($checkRowCountSql);
+    $rowCount = $rowCountResult->fetch_assoc()['rowCount'];
+
+    if ($rowCount >= 50) {
+        // Truncate the display table
+        $truncateTableSql = "TRUNCATE TABLE display";
+        $conn->query($truncateTableSql);
+    }
+
     $officeDataSql = "SELECT * FROM display WHERE officeName = '$office' AND status = 0 ORDER BY window, id DESC";
     $officeDataResult = $conn->query($officeDataSql);
 
