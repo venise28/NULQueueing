@@ -2,7 +2,7 @@
 @include 'database.php';
 
 // Fetch up to 15 most recent queue numbers from the 'queue' table
-$pendingQueueSql = "SELECT * FROM queue ORDER BY timestamp DESC LIMIT 15";
+$pendingQueueSql = "SELECT * FROM queue WHERE display_status = 0 ORDER BY timestamp ASC LIMIT 15";
 $pendingQueueResult = $conn->query($pendingQueueSql);
 
 echo '<div class="pending-queue queue">';
