@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  const CONTROLLER_URL = `${window.location.protocol}//${window.location.host}/admission/process.php`;
+  const CONTROLLER_URL = `${window.location.protocol}//${window.location.host}/QUEUE/admission/process.php`;
   const ADMISSION_OFFICE = "ADMISSION";
 
   // prevent button from getting cached

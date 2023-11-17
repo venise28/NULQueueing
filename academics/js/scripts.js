@@ -123,9 +123,13 @@ function fetchInfo(queueNumber) {
   const endorseForm = document.querySelector('.modform-div');
   const doneDiv = document.getElementById('done-div');
   const confirmDiv = document.getElementById('confirm-div');
-  
+ 
+  const queuebutton = document.getElementById('new-queue-button');
 
-  
+  queuebutton.addEventListener('click', () => {
+    location.href = '../academicsinterface.php';
+    
+  });
 
 
   endorseButton.addEventListener('click', () => {
