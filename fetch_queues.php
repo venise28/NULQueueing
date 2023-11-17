@@ -12,6 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
 
     $limit = $officeLimits[$office] ?? 1;
 
+    // Check if the number of rows in the display table exceeds 50
+    $checkRowCountSql = "SELECT COUNT(*) as rowCount FROM display WHERE officeName = '$office'";
+    $rowCountResult = $conn->query($checkRowCountSql);
+    $rowCount = $rowCountResult->fetch_assoc()['rowCount'];
+
+    if ($rowCount >= 50) {
+        // Truncate the display table
+        $truncateTableSql = "TRUNCATE TABLE display";
+        $conn->query($truncateTableSql);
+    }
+
     $officeDataSql = "SELECT * FROM display WHERE officeName = '$office' AND status = 0 ORDER BY window, id DESC";
     $officeDataResult = $conn->query($officeDataSql);
 
@@ -28,6 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
             if (!in_array($window, $currentWindows)) {
                 $queues[] = '<div class="' . $office . '-queue queue"><h2 class="queue-text">Window ' . $window . ': ' . $queueNumber . '</h2></div>';
                 $currentWindows[] = $window;
+
+                // Move the displayed queue_number to the queue_logs table
+                $insertLogSql = "INSERT INTO queue_logs (office, queue_number) VALUES ('$office', '$queueNumber')";
+                $conn->query($insertLogSql);
+
+                // Delete the displayed queue_number from the queue table
+                $deleteQueueSql = "DELETE FROM queue WHERE office = '$office' AND queue_number = '$queueNumber'";
+                $conn->query($deleteQueueSql);
             }
 
             // Break the loop if the desired limit is reached
@@ -47,4 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
 } else {
     echo "Invalid request";
 }
+
+$conn->close();
 ?>

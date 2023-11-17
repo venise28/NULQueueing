@@ -1,27 +1,6 @@
 <?php
 @include 'database.php';
 
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office']) && isset($_POST['window']) && isset($_POST['queue_number'])) {
-    $office = $_POST['office'];
-    $window = $_POST['window'];
-    $queueNumber = $_POST['queue_number'];
-
-    $insertSql = "INSERT INTO display (officeName, window, queue_number) VALUES ('$office', '$window', '$queueNumber')";
-    $conn->query($insertSql);
-
-
-    $queueCountSql = "SELECT COUNT(*) AS count FROM display WHERE officeName = '$office'";
-    $queueCountResult = $conn->query($queueCountSql);
-    $queueCount = $queueCountResult->fetch_assoc()['count'];
-
-
-    if ($queueCount > 2) {
-        $deleteOldestSql = "DELETE FROM display WHERE officeName = '$office' ORDER BY id LIMIT 1";
-        $conn->query($deleteOldestSql);
-    }
-}
-
 $sql = "SELECT DISTINCT officeName FROM offices";
 $result = $conn->query($sql);
 
@@ -159,7 +138,6 @@ $result = $conn->query($sql);
         // Fetch pending queue data on page load
         fetchPendingQueue();
 
-        // Update pending queue every 15 seconds
         setInterval(fetchPendingQueue, 15000);
     </script>
     <script src="script/displayscript.js"></script>

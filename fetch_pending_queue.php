@@ -1,33 +1,22 @@
 <?php
 @include 'database.php';
 
-// Fetch office names from the 'offices' table
-$sql = "SELECT DISTINCT officeName FROM offices";
-$result = $conn->query($sql);
+// Fetch up to 15 most recent queue numbers from the 'queue' table
+$pendingQueueSql = "SELECT * FROM queue ORDER BY timestamp DESC LIMIT 15";
+$pendingQueueResult = $conn->query($pendingQueueSql);
 
-// Output pending queue data for each office
-while ($row = $result->fetch_assoc()) {
-    $officeName = $row["officeName"];
-
-    // Fetch pending queue data for the current office
-    // $pendingQueueSql = "SELECT * FROM $officeName ORDER BY id DESC LIMIT 10"; // Adjust the query as needed
-    $pendingQueueSql = "SELECT * FROM $officeName ORDER BY timestamp ASC LIMIT 2";
-    $pendingQueueResult = $conn->query($pendingQueueSql);
-
-    echo '<div class="pending-queue queue">';
+echo '<div class="pending-queue queue">';
     
-    if ($pendingQueueResult->num_rows > 0) {
-        while ($pendingRow = $pendingQueueResult->fetch_assoc()) {
-            $queueNumber = $pendingRow["queue_number"];
-            echo '<h2>' . $queueNumber . '</h2>';
-        }
-    } 
-    // else {
-    //     echo '<h2>No pending queue for ' . $officeName . '</h2>';
-    // }
-
-    echo '</div>';
+if ($pendingQueueResult->num_rows > 0) {
+    while ($pendingRow = $pendingQueueResult->fetch_assoc()) {
+        $queueNumber = $pendingRow["queue_number"];
+        echo '<h2>' . $queueNumber . '</h2>';
+    }
+} else {
+    echo '<h2>No pending queue</h2>';
 }
+
+echo '</div>';
 
 $conn->close();
 ?>
