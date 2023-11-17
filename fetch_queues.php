@@ -28,6 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
             if (!in_array($window, $currentWindows)) {
                 $queues[] = '<div class="' . $office . '-queue queue"><h2 class="queue-text">Window ' . $window . ': ' . $queueNumber . '</h2></div>';
                 $currentWindows[] = $window;
+
+                // Move the displayed queue_number to the queue_logs table
+                $insertLogSql = "INSERT INTO queue_logs (office, queue_number) VALUES ('$office', '$queueNumber')";
+                $conn->query($insertLogSql);
+
+                // Delete the displayed queue_number from the queue table
+                $deleteQueueSql = "DELETE FROM queue WHERE office = '$office' AND queue_number = '$queueNumber'";
+                $conn->query($deleteQueueSql);
             }
 
             // Break the loop if the desired limit is reached
@@ -47,4 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
 } else {
     echo "Invalid request";
 }
+
+$conn->close();
 ?>
