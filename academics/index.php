@@ -148,7 +148,7 @@ if (isset($_SESSION["full_name"]) && isset($_SESSION["username"]) && isset($_SES
 
     <div class="form-div">
         <div class="newque-div">
-          <button>New Queue <i class="fa-solid fa-square-plus"></i></button>
+          <button id="new-queue-button">New Queue <i class="fa-solid fa-square-plus"></i></button>
         </div>
         <div class="info-div">
           <!--Start of info-->

@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
 
     $limit = $officeLimits[$office] ?? 1;
 
-    $officeDataSql = "SELECT * FROM display WHERE officeName = '$office' ORDER BY window, id DESC";
+    $officeDataSql = "SELECT * FROM display WHERE officeName = '$office' AND status = 0 ORDER BY window, id DESC";
     $officeDataResult = $conn->query($officeDataSql);
 
     echo '<div class="' . $office . '-queue-container">';
@@ -36,8 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
             }
         }
 
-        // Display the reversed queues
-        echo implode("", $queues);
+        // Display the queues in reverse order
+        echo implode("", ($queues));
     } else {
         // Display an empty queue container if no data is found for the current office
         echo '<div class="' . $office . '-queue queue"><h2 class="queue-text">-</h2></div>';

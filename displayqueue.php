@@ -162,6 +162,7 @@ $result = $conn->query($sql);
         // Update pending queue every 15 seconds
         setInterval(fetchPendingQueue, 15000);
     </script>
+    <script src="script/displayscript.js"></script>
 </body>
 
 </html>
