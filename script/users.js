@@ -81,7 +81,7 @@ function openEditUserModal(ID, full_name, office, selectWindow, username, passwo
 
     $('#editUserModal #ID').val(ID);
     $('#editUserModal #full_name').val(full_name);
-    $('#editUserModal #office').val(office);
+    $('#editUserModal #editoffice').val(office);
     $('#editUserModal #selectWindow').val(selectWindow);
     $('#editUserModal #username').val(username);
     $('#editUserModal #password').val(password);

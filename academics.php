@@ -32,36 +32,45 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $concern = $_POST["concern"];
     $program = $_POST["program"];
     $studentId = $_POST["studentId"];
-
     $queueNumber = getNextQueueNumber($program);
 
+    // Fetch $course from program_chairs table
+    $fetchCourseQuery = "SELECT course FROM program_chairs WHERE full_name = '$concern'";
+    $courseResult = $conn->query($fetchCourseQuery);
 
-    // database insert
-    $sql = "INSERT INTO academics (concern, program, student_id, queue_number, transaction) VALUES ('$concern', '$program', '$studentId', '$queueNumber', 'Subject Registration')";
+    if ($courseResult && $courseResult->num_rows > 0) {
+        $row = $courseResult->fetch_assoc();
+        $course = $row["course"];
 
-    if ($conn->query($sql) === TRUE) {
-        // Insert into queue table
-        $office = $_POST["office"];
-        $program_queue = $_POST["program_queue"];
-        $studentId = $_POST["studentId"];
-        $endorsed = "kiosk";
+        // Database insert into academics and academics_queue tables
+        $sql = "INSERT INTO academics (concern, program, student_id, queue_number, transaction) VALUES ('$concern', '$program', '$studentId', '$queueNumber', 'Subject Registration')";
+        $sql2 = "INSERT INTO academics_queue (concern, program, student_id, queue_number, transaction, course) VALUES ('$concern', '$program', '$studentId', '$queueNumber', 'Subject Registration', '$course')";
 
-        // Check if the office exists in the colleges table
-        $officeExistsQuery = "SELECT acronym FROM colleges WHERE acronym = '$office'";
-        $officeExistsResult = $conn->query($officeExistsQuery);
+        if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
+            // Insert into queue table
+            $office = $_POST["office"];
+            $program_queue = $_POST["program_queue"];
+            $endorsed = "kiosk";
 
-        if ($officeExistsResult->num_rows > 0) {
-            $office = "ACADEMICS";
-        }
+            // Check if the office exists in the colleges table
+            $officeExistsQuery = "SELECT acronym FROM colleges WHERE acronym = '$office'";
+            $officeExistsResult = $conn->query($officeExistsQuery);
 
-        $queueSql = "INSERT INTO queue (student_id, program, queue_number, office, endorsed) VALUES ('$studentId', '$program_queue', '$queueNumber', '$office', '$endorsed')";
-        if ($conn->query($queueSql) === TRUE) {
-            echo json_encode(["success" => true, "queue_number" => $queueNumber]);
+            if ($officeExistsResult->num_rows > 0) {
+                $office = "ACADEMICS";
+            }
+
+            $queueSql = "INSERT INTO queue (student_id, program, queue_number, office, endorsed) VALUES ('$studentId', '$program_queue', '$queueNumber', '$office', '$endorsed')";
+            if ($conn->query($queueSql) === TRUE) {
+                echo json_encode(["success" => true, "queue_number" => $queueNumber]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Error inserting into queue table: " . $conn->error]);
+            }
         } else {
-            echo json_encode(["success" => false, "message" => "Error inserting into queue table: " . $conn->error]);
+            echo json_encode(["success" => false, "message" => "Error inserting into academics table or academics_queue table: " . $conn->error]);
         }
     } else {
-        echo json_encode(["success" => false, "message" => "Error inserting into academics table: " . $conn->error]);
+        echo json_encode(["success" => false, "message" => "Error fetching course from program_chairs table: " . $conn->error]);
     }
 } else {
     echo "Invalid request";

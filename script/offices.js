@@ -37,6 +37,54 @@ myTable = () => {
     }
 }
 
+mycompletedTable = () => {
+    var input, filter, table, tr, th, td, i, j, txtValue;
+    input = document.getElementById("myInputcompleted");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTablecompleted");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+        tr[i].style.display = "none";
+        th = tr[0].getElementsByTagName("th");
+        for (j = 0; j < th.length; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+            if (td || th[j]) {
+                txtValue = (td ? td.textContent || td.innerText : "") + (th[j] ? th[j].textContent || th[j].innerText : "");
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+mypendingTable = () => {
+    var input, filter, table, tr, th, td, i, j, txtValue;
+    input = document.getElementById("myInputpending");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTablepending");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+        tr[i].style.display = "none";
+        th = tr[0].getElementsByTagName("th");
+        for (j = 0; j < th.length; j++) {
+            td = tr[i].getElementsByTagName("td")[j];
+            if (td || th[j]) {
+                txtValue = (td ? td.textContent || td.innerText : "") + (th[j] ? th[j].textContent || th[j].innerText : "");
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
 
 //FOR Office-aside.php
 document.getElementById('searchOfficesInput').addEventListener('input', function () {

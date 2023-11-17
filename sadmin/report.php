@@ -17,7 +17,7 @@ if (!isset($_SESSION['email'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADMIN DASHBOARD</title>
+    <title>REPORTS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -45,6 +45,32 @@ if (!isset($_SESSION['email'])) {
 
 
             $(document).ready(function () {
+
+                $('#btn-empty-queue').click(function () {
+                    if (confirm('Are you sure you want to empty the queue?')) {
+                        $.ajax({
+                            url: 'empty-queue.php',
+                            method: 'POST',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
+                                    alert('Queue emptied successfully!');
+                                    location.reload();
+                                } else {
+                                    alert('Error emptying queue: ' + response.error);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('AJAX request failed with status ' + status + ': ' + error);
+                            }
+                        });
+                    }
+                });
+
+
+                document.getElementById('btn-empty-queue').addEventListener('click', function (e) {
+                    e.preventDefault(); // Prevent the form from being submitted
+                });
 
                 document.getElementById('btn-print-this').addEventListener('click', function (e) {
                     e.preventDefault(); // Prevent the form from being submitted
@@ -111,6 +137,26 @@ if (!isset($_SESSION['email'])) {
                             myChart.data.labels = newData.week;
                             myChart.update();
                             console.log(newData.customer);
+                        }
+                    });
+
+                    // Perform an AJAX request to retrieve updated data
+                    $.ajax({
+                        type: "POST",
+                        url: "update_chart_time.php",
+                        data: {
+                            monthstart: selectedMonthStart,
+                            monthend: selectedMonthEnd,
+                            office: selectedOffice,
+                            year: selectedYear
+                        },
+                        success: function (response) {
+                            // Update the content div with the updated data
+                            const newData = JSON.parse(response);
+                            myChartLine.data.datasets[0].data = newData.averageTime;
+                            myChartLine.data.labels = newData.weekDateRangeAvgTime;
+                            myChartLine.update();
+                            console.log(newData.averageTime);
                         }
                     });
                 });
@@ -198,9 +244,8 @@ if (!isset($_SESSION['email'])) {
 
                         <button id="btn-print-this" class="btn btn-success btn-sm"> Print
                         </button>
-
-
                         <input type="submit" value="Export CSV">
+                        <button id="btn-empty-queue" class="btn btn-danger btn-sm"> Empty Queue</button>
                     </form>
 
 
@@ -217,42 +262,6 @@ if (!isset($_SESSION['email'])) {
                             <span class="yearout text-center fs-5 fw-bold nu_color"></span>
                         </div>
 
-                        <?php
-                        $tquery = $conn->query("SELECT week.week_name, 
-                        IFNULL(AVG(timeout - timestamp), 0) AS average_time
-                 FROM (
-                     SELECT 'WEEK 1' AS week_name
-                     UNION
-                     SELECT 'WEEK 2' AS week_name
-                     UNION
-                     SELECT 'WEEK 3' AS week_name
-                     UNION
-                     SELECT 'WEEK 4' AS week_name
-                 ) AS week
-                 LEFT JOIN academics_logs al ON
-                     (DAY(al.timestamp) BETWEEN 
-                         CASE week.week_name
-                             WHEN 'WEEK 1' THEN 1
-                             WHEN 'WEEK 2' THEN 8
-                             WHEN 'WEEK 3' THEN 15
-                             WHEN 'WEEK 4' THEN 22
-                         END
-                     AND
-                         CASE week.week_name
-                             WHEN 'WEEK 1' THEN 7
-                             WHEN 'WEEK 2' THEN 14
-                             WHEN 'WEEK 3' THEN 21
-                             WHEN 'WEEK 4' THEN DAY(LAST_DAY(al.timestamp))
-                         END)
-                     AND MONTH(al.timestamp) = 10
-                 GROUP BY week.week_name;
-                                            ");
-
-                        foreach ($tquery as $data) {
-                            $name[] = $data['week_name'];
-                            $time[] = $data['average_time'];
-                        }
-                        ?>
 
 
                         <canvas class="align-items-center" id="myChartBar"></canvas>
@@ -264,13 +273,13 @@ if (!isset($_SESSION['email'])) {
 
                             const ctx1 = document.getElementById('myLineChart');
 
-                            new Chart(ctx1, {
+                            const myChartLine = new Chart(ctx1, {
                                 type: 'line',
                                 data: {
-                                    labels: <?php echo json_encode($name) ?>,
+                                    labels: ["WEEK 1", "WEEK 2", "WEEK 3", "WEEK 4"],
                                     datasets: [{
                                         label: 'Time',
-                                        data: <?php echo json_encode($time) ?>,
+                                        data: ["0", "0", "0", "0"],
                                         borderColor: "#3EDAD8",
                                         backgroundColor: ["#3EDAD8", "#3EDAD8", "#2D8BBA", "#2F5F98", "#2C92D5"],
                                         borderWidth: 1
@@ -280,7 +289,7 @@ if (!isset($_SESSION['email'])) {
                                     plugins: {
                                         title: {
                                             display: true,
-                                            text: 'AVERAGE TIME PER WEEK',
+                                            text: 'AVERAGE SERVING TIME',
                                         }
                                     }
                                 }
@@ -304,7 +313,7 @@ if (!isset($_SESSION['email'])) {
                                     plugins: {
                                         title: {
                                             display: true,
-                                            text: 'CUSTOMERS PER WEEK',
+                                            text: 'AVERAGE CUSTOMERS',
                                         }
                                     }
                                 }

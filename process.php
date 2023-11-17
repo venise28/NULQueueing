@@ -29,7 +29,7 @@ function insertQueueToTables($tabledata)
     $timeStamp = date('Y-m-d H:i:s');
     $office = strtolower(str_replace(' ', '', $tabledata['office']));
 
-    $sql = "INSERT INTO $office (queue_number, student_id, timestamp) VALUES ('$queueNumber', '$studentId', '$timeStamp')";
+    $sql = "INSERT INTO $office (queue_number, student_id) VALUES ('$queueNumber', '$studentId')";
 
     if ($conn->query($sql) === TRUE) {
         return true;

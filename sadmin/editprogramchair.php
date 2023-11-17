@@ -17,6 +17,7 @@ $window = $_POST['selectWindow'];
 $username = $_POST['username'];
 $password = $_POST['password'];
 $program = $_POST['editacademicDepartment'];
+$course = $_POST['editcourse'];
 
 // Check if record exists
 $checkSql = "SELECT * FROM user_accounts WHERE ID='$ID'";
@@ -47,6 +48,7 @@ if ($checkResult->num_rows > 0) {
                 $row = $fullNameResult->fetch_assoc();
                 $userFullName = $row['full_name'];
 
+
                 // Check if the record already exists in the program_chairs table
                 $checkChairSql = "SELECT * FROM program_chairs WHERE user_id='$ID'";
                 $checkChairResult = $conn->query($checkChairSql);
@@ -55,7 +57,8 @@ if ($checkResult->num_rows > 0) {
                     // Update the program_chairs table
                     $updateChairSql = "UPDATE program_chairs 
                                        SET full_name = '$full_name',
-                                           program = '$program'
+                                           program = '$program',
+                                           course = '$course'
                                        WHERE user_id = '$ID'";
 
                     if ($conn->query($updateChairSql) === TRUE) {

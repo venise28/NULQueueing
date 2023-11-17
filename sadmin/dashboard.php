@@ -134,32 +134,6 @@ if (!isset($_SESSION['email'])) {
 
                 <div class="row justify-content-center mt-5" style="height:40vh; width:auto;">
 
-                    <?php
-                    $query = $conn->query("SELECT office, COUNT(*) AS office_count
-                FROM queue
-                GROUP BY office
-                HAVING office_count > 1;");
-
-                    foreach ($query as $data) {
-                        $office[] = $data['office'];
-                        $count[] = $data['office_count'];
-                    }
-
-                    $tquery = $conn->query("SELECT 'academics' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time
-                    FROM academics_logs
-                    WHERE timestamp IS NOT NULL AND timeout IS NOT NULL
-                    UNION ALL
-                    SELECT 'admissions' AS name, AVG(TIMESTAMPDIFF(SECOND, timestamp, timeout)) AS average_time
-                    FROM admission_logs
-                    WHERE timestamp IS NOT NULL AND timeout IS NOT NULL;
-                    ");
-
-                    foreach ($tquery as $data) {
-                        $name[] = $data['name'];
-                        $time[] = $data['average_time'];
-                    }
-
-                    ?>
                     <canvas class="align-items-center" id="myChartBar"></canvas>
                     <canvas class="align-items-center" id="myChartPie"></canvas>
 
@@ -169,13 +143,13 @@ if (!isset($_SESSION['email'])) {
 
                         const ctx1 = document.getElementById('myChartPie');
 
-                        new Chart(ctx1, {
+                        const myPieChart = new Chart(ctx1, {
                             type: 'pie',
                             data: {
-                                labels: <?php echo json_encode($office) ?>,
+                                labels: ["CUSTOMERS"],
                                 datasets: [{
                                     label: '# of Customers',
-                                    data: <?php echo json_encode($count) ?>,
+                                    data: ["0"],
                                     backgroundColor: ["#3EDAD8", "#3EDAD8", "#2D8BBA", "#2F5F98", "#2C92D5"],
                                     borderWidth: 1
                                 }]
@@ -192,13 +166,13 @@ if (!isset($_SESSION['email'])) {
 
                         const ctx2 = document.getElementById('myChartBar');
 
-                        new Chart(ctx2, {
+                        const myBarChart = new Chart(ctx2, {
                             type: 'bar',
                             data: {
-                                labels: <?php echo json_encode($name) ?>,
+                                labels: ["TRANSACTIONS"],
                                 datasets: [{
                                     label: 'Transaction Time',
-                                    data: <?php echo json_encode($time) ?>,
+                                    data: ["0"],
                                     backgroundColor: ["#34418E"],
                                     borderWidth: 0
                                 }]
@@ -214,6 +188,47 @@ if (!isset($_SESSION['email'])) {
                             }
 
                         });
+
+
+                        // Update Pie Chart
+                        function updatePieChart() {
+                            $.ajax({
+                                url: 'update_chartdb.php', // Create a PHP file to fetch data
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Update pie chart data
+                                    myPieChart.data.labels = data.officecount;
+                                    myPieChart.data.datasets[0].data = data.customercount;
+                                    myPieChart.update();
+                                },
+                                error: function (error) {
+                                    console.log('Error fetching pie chart data: ', error);
+                                }
+                            });
+                        }
+
+                        // update bar chart data
+                        function updateBarChart() {
+                            $.ajax({
+                                url: 'update_chartdb.php', // Create a PHP file to fetch data
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Update bar chart data
+                                    myBarChart.data.labels = data.name;
+                                    myBarChart.data.datasets[0].data = data.time;
+                                    myBarChart.update();
+                                },
+                                error: function (error) {
+                                    console.log('Error fetching bar chart data: ', error);
+                                }
+                            });
+                        }
+                        setInterval(function () {
+                            updatePieChart();
+                            updateBarChart();
+                        }, 100);
                     </script>
 
                 </div>

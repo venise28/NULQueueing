@@ -16,6 +16,7 @@ $window = $_POST['selectWindow'];
 $username = $_POST['username'];
 $password = $_POST['password'];
 $program = $_POST['academicDepartment'];
+$course = $_POST['addcourse'];
 
 // Check if a record with the same full_name or username already exists
 $checkSql = "SELECT * FROM user_accounts WHERE full_name = '$full_name' OR username = '$username'";
@@ -30,8 +31,8 @@ if ($checkResult->num_rows == 0) {
         // Retrieve the ID of the newly inserted user
         $userID = $conn->insert_id;
 
-        $insertChairSql = "INSERT INTO program_chairs (full_name, program, user_id) 
-            VALUES ('$full_name', '$program', '$userID')";
+        $insertChairSql = "INSERT INTO program_chairs (full_name, program, user_id, course) 
+            VALUES ('$full_name', '$program', '$userID', '$course')";
 
         if ($conn->query($insertChairSql) === TRUE) {
             // User and program chair added successfully
