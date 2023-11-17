@@ -122,7 +122,7 @@ $result = $conn->query($sql);
         // Fetch queue data on page load
         fetchQueueData();
 
-        setInterval(fetchQueueData, 15000);
+        setInterval(fetchQueueData, 5000);
 
         //FOR PENDING QUEUE
         function fetchPendingQueue() {
@@ -138,7 +138,7 @@ $result = $conn->query($sql);
         // Fetch pending queue data on page load
         fetchPendingQueue();
 
-        setInterval(fetchPendingQueue, 15000);
+        setInterval(fetchPendingQueue, 5000);
     </script>
     <script src="script/displayscript.js"></script>
 </body>
