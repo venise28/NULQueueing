@@ -1,8 +1,8 @@
 <?php
 @include '../database.php';
-session_start();
+// session_start();
 
-//FOR DELETING TABLE OF OFFICE IN DB
+// FOR DELETING TABLE OF OFFICE IN DB
 if (isset($_POST['officeId'])) {
     $officeId = $_POST['officeId'];
 
@@ -19,24 +19,23 @@ if (isset($_POST['officeId'])) {
         $deleteRowResult = mysqli_query($conn, $deleteRowQuery);
 
         // Perform the deletion of the table
-        $deleteTableQuery = "DROP TABLE IF EXISTS `$officeName`";
+        $deleteTableQuery = "DROP TABLE IF EXISTS `$officeName`, `$officeName" . "_logs`";
         $deleteTableResult = mysqli_query($conn, $deleteTableQuery);
 
         if ($deleteRowResult && $deleteTableResult) {
             // Return a success response if both deletions were successful
-            echo "Office and related table deleted successfully";
+            echo "Office and related tables deleted successfully";
         } else {
             // Return an error response if there was an issue with any deletion
-            echo "Error deleting office or related table";
+            echo "Error deleting office or related tables";
         }
     } else {
         // Return an error response if fetching officeName fails
         echo "Error fetching officeName";
     }
-    
 }
 
-//FOR OFFICE IN THE OFFICES TABLE
+// FOR DELETING OFFICE IN THE OFFICES TABLE
 if (isset($_POST['officeId'])) {
     $officeId = $_POST['officeId'];
 
