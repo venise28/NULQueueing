@@ -34,19 +34,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
         while ($officeRow = $officeDataResult->fetch_assoc()) {
             $window = $officeRow["window"];
             $queueNumber = $officeRow["queue_number"];
+            $status = $officeRow["status"];
 
             // Display only the latest queue for each window
             if (!in_array($window, $currentWindows)) {
                 $queues[] = '<div class="' . $office . '-queue queue"><h2 class="queue-text">Window ' . $window . ': ' . $queueNumber . '</h2></div>';
                 $currentWindows[] = $window;
 
-                // Move the displayed queue_number to the queue_logs table
-                $insertLogSql = "INSERT INTO queue_logs (office, queue_number) VALUES ('$office', '$queueNumber')";
-                $conn->query($insertLogSql);
+                if ($status == 0) {
+                    $updateQueueStatusSql = "UPDATE queue SET display_status = 1 WHERE office = '$office' AND queue_number = '$queueNumber'";
+                    $conn->query($updateQueueStatusSql);
+                }
 
-                // Delete the displayed queue_number from the queue table
-                $deleteQueueSql = "DELETE FROM queue WHERE office = '$office' AND queue_number = '$queueNumber'";
-                $conn->query($deleteQueueSql);
+                // Delete the displayed queue_number from the queue table if status is 1 in the display table
+                if ($status == 1) {
+                    // Move the displayed queue_number to the queue_logs table
+                    $insertLogSql = "INSERT INTO queue_logs (office, queue_number) VALUES ('$office', '$queueNumber')";
+                    $conn->query($insertLogSql);
+                    $deleteQueueSql = "DELETE FROM queue WHERE office = '$office' AND queue_number = '$queueNumber'";
+                    $conn->query($deleteQueueSql);
+                }
+
+
             }
 
             // Break the loop if the desired limit is reached
