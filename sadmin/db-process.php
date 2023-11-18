@@ -12,7 +12,7 @@ if ($_GET['action'] == 'customers') {
     }
 } elseif ($_GET['action'] == 'completed') {
     
-    $sql = "SELECT * FROM queue WHERE display_status = '1'";
+    $sql = "SELECT * FROM queue WHERE status = '1'";
     $result = $conn->query($sql);
 
     if ($result = mysqli_query($conn, $sql)) {
@@ -22,7 +22,7 @@ if ($_GET['action'] == 'customers') {
     
 } elseif ($_GET['action'] == 'pending') {
     
-    $sql = "SELECT * FROM queue WHERE display_status = '0'";
+    $sql = "SELECT * FROM queue WHERE status = '0'";
     $result = $conn->query($sql);
 
     if ($result = mysqli_query($conn, $sql)) {
