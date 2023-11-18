@@ -105,6 +105,7 @@ body::before {
 
 .pending-queue h2 {
     font-size: 3.5rem;
+    padding: .3rem 0;
 }
 /* MEDIA QUERY*/
 @media (max-width: 3600px) {
