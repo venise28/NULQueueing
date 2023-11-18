@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['office'])) {
                 $currentWindows[] = $window;
 
                 if ($status == 0) {
-                    $updateQueueStatusSql = "UPDATE queue SET display_status = 1 WHERE office = '$office' AND queue_number = '$queueNumber'";
+                    $updateQueueStatusSql = "UPDATE queue SET status = 1 WHERE office = '$office' AND queue_number = '$queueNumber'";
                     $conn->query($updateQueueStatusSql);
                 }
 
