@@ -14,7 +14,7 @@ while ($row = $result->fetch_assoc()) {
     $pendingQueueSql = "SELECT * FROM $officeName ORDER BY timestamp ASC LIMIT 2";
     $pendingQueueResult = $conn->query($pendingQueueSql);
 
-    echo '<div class="pending-queue queue">';
+    //echo '<div class="pending-queue queue">';
     
     if ($pendingQueueResult->num_rows > 0) {
         while ($pendingRow = $pendingQueueResult->fetch_assoc()) {
@@ -26,7 +26,7 @@ while ($row = $result->fetch_assoc()) {
     //     echo '<h2>No pending queue for ' . $officeName . '</h2>';
     // }
 
-    echo '</div>';
+    //echo '</div>';
 }
 
 $conn->close();
