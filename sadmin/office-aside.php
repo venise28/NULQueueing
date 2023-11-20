@@ -150,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <table class="table-bordered text-center border-black">
                         <thead>
                             <tr class="background-blue">
-                                <th scope="col">ID</th>
+                                <!-- <th scope="col">ID</th> -->
                                 <th scope="col">Acronym</th>
                                 <th scope="col">Offices Name</th>
                                 <th scope="col" class="col-3">Action</th>
@@ -179,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         foreach ($query_run as $items) {
                                             // Output data for search results
                                             echo "<tr>";
-                                            echo "<td>" . $items['ID'] . "</td>";
+                                            //echo "<td>" . $items['ID'] . "</td>";
                                             echo "<td>" . $items['acronym'] . "</td>";
                                             echo "<td>" . $items['officeName'] . "</td>";
                                             echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2' type='submit'>Edit</button>";
@@ -197,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         // Output data for all records
                                         echo "<tr>";
-                                        echo "<td>" . $row['ID'] . "</td>";
+                                        //echo "<td>" . $row['ID'] . "</td>";
                                         echo "<td>" . $row['acronym'] . "</td>";
                                         echo "<td>" . $row['officeName'] . "</td>";
                                         echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2 edit-button' data-officeid='" . $row['ID'] . "' onclick='openEditOfficeModal(" . $row['ID'] . ", \"" . $row['acronym'] . "\", \"" . $row['officeName'] . "\")'>Edit</button>";
