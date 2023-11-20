@@ -7,6 +7,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $updatedOfficeName = strtoupper($_POST['OfficeName']);
     $isOtherOffice = isset($_POST['otherOfficesUpdated']) ? 1 : 0; // 1 for "Other Offices", 0 for "Not Other Offices"
 
+    // Validate input to check for spaces in updated office name and acronym
+    if (strpos($updatedOfficeName, ' ') !== false || strpos($updatedAcronym, ' ') !== false) {
+        echo "Office name and acronym should not contain spaces.";
+        exit; // Stop further processing if there are spaces
+    }
+
     // Get the current officeName from the database
     $getCurrentOfficeNameQuery = "SELECT officeName FROM offices WHERE ID = ?";
     
@@ -53,6 +59,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 mysqli_close($conn);
-
-
 ?>
