@@ -87,7 +87,7 @@ if (!isset($_SESSION['email'])) {
                     <table class="table-bordered text-center border-black">
                         <thead>
                             <tr class="background-blue">
-                                <th scope="col">ID</th>
+                                <!-- <th scope="col">ID</th> -->
                                 <th scope="col">Acronym</th>
                                 <th scope="col">College Name</th>
                                 <th scope="col" class="col-3">Action</th>
@@ -116,7 +116,7 @@ if (!isset($_SESSION['email'])) {
                                         foreach ($query_run as $items) {
                                             // Output data for search results
                                             echo "<tr>";
-                                            echo "<td>" . $items['ID'] . "</td>";
+                                            //echo "<td>" . $items['ID'] . "</td>";
                                             echo "<td>" . $items['acronym'] . "</td>";
                                             echo "<td>" . $items['collegeName'] . "</td>";
                                             echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2' type='submit'>Edit</button>";
@@ -134,7 +134,7 @@ if (!isset($_SESSION['email'])) {
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         // Output data for all records
                                         echo "<tr>";
-                                        echo "<td>" . $row['ID'] . "</td>";
+                                        //echo "<td>" . $row['ID'] . "</td>";
                                         echo "<td>" . $row['acronym'] . "</td>";
                                         echo "<td>" . $row['collegeName'] . "</td>";
                                         echo "<td><button class='btn btn-edit my-2 my-sm-0 mx-2 edit-button' onclick='openEditCollegeModal(" . $row['ID'] . ", \"" . $row['acronym'] . "\", \"" . $row['collegeName'] . "\")'>Edit</button>";
