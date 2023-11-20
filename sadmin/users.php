@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <table class="table-bordered text-center border-black">
                         <thead>
                             <tr class="background-blue">
-                                <th scope="col">ID</th>
+                                <!-- <th scope="col">ID</th> -->
                                 <th scope="col">Full Name</th>
                                 <th scope="col">Office</th>
                                 <th scope="col">Window</th>
@@ -170,7 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         foreach ($query_run as $items) {
                                             // Output data for search results
                                             echo "<tr>";
-                                            echo "<td>" . $items['ID'] . "</td>";
+                                            //echo "<td>" . $items['ID'] . "</td>";
                                             echo "<td>" . $items['full_name'] . "</td>";
                                             echo "<td>" . $items['office'] . "</td>";
                                             echo "<td>" . $items['window'] . "</td>";
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         // Output data for all records
                                         echo "<tr>";
-                                        echo "<td>" . $row['ID'] . "</td>";
+                                        //echo "<td>" . $row['ID'] . "</td>";
                                         echo "<td>" . $row['full_name'] . "</td>";
                                         echo "<td>" . $row['office'] . "</td>";
                                         echo "<td>" . $row['window'] . "</td>";
